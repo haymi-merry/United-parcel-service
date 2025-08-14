@@ -68,7 +68,9 @@ const AdminDashboard: React.FC = () => {
                 fill="currentColor"
               />
             </svg>
-            <h2 className="text-lg font-bold tracking-tight">SwiftShip</h2>
+            <h2 className="text-lg font-bold tracking-tight">
+              United parcel service
+            </h2>
           </div>
           <nav className="flex items-center gap-9">
             <Link to="/"></Link>
