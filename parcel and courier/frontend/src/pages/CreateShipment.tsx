@@ -89,7 +89,7 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
       if (imagePreview) URL.revokeObjectURL(imagePreview);
     };
   }, [imagePreview]);
-
+  console.log(image);
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {

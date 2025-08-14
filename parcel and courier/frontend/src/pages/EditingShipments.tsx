@@ -55,7 +55,7 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState<boolean>(false);
-
+  console.log(image);
   function onBack() {
     navigate("/admin-dashboard");
   }
