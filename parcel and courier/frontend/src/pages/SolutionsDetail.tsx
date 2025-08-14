@@ -116,7 +116,9 @@ const SolutionsDetail: React.FC = () => {
           <i className="text-white w-4 h-4">
             <FaTruck />
           </i>
-          <h2 className="text-lg font-bold tracking-[-0.015em]">SwiftShip</h2>
+          <h2 className="text-lg font-bold tracking-[-0.015em]">
+            United Parcel Service
+          </h2>
         </div>
         <div className="flex flex-1 justify-end gap-8">
           <div className="flex items-center gap-9">
