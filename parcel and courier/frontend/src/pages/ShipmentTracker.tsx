@@ -188,7 +188,7 @@ export default function ShipmentTracker() {
           <div className="w-10 h-10 text-[#f9e106]">
             <FaTruck size={24} />
           </div>
-          <h1 className="text-lg font-bold">SwiftShip</h1>
+          <h1 className="text-lg font-bold">United Parcel Service</h1>
         </div>
 
         <nav className="flex items-center gap-5">

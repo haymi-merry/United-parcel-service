@@ -22,7 +22,7 @@ const AddressChangeRequest: React.FC = () => {
               </svg>
             </i>
             <h2 className="text-white text-lg font-bold leading-tight tracking-[-0.015em]">
-              SwiftShip
+              United Parcel Service
             </h2>
           </div>
           <div className="flex flex-1 justify-end gap-8">

@@ -64,21 +64,56 @@ export const deleteShipmentById = createAsyncThunk(
 
 export const updateShipmentById = createAsyncThunk(
   "shipment/updateShipmentById",
-  async ({ id, shipmentData }: { id: string; shipmentData: IShipment }) => {
+  async (
+    {
+      parcelId,
+      shipmentData,
+    }: { parcelId: string; shipmentData: Partial<IShipment> },
+    { rejectWithValue }
+  ) => {
     const { data, error } = await supabase
       .from("shipment")
       .update(shipmentData)
-      .eq("id", id);
+      .eq("parcel_id", parcelId)
+      .select("*")
+      .single();
+
     if (error) {
-      throw new Error("Failed to update shipment");
+      console.error("Update error:", error.message);
+      return rejectWithValue("Failed to update shipment");
     }
-    return data;
+
+    if (!data) {
+      return rejectWithValue("No shipment found with the provided ID");
+    }
+
+    if (
+      shipmentData.status ||
+      shipmentData.origin ||
+      shipmentData.destination
+    ) {
+      const { error: statusError } = await supabase
+        .from("transport_history")
+        .insert({
+          parcel_id: parcelId,
+          current_location: shipmentData.origin || data.origin,
+          current_date: shipmentData.pickup_date || data.pickup_date,
+          current_time: formatTimeStampIntoTime(Date.now()),
+        });
+
+      if (statusError) {
+        console.error("Transport history update error:", statusError.message);
+        return rejectWithValue("Failed to update transport history");
+      }
+    }
+
+    return data as IShipment;
   }
 );
 
 export const fetchShipments = createAsyncThunk(
   "shipment/fetchShipments",
-  async () => {
+  async (_, { rejectWithValue }) => {
     const { data, error } = await supabase.from("shipment").select(`
       *,
       transport_history (
@@ -86,13 +121,11 @@ export const fetchShipments = createAsyncThunk(
         transport_id,
         current_location,
         current_date,
-        current_time,
-        icon
+        current_time
       )
     `);
     if (error) {
-      console.log(error.message);
-      throw new Error("Failed to fetch shipments");
+      return rejectWithValue(error.message);
     }
     return data;
   }
@@ -143,6 +176,19 @@ const shipmentReducer = createSlice({
         state.loading = true;
       })
       .addCase(deleteShipmentById.rejected, (state, { payload }) => {
+        state.error = payload as string;
+        state.loading = false;
+      })
+      .addCase(updateShipmentById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateShipmentById.fulfilled, (state, { payload }) => {
+        state.shipment = state.shipment.map((item) =>
+          item.parcel_id === payload.parcel_id ? payload : item
+        );
+        state.loading = false;
+      })
+      .addCase(updateShipmentById.rejected, (state, { payload }) => {
         state.error = payload as string;
         state.loading = false;
       });

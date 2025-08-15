@@ -59,7 +59,6 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
   function onBack() {
     navigate("/admin-dashboard");
   }
-
   useEffect(() => {
     const found = shipments.find((s: IShipment) => s.parcel_id === id);
     setCurrentShipment(found);
@@ -83,28 +82,26 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
     }
   }, [shipments, id]);
 
-  useEffect(() => {
-    if (fetcher.data && fetcher.data.success) {
-      setFormData({
-        parcelId: "",
-        senderName: "",
-        senderAddress: "",
-        senderPhone: "",
-        recipientName: "",
-        recipientAddress: "",
-        recipientPhone: "",
-        origin: "",
-        destination: "",
-        packageDescription: "",
-        pickupDate: "",
-        deliveryDate: "",
-        status: "pending",
-      });
-      setImage(null);
-      setImagePreview(null);
-      navigate("/admin-dashboard");
-    }
-  }, [fetcher.data, navigate]);
+  if (fetcher.data && fetcher.data.success) {
+    setFormData({
+      parcelId: "",
+      senderName: "",
+      senderAddress: "",
+      senderPhone: "",
+      recipientName: "",
+      recipientAddress: "",
+      recipientPhone: "",
+      origin: "",
+      destination: "",
+      packageDescription: "",
+      pickupDate: "",
+      deliveryDate: "",
+      status: "pending",
+    });
+    setImage(null);
+    setImagePreview(null);
+    navigate("/admin-dashboard");
+  }
 
   useEffect(() => {
     setIsMounted(true);

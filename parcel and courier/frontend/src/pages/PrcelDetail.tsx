@@ -4,17 +4,31 @@ import { useNavigate, useParams } from "react-router-dom";
 import type { TAppDispatch, TRootState } from "@/app/store";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteShipmentById, fetchShipments } from "@/features/shipmentSlice";
-import type { IShipment } from "@/lib/types";
+import type { IShipment, ITransportHistory } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import Swal from "sweetalert2";
+import TrackingForm from "./TrackingForm";
+import { deleteTransistById } from "@/features/transitStatusSlice";
+
+type TModelData = {
+  transportData: ITransportHistory | null;
+  type: "Edit" | "Add";
+};
 
 const ParcelDetails: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<TAppDispatch>();
   const { id } = useParams<{ id: string }>();
-  const { shipment: shipments } = useSelector(
-    (state: TRootState) => state.shipment
-  );
+  const [isTrackingEditorOpen, setIsTrackingEditorOpen] = useState(false);
+  const [modelData, setModelData] = useState<TModelData>({
+    transportData: null,
+    type: "Edit",
+  });
+  const {
+    shipment: shipments,
+    loading,
+    error,
+  } = useSelector((state: TRootState) => state.shipment);
 
   function handleActionClick(action: string) {
     if (action === "Delete Parcel" && id) {
@@ -43,6 +57,23 @@ const ParcelDetails: React.FC = () => {
     }
   }
 
+  function handleActionForTracking(action: string, tranport_id: string) {
+    if (action === "DELETE") {
+      Swal.fire({
+        icon: "warning",
+        title: "Are you sure?",
+        text: "You're about to delete tracking details",
+        showConfirmButton: true,
+        confirmButtonText: "Delete",
+        showCancelButton: true,
+      }).then(async (result) => {
+        if (!result.isConfirmed) return;
+        await dispatch(deleteTransistById(tranport_id));
+        await dispatch(fetchShipments());
+      });
+    }
+  }
+
   const [currentShipment, setCurrentShipment] = useState<IShipment | null>(
     shipments.find((shipment) => shipment.parcel_id === id) || null
   );
@@ -54,18 +85,60 @@ const ParcelDetails: React.FC = () => {
   useEffect(() => {
     const found = shipments.find((shipment) => shipment.parcel_id === id);
     if (!found && shipments && shipments.length > 0) {
-      (async () => {
-        await Swal.fire({
-          title: "Parcel Not Found",
-          text: "There is no parcel with the given ID. Please create one!",
-          icon: "error",
-        });
-      })();
-      navigate(`/create-shipment`, { replace: true });
+      Swal.fire({
+        title: "Parcel Not Found",
+        text: "There is no parcel with the given ID. Please create one!",
+        icon: "error",
+      }).then(() => {
+        navigate(`/admin_dashboard`, { replace: true });
+      });
       return;
     }
     setCurrentShipment(found!);
   }, [id, shipments, navigate]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#232110]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-20 h-20 rounded-full bg-[#f9e106] animate-pulse" />
+          <p className="text-white font-semibold">Loading details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  function openModel(action: string, event: ITransportHistory) {
+    if (action === "EDIT" && event.transport_id) {
+      setIsTrackingEditorOpen(true);
+      setModelData({
+        transportData: event,
+        type: "Edit",
+      });
+      return;
+    }
+    if (action === "ADD" && event.transport_id) {
+      setIsTrackingEditorOpen(true);
+      setModelData({
+        transportData: event,
+        type: "Add",
+      });
+    }
+  }
+
+  if (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Network Error",
+      text: error,
+      showConfirmButton: true,
+      confirmButtonText: "Retry",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(fetchShipments());
+      }
+    });
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-[#232110] font-[Space Grotesk, Noto Sans, sans-serif] text-white">
@@ -171,7 +244,8 @@ const ParcelDetails: React.FC = () => {
           <h2 className="px-4 pb-3 pt-5 text-[22px] font-bold tracking-tight">
             Tracking History
           </h2>
-          <div className="grid grid-cols-[40px_1fr] gap-x-2 px-4">
+
+          <div className="grid   grid-cols-[40px_1fr_1fr]  gap-x-6 px-4">
             {currentShipment?.transport_history?.map((event, index) => (
               <React.Fragment key={index}>
                 <div className="flex flex-col items-center gap-1 pt-3">
@@ -181,11 +255,11 @@ const ParcelDetails: React.FC = () => {
                     </i>
                   ) : currentShipment.transport_history &&
                     index === currentShipment?.transport_history?.length - 1 ? (
-                    <i className="h-6 w-6">
+                    <i className="h-4 w-4 md:h-6 md:w-6">
                       <Check />
                     </i>
                   ) : (
-                    <i className="h-6 w-6">
+                    <i className="h-4 w-4 md:h-6 md:w-6">
                       <Truck />
                     </i>
                   )}
@@ -194,13 +268,37 @@ const ParcelDetails: React.FC = () => {
                       <div className="w-[1.5px] grow bg-[#6a642f] h-2" />
                     )}
                 </div>
-                <div className="flex flex-1 flex-col py-3">
-                  <p className="text-base font-medium">
+
+                <div className="flex flex-1 flex-col py-3 ">
+                  <p className="text-sm md:text-base font-medium">
                     {event.current_location}
                   </p>
-                  <p className="text-base text-[#ccc68e]">
+                  <p className="text-sm md:text-base text-[#ccc68e]">
                     {event.current_date}
                   </p>
+                </div>
+
+                <div className="flex gap-x-2">
+                  <Button
+                    className="bg-[#4a4621] text-[11px] md:text-sm text-white hover:bg-[#5a5531]"
+                    onClick={() => openModel("ADD", event)}
+                  >
+                    Add
+                  </Button>
+                  <Button
+                    className="bg-[#4a4621] text-[11px] md:text-sm text-white hover:bg-[#5a5531]"
+                    onClick={() => openModel("EDIT", event)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    className="bg-[#4a4621] text-[11px] md:text-sm text-white hover:bg-[#5a5531]"
+                    onClick={() =>
+                      handleActionForTracking("DELETE", event.transport_id!)
+                    }
+                  >
+                    Delete
+                  </Button>
                 </div>
               </React.Fragment>
             ))}
@@ -219,6 +317,24 @@ const ParcelDetails: React.FC = () => {
           </div>
         </div>
       </main>
+      {isTrackingEditorOpen && (
+        <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-stone-700 bg-opacity-50  items-center justify-center z-50 md:w-1/2 w-[90%] h-[90%]">
+          <header className="border-b-1 w-full border-[#f9e106] mb-3 py-3 px-3 flex items-center justify-between">
+            <h2 className="text-lg font-bold">{modelData.type} Tracking</h2>
+            <Button
+              onClick={() => setIsTrackingEditorOpen(false)}
+              className=" bg-[#f9e106] text-white hover:border-1 border-[#f9e106] "
+            >
+              Close
+            </Button>
+          </header>
+          <TrackingForm
+            event={modelData.transportData! as ITransportHistory}
+            type={modelData.type}
+            onClose={() => setIsTrackingEditorOpen(false)}
+          />
+        </div>
+      )}
     </div>
   );
 };

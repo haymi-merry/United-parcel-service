@@ -36,5 +36,4 @@ export interface ITransportHistory {
   current_location: string;
   current_date: string;
   current_time: string;
-  icon: string;
 }

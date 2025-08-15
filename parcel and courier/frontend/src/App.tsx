@@ -15,7 +15,7 @@ import { TypeAnimation } from "react-type-animation";
 const App = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [showCustomerService, setShowCustomerService] = useState(false);
-
+  const [initialLoading, setInitialLoading] = useState(true);
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -29,6 +29,26 @@ const App = () => {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
+  }
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setInitialLoading(false);
+    }, 2000);
+    return () => {
+      clearTimeout(id);
+    };
+  }, []);
+
+  if (initialLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#232110]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-20 h-20 rounded-full bg-[#f9e106] animate-pulse" />
+          <p className="text-white font-semibold">Loading Shipments...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -50,13 +70,13 @@ const App = () => {
             </div>
             <h2
               onClick={() => scrollIntoSection("home")}
-              className="text-white text-lg font-bold leading-tight tracking-[-0.015em]"
+              className="text-white  text-lg font-bold leading-tight tracking-[-0.015em]"
             >
               United Parcel Services
             </h2>
           </div>
           <div className="flex flex-1 justify-end gap-8">
-            <div className="flex items-center gap-9">
+            <div className="hidden md:flex items-center gap-9">
               <Link
                 to="/about"
                 className="text-white text-sm font-medium leading-normal"
@@ -90,7 +110,7 @@ const App = () => {
                 to="/track-parcel"
                 className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#f9f506] text-[#181811] text-sm font-bold leading-normal tracking-[0.015em]"
               >
-                <span className="truncate">Track Your Parcel</span>
+                <span className="truncate">Track</span>
               </Link>
             </div>
           </div>

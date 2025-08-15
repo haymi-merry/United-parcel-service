@@ -27,7 +27,7 @@ const AboutSwiftShip: React.FC = () => {
               onClick={() => navigate("/")}
               className="text-white cursor-pointer text-lg font-bold leading-tight tracking-[-0.015em]"
             >
-              SwiftShip
+              United Parcel Service
             </h2>
           </div>
           <div className="flex flex-1 justify-end gap-8">

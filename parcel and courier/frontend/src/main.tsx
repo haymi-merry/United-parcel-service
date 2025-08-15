@@ -13,7 +13,7 @@ import AdminDashboard from "./pages/AdminDashboard.tsx";
 import ParcelDetails from "./pages/PrcelDetail.tsx";
 import AddressChangeRequest from "./pages/AddressChangeRequest.tsx";
 import About from "./pages/About.tsx";
-import shipment from "./actions/shipment.ts";
+import { shipment, updateShipment } from "./actions/shipment.ts";
 import { store } from "./app/store.ts";
 import { Provider } from "react-redux";
 import EditShipment from "./pages/EditingShipments.tsx";
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
   {
     path: "/parcel/:id/edit",
     element: <EditShipment onLogout={() => {}} />,
-    action: shipment,
+    action: updateShipment,
   },
   {
     path: "/address-change-request",
