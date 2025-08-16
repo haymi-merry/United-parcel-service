@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaPlus, FaCalendarAlt, FaDoorOpen } from "react-icons/fa";
 import { useFetcher, useNavigate } from "react-router-dom";
+
 interface FormData {
   parcelId: string;
   senderName: string;
@@ -91,7 +92,9 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
   }, [imagePreview]);
   console.log(image);
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -126,10 +129,10 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
         animate={{ opacity: isMounted ? 1 : 0 }}
         transition={{ duration: 1 }}
       >
-        <div className="flex flex-1 justify-center py-5 px-6 gap-1">
-          <div className="flex flex-col w-80">
+        <div className="flex flex-col md:flex-row flex-1 justify-center py-5 px-4 sm:px-6 gap-4 md:gap-6">
+          <div className="flex flex-col w-full md:w-80">
             <motion.div
-              className="flex h-[700px] flex-col justify-between bg-[#181811] p-4"
+              className="flex flex-col justify-between bg-[#181811] p-4"
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.5 }}
@@ -164,14 +167,14 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
               </div>
             </motion.div>
           </div>
-          <div className="flex flex-col max-w-[960px] flex-1">
+          <div className="flex flex-col w-full md:max-w-[960px]">
             <motion.div
               className="flex flex-wrap justify-between gap-3 p-4"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <p className="text-[32px] font-bold tracking-tight min-w-72">
+              <p className="text-2xl sm:text-[32px] font-bold tracking-tight">
                 Create Shipment
               </p>
             </motion.div>
@@ -193,7 +196,7 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                   },
                   {
                     label: "Package Name",
-                    name: "packageName",
+                    name: "package_name",
                     placeholder: "Enter package name",
                     type: "text",
                   },
@@ -205,7 +208,7 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                   },
                 ].map((item) => (
                   <div
-                    key={"parcelId"}
+                    key={item.name}
                     className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3"
                   >
                     <label
@@ -439,20 +442,24 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                   </div>
                 ))}
 
-                <h3>Transport Information</h3>
+                <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
+                  Transport Information
+                </h3>
                 <div
-                  key={"status"}
+                  key="status"
                   className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3"
                 >
                   <label
-                    htmlFor={"status"}
+                    htmlFor="status"
                     className="flex flex-col min-w-40 flex-1"
                   >
                     <p className="text-base font-medium pb-2">Status</p>
                     <div className="flex w-full items-stretch rounded-lg">
                       <select
-                        name={"status"}
-                        id={"status"}
+                        name="status"
+                        id="status"
+                        value={formData.status}
+                        onChange={handleInputChange}
                         className="w-full rounded-lg rounded-r-none bg-[#27271b] border border-[#55553a] border-r-0 h-14 p-[15px] pr-2 text-base font-normal  focus:outline-none focus:ring-0 focus:border-[#55553a] placeholder:text-[#bbba9b]"
                       >
                         <option value="pending">Pending</option>

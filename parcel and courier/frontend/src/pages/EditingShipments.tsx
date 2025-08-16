@@ -150,10 +150,10 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
         animate={{ opacity: isMounted ? 1 : 0 }}
         transition={{ duration: 1 }}
       >
-        <div className="flex flex-1 justify-center py-5 px-6 gap-1">
-          <div className="flex flex-col w-80">
+        <div className="flex flex-col md:flex-row flex-1 justify-center py-5 px-4 sm:px-6 gap-4 md:gap-6">
+          <div className="flex flex-col w-full md:w-80">
             <motion.div
-              className="flex h-[700px] flex-col justify-between bg-[#181811] p-4"
+              className="flex flex-col justify-between bg-[#181811] p-4"
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.5 }}
@@ -188,14 +188,14 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
               </div>
             </motion.div>
           </div>
-          <div className="flex flex-col max-w-[960px] flex-1">
+          <div className="flex flex-col w-full md:max-w-[960px]">
             <motion.div
               className="flex flex-wrap justify-between gap-3 p-4"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <p className="text-[32px] font-bold tracking-tight min-w-72">
+              <p className="text-2xl sm:text-[32px] font-bold tracking-tight">
                 Edit Shipment
               </p>
             </motion.div>
@@ -209,20 +209,20 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                   Parcel Information
                 </h3>
                 <div
-                  key={"parcelId"}
-                  className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3"
+                  key="parcelId"
+                  className="flex w-full max-w-[480px] flex-wrap items-end gap-4 px-4 py-3"
                 >
                   <label
-                    htmlFor={"parcelId"}
+                    htmlFor="parcelId"
                     className="flex flex-col min-w-40 flex-1"
                   >
                     <p className="text-base font-medium pb-2">Parcel ID</p>
                     <input
-                      name={"parcelId"}
-                      id={"parcelId"}
+                      name="parcelId"
+                      id="parcelId"
                       defaultValue={formData.parcelId}
                       onChange={handleInputChange}
-                      placeholder={"Enter parcel ID"}
+                      placeholder="Enter parcel ID"
                       readOnly
                       className="w-full rounded-lg bg-[#27271b] border border-[#55553a] h-14 p-[15px] text-base font-normal focus:outline-none focus:ring-0 focus:border-[#55553a] placeholder:text-[#bbba9b]"
                     />
@@ -250,7 +250,7 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                 ].map((field) => (
                   <div
                     key={field.name}
-                    className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3"
+                    className="flex w-full max-w-[480px] flex-wrap items-end gap-4 px-4 py-3"
                   >
                     <label
                       htmlFor={field.name}
@@ -292,7 +292,7 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                 ].map((field) => (
                   <div
                     key={field.name}
-                    className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3"
+                    className="flex w-full max-w-[480px] flex-wrap items-end gap-4 px-4 py-3"
                   >
                     <label
                       htmlFor={field.name}
@@ -329,7 +329,7 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                 ].map((field) => (
                   <div
                     key={field.name}
-                    className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3"
+                    className="flex w-full max-w-[480px] flex-wrap items-end gap-4 px-4 py-3"
                   >
                     <label
                       htmlFor={field.name}
@@ -352,7 +352,7 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
                   Package Details
                 </h3>
-                <div className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                <div className="flex w-full max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
                   <label className="flex flex-col min-w-40 flex-1">
                     <p className="text-base font-medium pb-2">Description</p>
                     <textarea
@@ -371,7 +371,7 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                 </h3>
                 <div className="flex flex-col p-4">
                   <motion.div
-                    className="flex flex-col items-center gap-6 rounded-lg border-2 border-dashed border-[#55553a] px-6 py-14"
+                    className="flex flex-col items-center gap-6 rounded-lg border-2 border-dashed border-[#55553a] px-6 py-10 sm:py-14"
                     initial={{ scale: 0.95, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.5 }}
@@ -403,7 +403,7 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                       <motion.img
                         src={imagePreview}
                         alt="Package Preview"
-                        className="w-32 h-32 object-cover rounded-lg mt-4"
+                        className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg mt-4"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.5 }}
@@ -428,7 +428,7 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                 ].map((field) => (
                   <div
                     key={field.name}
-                    className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3"
+                    className="flex w-full max-w-[480px] flex-wrap items-end gap-4 px-4 py-3"
                   >
                     <label
                       htmlFor={field.name}
@@ -461,18 +461,18 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                   Transport Information
                 </h3>
                 <div
-                  key={"status"}
-                  className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3"
+                  key="status"
+                  className="flex w-full max-w-[480px] flex-wrap items-end gap-4 px-4 py-3"
                 >
                   <label
-                    htmlFor={"status"}
+                    htmlFor="status"
                     className="flex flex-col min-w-40 flex-1"
                   >
                     <p className="text-base font-medium pb-2">Status</p>
                     <div className="flex w-full items-stretch rounded-lg">
                       <select
-                        name={"status"}
-                        id={"status"}
+                        name="status"
+                        id="status"
                         defaultValue={formData.status}
                         onChange={handleInputChange}
                         className="w-full rounded-lg rounded-r-none bg-[#27271b] border border-[#55553a] border-r-0 h-14 p-[15px] pr-2 text-base font-normal focus:outline-none focus:ring-0 focus:border-[#55553a] placeholder:text-[#bbba9b]"
@@ -488,7 +488,7 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                 <div className="flex px-4 py-3 justify-end">
                   <motion.button
                     type="submit"
-                    className="min-w-[84px] max-w-[480px] rounded-lg h-10 px-4 bg-[#f9f506] text-[#181811] text-sm font-bold tracking-[0.015em]"
+                    className="min-w-[84px] w-full sm:max-w-[480px] rounded-lg h-10 px-4 bg-[#f9f506] text-[#181811] text-sm font-bold tracking-[0.015em]"
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.3 }}
                   >
