@@ -13,8 +13,8 @@ export default function TrackIDInput() {
   const { shipment } = useSelector((state: TRootState) => state.shipment);
 
   useEffect(() => {
-    dispatch(fetchShipments());
-  }, [dispatch]);
+    if (!shipment || shipment.length < 1) dispatch(fetchShipments());
+  }, [dispatch, shipment]);
   useEffect(() => {
     if (parcelID === "admin") {
       Swal.fire({

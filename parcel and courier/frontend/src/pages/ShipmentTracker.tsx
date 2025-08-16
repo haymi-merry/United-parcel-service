@@ -1,4 +1,3 @@
-// src/components/ShipmentTracker.tsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   MapContainer,
@@ -8,37 +7,19 @@ import {
   Polyline,
   useMap,
 } from "react-leaflet";
-import L from "leaflet";
+import L, { type LatLngTuple } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { FaTruck, FaMapMarkerAlt, FaCheckCircle } from "react-icons/fa";
 
-/**
- * NOTE:
- * - Make sure you have installed: react-leaflet, leaflet, react-icons
- *   npm install react-leaflet leaflet react-icons
- *
- * - Vite + TypeScript may complain about importing Leaflet's images.
- *   If you see TS errors about importing .png/.jpg, add a `src/vite-env.d.ts`:
- *     declare module '*.png';
- *     declare module '*.jpg';
- *     declare module '*.jpeg';
- *     declare module '*.webp';
- *
- * - This component is self-contained for demo purposes. Split into smaller pieces
- *   (MapView, Timeline, Header, AddressForm) when integrating into a larger app.
- */
-
-/* Fix Leaflet's default icon URLs (works with Vite/Rollup)
-   If you prefer not to import images, you can host icons or use a custom marker.
-*/
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import type { TAppDispatch, TRootState } from "@/app/store";
 import type { IShipment } from "@/lib/types";
 import { fetchShipments } from "@/features/shipmentSlice";
+import { Button } from "@/components/ui/button";
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
@@ -46,40 +27,75 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-function FitBounds({ points }: { points: [number, number][] }) {
+function FitBounds({ points }: { points: LatLngTuple[] }) {
   const map = useMap();
   useEffect(() => {
-    if (!map || points.length === 0) return;
-    const bounds = L.latLngBounds(points);
-    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+    if (points.length > 0) {
+      map.fitBounds(L.latLngBounds(points), { padding: [40, 40], maxZoom: 12 });
+    }
   }, [map, points]);
+  return null;
+}
+
+function ChangeCenter({ center }: { center?: LatLngTuple }) {
+  const map = useMap();
+  useEffect(() => {
+    if (center) {
+      map.setView(center, map.getZoom());
+    }
+  }, [center, map]);
   return null;
 }
 
 export default function ShipmentTracker() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch<TAppDispatch>();
   const [shipment, setShipment] = useState<IShipment | null>(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
+
+  const [center, setCenter] = useState<LatLngTuple>([51.505, -0.09]);
 
   const { shipment: shipments, loading: isShipmentsLoading } = useSelector(
     (state: TRootState) => state.shipment
   );
 
+  const mapRef = useRef(null);
+
   useEffect(() => {
-    if (!shipments || shipments.length === 0) dispatch(fetchShipments());
+    if (!shipments || shipments.length === 0) {
+      dispatch(fetchShipments());
+    }
   }, [dispatch, shipments]);
 
   useEffect(() => {
     const found = shipments.find((s) => s.parcel_id === id);
     if (found) {
       setShipment(found);
+
+      const coords = found.transport_history?.[0]?.coordinates;
+      if (Array.isArray(coords) && coords.length === 2) {
+        setCenter([coords[0], coords[1]]);
+      }
     }
-  }, [id, shipments]);
+  }, [id, shipments, center]);
 
-  // UI state
+  const routes: LatLngTuple[] = useMemo(() => {
+    return (
+      shipment?.transport_history?.map((item) =>
+        Array.isArray(item.coordinates) && item.coordinates.length === 2
+          ? (item.coordinates as LatLngTuple)
+          : [51.505, -0.09]
+      ) || []
+    );
+  }, [shipment]);
 
-  const mapRef = useRef<L.Map | null>(null);
+  function scrollToSection(sectionId: string) {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  }
 
   if (isShipmentsLoading) {
     return (
@@ -104,18 +120,15 @@ export default function ShipmentTracker() {
         </div>
 
         <nav className="flex flex-wrap items-center gap-3 mt-2 sm:mt-0 sm:gap-5">
-          <a className="text-sm" href="#">
-            Services
-          </a>
-          <a className="text-sm" href="#">
-            Pricing
-          </a>
-          <a className="text-sm" href="#">
+          <Button
+            className="text-sm cursor-pointer"
+            onClick={() => scrollToSection("contact")}
+          >
             Contact
-          </a>
-          <button className="rounded-full bg-[#4a4621] px-4 py-2 text-sm">
+          </Button>
+          <Button className="rounded-full bg-[#4a4621] px-4 py-2 text-sm">
             Login
-          </button>
+          </Button>
         </nav>
       </header>
 
@@ -133,7 +146,7 @@ export default function ShipmentTracker() {
               </p>
               <div className="mt-3">
                 <button
-                  onClick={() => alert("Open details (placeholder)")}
+                  onClick={() => navigate(`/parcel/${shipment?.parcel_id}`)}
                   className="rounded-full bg-[#4a4621] px-4 py-2 text-sm"
                 >
                   View Details
@@ -151,7 +164,6 @@ export default function ShipmentTracker() {
           </div>
         </section>
 
-        {/* Map + timeline */}
         <section className="mt-6 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6">
           <div className="bg-[#181811] p-4 rounded-xl">
             <h3 className="font-semibold mb-3">Map & Route</h3>
@@ -159,25 +171,34 @@ export default function ShipmentTracker() {
             <MapContainer
               ref={mapRef}
               className="h-64 sm:h-96 w-full rounded-md"
-              center={[51.505, -0.09]}
+              center={center}
               zoom={6}
             >
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               <FitBounds points={[[51.505, -0.09]]} />
               <Polyline
-                positions={[
-                  [51.505, -0.09],
-                  [51.51, -0.1],
-                ]}
-                pathOptions={{ color: "#f9e106", weight: 2 }}
+                positions={routes}
+                pathOptions={{ color: "#1be73d", weight: 4 }}
               />
+              <ChangeCenter center={center} />
+
               {shipment?.transport_history?.map((ev) => (
-                <Marker key={ev.transport_id} position={[51.505, -0.09]}>
+                <Marker
+                  key={ev.transport_id}
+                  position={ev.coordinates || [51.505, -0.09]}
+                  title={ev.current_location}
+                  icon={L.icon({
+                    iconUrl: markerIcon,
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [0, -41],
+                  })}
+                >
                   <Popup>
                     <div className="max-w-xs">
                       <p className="font-semibold">{ev.current_location}</p>
                       <p className="text-sm text-[#ccc68e]">
-                        {ev.current_time}
+                        {ev.current_country}
                       </p>
                       <p className="mt-2 text-sm">{ev.current_time}</p>
                     </div>
@@ -238,21 +259,23 @@ export default function ShipmentTracker() {
                   tabIndex={0}
                 >
                   <div className="mt-1">
-                    {index === 0 && (
+                    {index === 0 ? (
                       <i className="text-[#f9e106]">
                         <FaMapMarkerAlt />
                       </i>
-                    )}
-                    {index === 1 && (
+                    ) : index ===
+                        (shipment!.transport_history! &&
+                          shipment?.transport_history?.length &&
+                          shipment?.transport_history?.length) -
+                          1 && (
+                        <i className="text-green-500">
+                          <FaCheckCircle />
+                        </i>
+                      ) ? (
                       <i className="text-[#f9e106]">
                         <FaTruck />
                       </i>
-                    )}
-                    {index === shipment?.transport_history?.length - 1 && (
-                      <i className="text-green-500">
-                        <FaCheckCircle />
-                      </i>
-                    )}
+                    ) : null}
                   </div>
                   <div>
                     <p className="font-medium">
@@ -276,10 +299,22 @@ export default function ShipmentTracker() {
           </aside>
         </section>
 
-        <footer className="mt-8 text-center text-[#ccc68e] text-sm">
+        <footer
+          id="contact"
+          className="mt-8 text-center text-[#ccc68e] text-sm"
+        >
           Contact us at{" "}
-          <span className="text-white">unitedparcels880@gmail.com</span> or
-          WhatsApp <span className="text-white">+31610928914</span>.
+          <a
+            className="text-[#f9e106]"
+            href={`mailto:unitedparcels880@gmail.com`}
+          >
+            unitedparcels880@gmail.com
+          </a>{" "}
+          or WhatsApp{" "}
+          <a href={`https://wa.me/31610928914`} className="text-[#f9e106]">
+            +31610928914
+          </a>
+          .
         </footer>
       </main>
     </div>

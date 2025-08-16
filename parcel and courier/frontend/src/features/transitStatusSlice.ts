@@ -20,10 +20,43 @@ export const fetchTransitHistory = createAsyncThunk(
     const { data, error } = await supabase
       .from("transport_history")
       .select("*");
+
     if (error) {
       return rejectWithValue(error.message);
     }
-    return data;
+
+    let transportHistory: ITransportHistory[] | null = null;
+
+    if (data && data.length > 0) {
+      transportHistory = await Promise.all(
+        data.map(async (history: ITransportHistory) => {
+          try {
+            const res = await fetch(
+              `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+                history.current_location
+              )}&country=${encodeURIComponent(history.current_country)}`
+            );
+            const coordinates = await res.json();
+
+            return {
+              ...history,
+              coordinates:
+                coordinates.results && coordinates.results.length > 0
+                  ? [
+                      coordinates.results[0].latitude,
+                      coordinates.results[0].longitude,
+                    ]
+                  : null,
+            };
+          } catch (err) {
+            console.error(err);
+            return { ...history, coordinates: null };
+          }
+        })
+      );
+    }
+
+    return transportHistory && transportHistory;
   }
 );
 

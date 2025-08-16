@@ -121,13 +121,57 @@ export const fetchShipments = createAsyncThunk(
         transport_id,
         current_location,
         current_date,
+        current_country,
         current_time
       )
     `);
+
     if (error) {
       return rejectWithValue(error.message);
     }
-    return data;
+    let shipments: IShipment[] | null = null;
+
+    if (data && data.length > 0) {
+      shipments = await Promise.all(
+        data.map(async (shipment: IShipment) => {
+          const { transport_history, ...rest } = shipment;
+
+          const historyWithCoordinates = await Promise.all(
+            (transport_history || []).map(async (history) => {
+              try {
+                const res = await fetch(
+                  `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(
+                    history.current_location
+                  )}&country=${encodeURIComponent(history.current_country)}`
+                );
+                const coordinates = await res.json();
+
+                return {
+                  ...history,
+                  coordinates:
+                    coordinates.results && coordinates.results.length > 0
+                      ? [
+                          coordinates.results[0].latitude,
+                          coordinates.results[0].longitude,
+                        ]
+                      : null,
+                };
+              } catch (err) {
+                console.error(err);
+                return { ...history, coordinates: null };
+              }
+            })
+          );
+
+          return {
+            ...rest,
+            transport_history: historyWithCoordinates,
+          };
+        })
+      );
+    }
+
+    return shipments && shipments;
   }
 );
 

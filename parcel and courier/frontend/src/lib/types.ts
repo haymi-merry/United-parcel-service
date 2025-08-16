@@ -34,6 +34,8 @@ export interface ITransportHistory {
   parcel_id: string;
   transport_id?: string;
   current_location: string;
+  current_country: string;
   current_date: string;
   current_time: string;
+  coordinates?: [number, number];
 }
