@@ -1,5 +1,5 @@
 // src/components/ShipmentTracker.tsx
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -34,6 +34,11 @@ import { FaTruck, FaMapMarkerAlt, FaCheckCircle } from "react-icons/fa";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import type { TAppDispatch, TRootState } from "@/app/store";
+import type { IShipment } from "@/lib/types";
+import { fetchShipments } from "@/features/shipmentSlice";
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
@@ -41,28 +46,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-/* ----------------------------- Types & Data ------------------------------ */
-
-type ShipmentStatus = "shipped" | "in_transit" | "delivered";
-
-type ShipmentEvent = {
-  id: string;
-  status: ShipmentStatus;
-  time: string; // human-readable for demo
-  location: string;
-  coords: [number, number];
-  note?: string;
-};
-
-type Shipment = {
-  trackingId: string;
-  imageUrl?: string;
-  estimatedDelivery?: string;
-  events: ShipmentEvent[];
-};
-
-/* ---------------------------- Helper Component --------------------------- */
-/** Fit the map to the given points (safe: will no-op if map not ready) */
 function FitBounds({ points }: { points: [number, number][] }) {
   const map = useMap();
   useEffect(() => {
@@ -73,103 +56,32 @@ function FitBounds({ points }: { points: [number, number][] }) {
   return null;
 }
 
-/* --------------------------- ShipmentTracker ---------------------------- */
-
 export default function ShipmentTracker() {
-  // Demo initial shipment (replace/load from API)
-  const [shipment, setShipment] = useState<Shipment>(() => ({
-    trackingId: "1234567890",
-    imageUrl:
-      "https://i.postimg.cc/tRwqbL4v/032-A6682-A47-F-4199-83-C2-345-FCD50-F1-BA.jpg",
-    estimatedDelivery: "Aug 15, 2025",
-    events: [
-      {
-        id: "e1",
-        status: "shipped",
-        time: "Aug 12, 2025 10:00 AM",
-        location: "Amsterdam, NL",
-        coords: [52.370216, 4.895168],
-        note: "Scanned at origin facility",
-      },
-      {
-        id: "e2",
-        status: "in_transit",
-        time: "Aug 13, 2025 02:00 PM",
-        location: "Frankfurt, DE",
-        coords: [50.110924, 8.682127],
-        note: "Arrived at regional hub",
-      },
-      {
-        id: "e3",
-        status: "delivered",
-        time: "Aug 14, 2025 11:00 AM",
-        location: "Paris, FR",
-        coords: [48.856613, 2.352222],
-        note: "Delivered to recipient",
-      },
-    ],
-  }));
+  const { id } = useParams();
+  const dispatch = useDispatch<TAppDispatch>();
+  const [shipment, setShipment] = useState<IShipment | null>(null);
+  const [showAddressForm, setShowAddressForm] = useState(false);
 
-  // UI state
-  const [isLoading, setIsLoading] = useState<boolean>(true); // 2s preloader
-  const [focusedEventId, setFocusedEventId] = useState<string | null>(null);
-  const [showAddressForm, setShowAddressForm] = useState<boolean>(false);
-  const [newLatLng, setNewLatLng] = useState<string>(""); // "lat,lng"
-  const mapRef = useRef<L.Map | null>(null);
-
-  // Preloader for 2 seconds to match spec
-  useEffect(() => {
-    const t = setTimeout(() => setIsLoading(false), 2000);
-    return () => clearTimeout(t);
-  }, []);
-
-  // route points memoized for performance
-  const routePoints = useMemo(
-    () => shipment.events.map((e) => e.coords),
-    [shipment.events]
+  const { shipment: shipments, loading: isShipmentsLoading } = useSelector(
+    (state: TRootState) => state.shipment
   );
 
-  // when focusedEventId changes, pan map to location
   useEffect(() => {
-    if (!focusedEventId || !mapRef.current) return;
-    const ev = shipment.events.find((x) => x.id === focusedEventId);
-    if (!ev) return;
-    mapRef.current.setView(ev.coords as L.LatLngExpression, 10, {
-      animate: true,
-    });
-  }, [focusedEventId, shipment.events]);
+    if (!shipments || shipments.length === 0) dispatch(fetchShipments());
+  }, [dispatch, shipments]);
 
-  // Add a new "in_transit" event from lat,lng input (simple client-side demo)
-  const handleAddAddress = (e: React.FormEvent) => {
-    e.preventDefault();
-    const parts = newLatLng.split(",").map((p) => p.trim());
-    if (parts.length !== 2) {
-      alert("Enter coordinates as: lat,lng (e.g. 48.8566,2.3522)");
-      return;
+  useEffect(() => {
+    const found = shipments.find((s) => s.parcel_id === id);
+    if (found) {
+      setShipment(found);
     }
-    const lat = parseFloat(parts[0]);
-    const lng = parseFloat(parts[1]);
-    if (Number.isNaN(lat) || Number.isNaN(lng)) {
-      alert("Invalid numeric coordinates.");
-      return;
-    }
+  }, [id, shipments]);
 
-    const newEvent: ShipmentEvent = {
-      id: `e${Date.now()}`,
-      status: "in_transit",
-      time: new Date().toLocaleString(),
-      location: `Custom (${lat.toFixed(3)}, ${lng.toFixed(3)})`,
-      coords: [lat, lng],
-      note: "Customer change request",
-    };
+  // UI state
 
-    setShipment((s) => ({ ...s, events: [...s.events, newEvent] }));
-    setNewLatLng("");
-    setShowAddressForm(false);
-    setFocusedEventId(newEvent.id);
-  };
+  const mapRef = useRef<L.Map | null>(null);
 
-  if (isLoading) {
+  if (isShipmentsLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#232110]">
         <div className="flex flex-col items-center gap-4">
@@ -183,7 +95,7 @@ export default function ShipmentTracker() {
   return (
     <div className="min-h-screen bg-[#232110] text-white font-sans">
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-[#4a4621] px-6 py-4">
+      <header className="flex flex-wrap items-center justify-between border-b border-[#4a4621] px-4 py-4 sm:px-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 text-[#f9e106]">
             <FaTruck size={24} />
@@ -191,7 +103,7 @@ export default function ShipmentTracker() {
           <h1 className="text-lg font-bold">United Parcel Service</h1>
         </div>
 
-        <nav className="flex items-center gap-5">
+        <nav className="flex flex-wrap items-center gap-3 mt-2 sm:mt-0 sm:gap-5">
           <a className="text-sm" href="#">
             Services
           </a>
@@ -207,17 +119,17 @@ export default function ShipmentTracker() {
         </nav>
       </header>
 
-      <main className="max-w-6xl mx-auto p-6">
+      <main className="max-w-6xl mx-auto p-4 sm:p-6">
         {/* Top area */}
         <section className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
-            <h2 className="text-2xl font-bold">Tracking Details</h2>
-            <p className="text-[#ccc68e]">Tracking ID: {shipment.trackingId}</p>
+            <h2 className="text-xl sm:text-2xl font-bold">Tracking Details</h2>
+            <p className="text-[#ccc68e]">Tracking ID: {shipment?.parcel_id}</p>
 
             <div className="mt-4 bg-[#181811] p-4 rounded-xl">
               <p className="font-semibold">Package Information</p>
               <p className="text-[#ccc68e]">
-                Estimated Delivery: {shipment.estimatedDelivery}
+                Estimated Delivery: {shipment?.delivery_date}
               </p>
               <div className="mt-3">
                 <button
@@ -232,9 +144,9 @@ export default function ShipmentTracker() {
 
           <div className="w-full md:w-96 mt-2 md:mt-0">
             <img
-              src={shipment.imageUrl}
+              src={shipment?.img_url}
               alt="Package preview"
-              className="w-full h-56 object-cover rounded-xl shadow-md"
+              className="w-full h-48 sm:h-56 object-cover rounded-xl shadow-md"
             />
           </div>
         </section>
@@ -245,23 +157,29 @@ export default function ShipmentTracker() {
             <h3 className="font-semibold mb-3">Map & Route</h3>
 
             <MapContainer
-              className="h-96 w-full rounded-md"
-              center={routePoints[0] || [51.505, -0.09]}
+              ref={mapRef}
+              className="h-64 sm:h-96 w-full rounded-md"
+              center={[51.505, -0.09]}
               zoom={6}
             >
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              <FitBounds points={routePoints} />
+              <FitBounds points={[[51.505, -0.09]]} />
               <Polyline
-                positions={routePoints}
-                pathOptions={{ color: "#f9e106", weight: 4 }}
+                positions={[
+                  [51.505, -0.09],
+                  [51.51, -0.1],
+                ]}
+                pathOptions={{ color: "#f9e106", weight: 2 }}
               />
-              {shipment.events.map((ev) => (
-                <Marker key={ev.id} position={ev.coords}>
+              {shipment?.transport_history?.map((ev) => (
+                <Marker key={ev.transport_id} position={[51.505, -0.09]}>
                   <Popup>
                     <div className="max-w-xs">
-                      <p className="font-semibold">{ev.location}</p>
-                      <p className="text-sm text-[#ccc68e]">{ev.time}</p>
-                      <p className="mt-2 text-sm">{ev.note}</p>
+                      <p className="font-semibold">{ev.current_location}</p>
+                      <p className="text-sm text-[#ccc68e]">
+                        {ev.current_time}
+                      </p>
+                      <p className="mt-2 text-sm">{ev.current_time}</p>
                     </div>
                   </Popup>
                 </Marker>
@@ -270,7 +188,7 @@ export default function ShipmentTracker() {
 
             <div className="mt-3 flex justify-end">
               <button
-                className="rounded-full bg-[#f9e106] text-[#232110] px-4 py-2 font-medium"
+                className="rounded-full bg-[#f9e106] text-[#232110] px-4 py-2 font-medium text-sm sm:text-base"
                 onClick={() => setShowAddressForm((s) => !s)}
               >
                 Need a change of delivery address?
@@ -278,12 +196,11 @@ export default function ShipmentTracker() {
             </div>
 
             {showAddressForm && (
-              <form onSubmit={handleAddAddress} className="mt-3 space-y-2">
+              <form className="mt-3 space-y-2">
                 <label className="block text-sm text-[#ccc68e]">
                   Provide coordinates (lat,lng)
                   <input
-                    value={newLatLng}
-                    onChange={(e) => setNewLatLng(e.target.value)}
+                    value={"45.7"}
                     placeholder="e.g. 48.8566,2.3522"
                     className="mt-1 w-full rounded-md bg-[#232110] border border-[#3b3b2a] px-3 py-2 text-white text-sm"
                   />
@@ -293,15 +210,14 @@ export default function ShipmentTracker() {
                     type="button"
                     onClick={() => {
                       setShowAddressForm(false);
-                      setNewLatLng("");
                     }}
-                    className="px-4 py-2 rounded-md border border-[#3b3b2a]"
+                    className="px-4 py-2 rounded-md border border-[#3b3b2a] text-sm"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-md bg-[#f9e106] text-[#232110] font-medium"
+                    className="px-4 py-2 rounded-md bg-[#f9e106] text-[#232110] font-medium text-sm"
                   >
                     Submit
                   </button>
@@ -314,40 +230,40 @@ export default function ShipmentTracker() {
             <h4 className="font-semibold mb-3">Shipment Progress</h4>
 
             <div className="space-y-4">
-              {shipment.events.map((ev) => (
+              {shipment?.transport_history?.map((ev, index) => (
                 <div
-                  key={ev.id}
+                  key={ev.transport_id}
                   className="flex gap-3 items-start cursor-pointer"
-                  onClick={() => setFocusedEventId(ev.id)}
                   role="button"
                   tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") setFocusedEventId(ev.id);
-                  }}
                 >
                   <div className="mt-1">
-                    {ev.status === "shipped" && (
+                    {index === 0 && (
                       <i className="text-[#f9e106]">
                         <FaMapMarkerAlt />
                       </i>
                     )}
-                    {ev.status === "in_transit" && (
+                    {index === 1 && (
                       <i className="text-[#f9e106]">
                         <FaTruck />
                       </i>
                     )}
-                    {ev.status === "delivered" && <FaCheckCircle />}
+                    {index === shipment?.transport_history?.length - 1 && (
+                      <i className="text-green-500">
+                        <FaCheckCircle />
+                      </i>
+                    )}
                   </div>
                   <div>
                     <p className="font-medium">
-                      {ev.status === "in_transit"
+                      {index === 1
                         ? "In Transit"
-                        : ev.status === "shipped"
+                        : index === 0
                         ? "Shipped"
                         : "Delivered"}
                     </p>
-                    <p className="text-[#ccc68e] text-sm">{ev.time}</p>
-                    <p className="text-sm mt-1">{ev.location}</p>
+                    <p className="text-[#ccc68e] text-sm">{ev.current_time}</p>
+                    <p className="text-sm mt-1">{ev.current_location}</p>
                   </div>
                 </div>
               ))}
@@ -360,7 +276,7 @@ export default function ShipmentTracker() {
           </aside>
         </section>
 
-        <footer className="mt-8 text-center text-[#ccc68e]">
+        <footer className="mt-8 text-center text-[#ccc68e] text-sm">
           Contact us at{" "}
           <span className="text-white">unitedparcels880@gmail.com</span> or
           WhatsApp <span className="text-white">+31610928914</span>.

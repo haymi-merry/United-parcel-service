@@ -45,7 +45,7 @@ const router = createBrowserRouter([
     action: shipment,
   },
   {
-    path: "/shipment-tracking",
+    path: "/shipment-tracking/:id",
     element: <ShipmentTracker />,
   },
   {
