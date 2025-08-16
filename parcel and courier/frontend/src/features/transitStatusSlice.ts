@@ -116,6 +116,7 @@ const changeCurrentStatusSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchTransitHistory.fulfilled, (state, { payload }) => {
+        if (!payload) return;
         state.transitHistory = payload;
         state.loading = false;
       })

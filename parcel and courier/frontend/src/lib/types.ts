@@ -37,5 +37,5 @@ export interface ITransportHistory {
   current_country: string;
   current_date: string;
   current_time: string;
-  coordinates?: [number, number];
+  coordinates?: [number, number] | null;
 }

@@ -97,17 +97,6 @@ const ParcelDetails: React.FC = () => {
     setCurrentShipment(found!);
   }, [id, shipments, navigate]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#232110]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-20 h-20 rounded-full bg-[#f9e106] animate-pulse" />
-          <p className="text-white font-semibold">Loading details...</p>
-        </div>
-      </div>
-    );
-  }
-
   function openModel(action: string, event: ITransportHistory) {
     if (action === "EDIT" && event.transport_id) {
       setIsTrackingEditorOpen(true);
@@ -138,6 +127,17 @@ const ParcelDetails: React.FC = () => {
         dispatch(fetchShipments());
       }
     });
+  }
+
+  if (loading || !currentShipment) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#232110]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-20 h-20 rounded-full bg-[#f9e106] animate-pulse" />
+          <p className="text-white font-semibold">Loading details...</p>
+        </div>
+      </div>
+    );
   }
 
   return (

@@ -78,7 +78,7 @@ export default function ShipmentTracker() {
         setCenter([coords[0], coords[1]]);
       }
     }
-  }, [id, shipments, center]);
+  }, [id, shipments]); // ✅ no `center`
 
   const routes: LatLngTuple[] = useMemo(() => {
     return (
@@ -148,7 +148,10 @@ export default function ShipmentTracker() {
               </p>
               <div className="mt-3">
                 <button
-                  onClick={() => navigate(`/parcel/${shipment?.parcel_id}`)}
+                  onClick={async () => {
+                    await navigate(`/parcel/${shipment?.parcel_id}`);
+                    window.location.reload();
+                  }}
                   className="rounded-full bg-[#4a4621] px-4 py-2 text-sm"
                 >
                   View Details
@@ -252,13 +255,14 @@ export default function ShipmentTracker() {
           <aside className="bg-[#181811] p-4 rounded-xl">
             <h4 className="font-semibold mb-3">Shipment Progress</h4>
 
-            <div className="space-y-4">
+            <div className="space-y-4 max-h-full overflow-y-scroll">
               {shipment?.transport_history?.map((ev, index) => (
                 <div
                   key={ev.transport_id}
                   className="flex gap-3 items-start cursor-pointer"
                   role="button"
                   tabIndex={0}
+                  onClick={() => setCenter(ev.coordinates as LatLngTuple)}
                 >
                   <div className="mt-1">
                     {index === 0 ? (
@@ -292,11 +296,6 @@ export default function ShipmentTracker() {
                   </div>
                 </div>
               ))}
-            </div>
-
-            <div className="mt-6 text-sm text-[#ccc68e]">
-              For real-time updates integrate a realtime DB (Supabase/Firebase)
-              or webhooks on the server.
             </div>
           </aside>
         </section>

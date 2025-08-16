@@ -150,10 +150,10 @@ export const fetchShipments = createAsyncThunk(
                   ...history,
                   coordinates:
                     coordinates.results && coordinates.results.length > 0
-                      ? [
+                      ? ([
                           coordinates.results[0].latitude,
                           coordinates.results[0].longitude,
-                        ]
+                        ] as [number, number])
                       : null,
                 };
               } catch (err) {
@@ -201,6 +201,7 @@ const shipmentReducer = createSlice({
         state.loading = false;
       })
       .addCase(fetchShipments.fulfilled, (state, { payload }) => {
+        if (!payload) return;
         state.shipment = payload;
         state.loading = false;
       })
