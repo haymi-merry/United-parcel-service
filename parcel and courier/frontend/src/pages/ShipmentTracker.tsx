@@ -102,7 +102,9 @@ export default function ShipmentTracker() {
       <div className="min-h-screen flex items-center justify-center bg-[#232110]">
         <div className="flex flex-col items-center gap-4">
           <div className="w-20 h-20 rounded-full bg-[#f9e106] animate-pulse" />
-          <p className="text-white font-semibold">Loading SwiftShip…</p>
+          <p className="text-white font-semibold">
+            Loading Tacking Information...
+          </p>
         </div>
       </div>
     );
@@ -264,18 +266,18 @@ export default function ShipmentTracker() {
                         <FaMapMarkerAlt />
                       </i>
                     ) : index ===
-                        (shipment!.transport_history! &&
-                          shipment?.transport_history?.length &&
-                          shipment?.transport_history?.length) -
-                          1 && (
-                        <i className="text-green-500">
-                          <FaCheckCircle />
-                        </i>
-                      ) ? (
+                      (shipment!.transport_history! &&
+                        shipment?.transport_history?.length &&
+                        shipment?.transport_history?.length) -
+                        1 ? (
+                      <i className="text-green-500">
+                        <FaCheckCircle />
+                      </i>
+                    ) : (
                       <i className="text-[#f9e106]">
                         <FaTruck />
                       </i>
-                    ) : null}
+                    )}
                   </div>
                   <div>
                     <p className="font-medium">

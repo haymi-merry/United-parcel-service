@@ -34,6 +34,7 @@ export default function TrackingForm({
           current_date: currentDate,
           current_time: new Date().toLocaleTimeString(),
           parcel_id: event.parcel_id,
+          current_country: formData.get("currentCountry") as string,
         })
       );
       await dispatch(fetchShipments());
@@ -48,6 +49,7 @@ export default function TrackingForm({
           current_date: currentDate,
           current_time: new Date().toLocaleTimeString(),
           parcel_id: event.parcel_id,
+          current_country: formData.get("currentCountry") as string,
         })
       );
       await dispatch(fetchShipments());
@@ -69,7 +71,7 @@ export default function TrackingForm({
   return (
     <div>
       <form action={transactionDetailAction}>
-        <div className="flex items-center justify-center gap-x-3">
+        <div className="flex items-center flex-wrap max-h-[90%] justify-center gap-x-3">
           <div className="flex flex-col justify-start gap-y-2">
             <label htmlFor="currentLocation">Current Location</label>
             <Input
@@ -80,6 +82,19 @@ export default function TrackingForm({
               }
               type="text"
               name="currentLocation"
+              placeholder="e.g Addis Ababa"
+            />
+          </div>
+
+          <div className="flex flex-col justify-start gap-y-2">
+            <label htmlFor="currentCountry">Current Country</label>
+            <Input
+              className="w-full rounded-lg  p-[15px] text-sm  font-normal focus:outline-none border-[#f9e106] border-1 placeholder:text-[#bbba9b]"
+              id="currentCountry"
+              defaultValue={type === "Edit" ? event.current_country : undefined}
+              type="text"
+              placeholder="e.g Ethiopia"
+              name="currentCountry"
             />
           </div>
           <div className="flex flex-col justify-start gap-y-2">
@@ -99,7 +114,7 @@ export default function TrackingForm({
             type="submit"
             className="px-15 rounded-md text-sm font-bold text-center tracking-tigh border-[#f9e106] border-1"
           >
-            {loading ? type + "ing" : type}
+            {loading ? type + "ing..." : type}
           </Button>
         </div>
       </form>
