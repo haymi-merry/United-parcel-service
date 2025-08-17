@@ -48,7 +48,7 @@ const ParcelDetails: React.FC = () => {
               text: "Parcel deleted successfully",
               icon: "success",
             });
-            navigate(`/parcel/${id}`, { replace: true });
+            navigate(`/admin-dashboard`, { replace: true });
           })();
         }
       });

@@ -20,6 +20,10 @@ import type { TAppDispatch, TRootState } from "@/app/store";
 import type { IShipment } from "@/lib/types";
 import { fetchShipments } from "@/features/shipmentSlice";
 import { Button } from "@/components/ui/button";
+import { createRequest } from "@/features/changeAddressSlice";
+import { initRealtime, sendRealtimeEvent } from "@/supabase/supabaseRealTime";
+import { supabase } from "@/supabase/supabase";
+import Swal from "sweetalert2";
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
@@ -78,7 +82,7 @@ export default function ShipmentTracker() {
         setCenter([coords[0], coords[1]]);
       }
     }
-  }, [id, shipments]); // ✅ no `center`
+  }, [id, shipments, showAddressForm]);
 
   const routes: LatLngTuple[] = useMemo(() => {
     return (
@@ -96,6 +100,41 @@ export default function ShipmentTracker() {
       element.scrollIntoView({ behavior: "smooth" });
     }
   }
+
+  async function handleSubmit(formData: FormData) {
+    const oldAddress = shipment?.destination;
+    const newAddress = formData.get("newAddress") as string;
+    const parcelId = shipment?.parcel_id;
+
+    if (oldAddress && newAddress && parcelId) {
+      await dispatch(
+        createRequest({
+          parcel_id: parcelId,
+          new_address: newAddress,
+          old_address: oldAddress,
+        })
+      );
+
+      sendRealtimeEvent("INSERT", {
+        parcel_id: parcelId,
+        new_address: newAddress,
+        old_address: oldAddress,
+      });
+
+      await Swal.fire({
+        title: "Success!",
+        text: "Your address change request has been submitted.",
+        icon: "success",
+      });
+    }
+  }
+
+  useEffect(() => {
+    const channel = initRealtime(dispatch);
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [dispatch]);
 
   if (isShipmentsLoading) {
     return (
@@ -222,12 +261,12 @@ export default function ShipmentTracker() {
             </div>
 
             {showAddressForm && (
-              <form className="mt-3 space-y-2">
+              <form action={handleSubmit} className="mt-3 space-y-2">
                 <label className="block text-sm text-[#ccc68e]">
-                  Provide coordinates (lat,lng)
+                  Provide new Address
                   <input
-                    value={"45.7"}
-                    placeholder="e.g. 48.8566,2.3522"
+                    placeholder="e.g. Lagos"
+                    name="newAddress"
                     className="mt-1 w-full rounded-md bg-[#232110] border border-[#3b3b2a] px-3 py-2 text-white text-sm"
                   />
                 </label>
