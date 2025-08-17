@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { createRequest } from "@/features/changeAddressSlice";
 import { initRealtime, sendRealtimeEvent } from "@/supabase/supabaseRealTime";
 import { supabase } from "@/supabase/supabase";
+import Swal from "sweetalert2";
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
@@ -119,6 +120,12 @@ export default function ShipmentTracker() {
         new_address: newAddress,
         old_address: oldAddress,
       });
+
+      await Swal.fire({
+        title: "Success!",
+        text: "Your address change request has been submitted.",
+        icon: "success",
+      });
     }
   }
 
@@ -127,7 +134,7 @@ export default function ShipmentTracker() {
     return () => {
       void supabase.removeChannel(channel);
     };
-  }, []);
+  }, [dispatch]);
 
   if (isShipmentsLoading) {
     return (
