@@ -1,0 +1,61 @@
+{
+  "common": {
+    "welcome": "Willkommen bei United Parcel Services",
+    "track": "Verfolgen",
+    "track_parcel": "Ihr Paket verfolgen",
+    "explore_solutions": "Unsere Lösungen entdecken",
+    "continue": "Weiter",
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "submit": "Einreichen",
+    "cancel": "Abbrechen",
+    "loading": "Wird geladen...",
+    "error": "Ein Fehler ist aufgetreten",
+    "back": "Zurück"
+  },
+  "header": {
+    "home": "Startseite",
+    "about": "Über uns",
+    "services": "Dienstleistungen",
+    "contact": "Kontakt",
+    "updates": "Aktualisierungen"
+  },
+  "services": {
+    "express_delivery": "Expresslieferung",
+    "express_desc": "Schnelle und zuverlässige Lieferung für dringende Sendungen",
+    "freight": "Frachtverkehr",
+    "freight_desc": "Effiziente und kostengünstige Lösungen für große Sendungen",
+    "customs": "Zollabfertigung",
+    "customs_desc": "Fachkundige Unterstützung bei Zollabfertigungsprozessen",
+    "warehousing": "Lagerung",
+    "warehousing_desc": "Sichere und flexible Lageroptionen für Ihre Waren"
+  },
+  "updates": {
+    "new_routes": "Service-Update: Neue Lieferrouten",
+    "new_routes_desc": "Wir haben unser Liefernetz erweitert, um neue Routen für einen schnelleren Service zu integrieren",
+    "holiday": "Versandfristen für Feiertage",
+    "holiday_desc": "Planen Sie Ihre Feiertagslieferungen im Voraus mit unseren aktualisierten Fristen",
+    "warehouse": "Lagererweiterungsankündigung",
+    "warehouse_desc": "Unsere neue Lageranlage ist jetzt geöffnet und bietet mehr Lagerkapazität"
+  },
+  "contact": {
+    "customer_service": "Kundendienst",
+    "name": "Name",
+    "email": "E-Mail",
+    "message": "Nachricht",
+    "send": "Senden",
+    "contact_info": "Kontaktieren Sie uns unter <1>{{email}}</1> oder WhatsApp <2>{{phone}}</2>. Folgen Sie uns in sozialen Medien."
+  },
+  "tariff": {
+    "title": "Navigation durch die neuesten Tarifentwicklungen",
+    "content": "Bleiben Sie über die neuesten Zolländerungen informiert, die den internationalen Versand betreffen. Wir sind bestrebt, transparente und aktuelle Informationen bereitzustellen, um Ihnen bei der effektiven Verwaltung Ihrer Logistik zu helfen."
+  },
+  "language": {
+    "select_language": "Wählen Sie Ihre Sprache",
+    "select_country": "Wählen Sie Ihr Land"
+  },
+  "about": {
+  "title": "Über SwiftShip",
+  "description": "SwiftShip ist ein weltweit führender Logistikdienstleister mit umfassenden Lösungen für Unternehmen und Privatpersonen. Mit über 100 Jahren Geschichte haben wir uns einen Ruf für Zuverlässigkeit, Innovation und Kundenzufriedenheit erarbeitet. Unsere Dienstleistungen umfassen Paketzustellung, Frachttransport, Lieferkettenmanagement und branchenspezifische Lösungen. Unser modernes Trackingsystem bietet Echtzeit-Überwachung Ihrer Sendungen. Wir verpflichten uns zu Nachhaltigkeit und ethischen Praktiken, minimieren unsere Umweltauswirkungen und leisten positive Beiträge für die Gemeinschaften, denen wir dienen."
+}
+}

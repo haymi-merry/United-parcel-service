@@ -1,0 +1,61 @@
+{
+  "common": {
+    "welcome": "欢迎来到联合包裹服务",
+    "track": "追踪",
+    "track_parcel": "追踪您的包裹",
+    "explore_solutions": "探索我们的解决方案",
+    "continue": "继续",
+    "login": "登录",
+    "logout": "登出",
+    "submit": "提交",
+    "cancel": "取消",
+    "loading": "加载中...",
+    "error": "发生错误",
+    "back": "返回"
+  },
+  "header": {
+    "home": "首页",
+    "about": "关于",
+    "services": "服务",
+    "contact": "联系",
+    "updates": "更新"
+  },
+  "services": {
+    "express_delivery": "快递服务",
+    "express_desc": "快速可靠的紧急货物交付",
+    "freight": "货运代理",
+    "freight_desc": "为大宗货物提供高效且经济的解决方案",
+    "customs": "海关经纪",
+    "customs_desc": "专业协助完成海关清关流程",
+    "warehousing": "仓储服务",
+    "warehousing_desc": "为您的货物提供安全灵活的存储选择"
+  },
+  "updates": {
+    "new_routes": "服务更新：新的交付路线",
+    "new_routes_desc": "我们扩展了交付网络，包括更快的服务路线",
+    "holiday": "假日运输截止日期",
+    "holiday_desc": "根据我们更新的截止日期提前计划您的假日运输",
+    "warehouse": "仓库扩展公告",
+    "warehouse_desc": "我们的新仓库设施现已开放，提供更多存储容量"
+  },
+  "contact": {
+    "customer_service": "客户服务",
+    "name": "姓名",
+    "email": "电子邮件",
+    "message": "消息",
+    "send": "发送",
+    "contact_info": "通过<1>{{email}}</1>或WhatsApp<2>{{phone}}</2>联系我们。关注我们的社交媒体。"
+  },
+  "tariff": {
+    "title": "了解最新关税发展",
+    "content": "随时了解影响国际运输的最新关税变化。我们致力于提供透明和最新的信息，帮助您有效管理物流。"
+  },
+  "language": {
+    "select_language": "选择您的语言",
+    "select_country": "选择您的国家"
+  },
+  "about": {
+  "title": "关于SwiftShip",
+  "description": "SwiftShip是全球物流领导者，为企业和个人提供全方位解决方案。拥有百年历史，我们以可靠、创新和客户满意著称。我们的服务包括包裹递送、货运代理、供应链管理和行业专项解决方案。先进的追踪系统提供货物实时可视性，确保透明与安心。我们致力于可持续发展和道德实践，努力减少环境影响并积极回馈服务社区。"
+}
+}

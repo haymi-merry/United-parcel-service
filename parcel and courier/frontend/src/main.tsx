@@ -17,6 +17,8 @@ import { shipment, updateShipment } from "./actions/shipment.ts";
 import { store } from "./app/store.ts";
 import { Provider } from "react-redux";
 import EditShipment from "./pages/EditingShipments.tsx";
+import '@/i18n/i18n.ts';
+
 
 const router = createBrowserRouter([
   {
