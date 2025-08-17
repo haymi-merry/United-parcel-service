@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaPlus, FaCalendarAlt, FaDoorOpen } from "react-icons/fa";
 import { useFetcher, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import type { TRootState } from "@/app/store";
+import Swal from "sweetalert2";
 
 interface FormData {
   parcelId: string;
@@ -28,6 +31,23 @@ interface CreateShipmentProps {
 }
 
 const CreateShipment: React.FC<CreateShipmentProps> = () => {
+  const { authenticated } = useSelector((state: TRootState) => state.user);
+
+  if (!authenticated) {
+    Swal.fire({
+      title: "Unauthorized",
+      text: "Please log in to create a shipment.",
+      icon: "warning",
+      background: "#232110",
+      color: "#bbba9b",
+      confirmButtonText: "OK",
+    }).then(({ isConfirmed }) => {
+      if (isConfirmed) {
+        navigate("/");
+      }
+    });
+  }
+
   const [formData, setFormData] = useState<FormData>({
     parcelId: "",
     senderName: "",

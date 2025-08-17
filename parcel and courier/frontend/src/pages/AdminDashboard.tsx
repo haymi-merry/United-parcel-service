@@ -1,44 +1,56 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import type { IShipment } from "@/lib/types";
 import { useDispatch, useSelector } from "react-redux";
 import type { TAppDispatch, TRootState } from "@/app/store";
 import { fetchShipments } from "@/features/shipmentSlice";
+import Swal from "sweetalert2";
 
 const AdminDashboard: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch<TAppDispatch>();
+
   const { shipment, loading } = useSelector(
     (state: TRootState) => state.shipment
   );
-  const dispatch = useDispatch<TAppDispatch>();
+  const { authenticated } = useSelector((state: TRootState) => state.user);
 
-  const [filteredShipment, setFilteredShipment] = useState<null | IShipment[]>(
-    shipment
-  );
+  /** Unauthorized check — run only when auth state changes */
+  useEffect(() => {
+    if (!authenticated) {
+      Swal.fire({
+        title: "Unauthorized",
+        text: "Please log in to create a shipment.",
+        icon: "warning",
+        background: "#232110",
+        color: "#bbba9b",
+        confirmButtonText: "OK",
+      }).then(({ isConfirmed }) => {
+        if (isConfirmed) navigate("/");
+      });
+    }
+  }, [authenticated, navigate]);
 
+  /** Fetch shipments on mount */
   useEffect(() => {
     dispatch(fetchShipments());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (!searchQuery.trim()) {
-      setFilteredShipment(shipment);
-      return;
-    }
-    const query = searchQuery.toLowerCase();
+  /** Derived filtered shipments */
+  const filteredShipment = useMemo(() => {
+    if (!searchQuery.trim()) return shipment;
 
-    const filtered = shipment.filter((shipment: IShipment) => {
+    const query = searchQuery.toLowerCase();
+    return shipment.filter((s: IShipment) => {
       return (
-        shipment.parcel_id.toLowerCase().includes(query) ||
-        shipment.origin.toLowerCase().includes(query) ||
-        shipment.destination.toLowerCase().includes(query) ||
-        shipment.status.toLowerCase().includes(query)
+        s.parcel_id?.toLowerCase().includes(query) ||
+        s.origin?.toLowerCase().includes(query) ||
+        s.destination?.toLowerCase().includes(query) ||
+        s.status?.toLowerCase().includes(query)
       );
     });
-
-    setFilteredShipment(filtered);
   }, [searchQuery, shipment]);
 
   if (loading) {
@@ -69,11 +81,11 @@ const AdminDashboard: React.FC = () => {
               />
             </svg>
             <h2 className="text-lg font-bold tracking-tight">
-              United parcel service
+              United Parcel Service
             </h2>
           </div>
           <nav className="flex items-center gap-9">
-            <Link to="/"></Link>
+            <Link to="/">Home</Link>
           </nav>
         </div>
       </header>
@@ -106,62 +118,37 @@ const AdminDashboard: React.FC = () => {
           </div>
 
           <div className="space-y-4 p-4">
-            {filteredShipment?.map((shipment) => (
-              <div key={shipment.parcel_id} className="flex gap-4 rounded-xl">
+            {filteredShipment?.map((s) => (
+              <div key={s.parcel_id} className="flex gap-4 rounded-xl">
                 <div className="flex flex-[2_2_0px] flex-col gap-4">
                   <div className="flex flex-col gap-1">
                     <p className="text-base font-bold">
-                      Parcel ID: {shipment.parcel_id}
+                      Parcel ID: {s.parcel_id}
                     </p>
                     <p className="text-sm text-[#ccc68e]">
-                      Origin: {shipment.origin} | Destination:{" "}
-                      {shipment.destination} | Status: {shipment.status}
+                      Origin: {s.origin} | Destination: {s.destination} |
+                      Status: {s.status}
                     </p>
                   </div>
                   <button
-                    onClick={() => navigate(`/parcel/${shipment.parcel_id}`)}
+                    onClick={() => navigate(`/parcel/${s.parcel_id}`)}
                     className="h-8 w-fit rounded-full bg-[#4a4621] px-4 text-sm font-medium hover:bg-[#5a5531]"
                   >
                     View Details
                   </button>
                 </div>
-                <div
-                  className="flex-1 rounded-xl bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url('${shipment.img_url}')`,
-                    aspectRatio: "16/9",
-                  }}
-                />
+                {s.img_url && (
+                  <div
+                    className="flex-1 rounded-xl bg-cover bg-center"
+                    style={{
+                      backgroundImage: `url('${s.img_url}')`,
+                      aspectRatio: "16/9",
+                    }}
+                  />
+                )}
               </div>
             ))}
           </div>
-
-          {/* <div className="flex items-center justify-center gap-2 p-4">
-            <a href="#" className="flex h-10 w-10 items-center justify-center">
-              <ChevronLeft className="h-5 w-5" />
-            </a>
-            <a
-              href="#"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-[#4a4621] text-sm font-bold"
-            >
-              1
-            </a>
-            {[2, 3, 10].map((page) => (
-              <a
-                key={page}
-                href="#"
-                className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-normal hover:bg-[#4a4621]"
-              >
-                {page}
-              </a>
-            ))}
-            <span className="flex h-10 w-10 items-center justify-center text-sm font-normal">
-              ...
-            </span>
-            <a href="#" className="flex h-10 w-10 items-center justify-center">
-              <ChevronRight className="h-5 w-5" />
-            </a>
-          </div> */}
         </div>
       </main>
     </div>

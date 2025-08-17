@@ -1,9 +1,10 @@
 import Form from "@/components/Form";
 import { useState } from "react";
 import i18n from "i18next";
-
+import { useNavigate } from "react-router-dom";
 
 export default function LanguagePreference() {
+  const navigate = useNavigate();
   const countries = [
     { value: "us", label: "United States" },
     { value: "ca", label: "Canada" },
@@ -53,7 +54,7 @@ export default function LanguagePreference() {
     { value: "ua", label: "Ukraine" },
     { value: "ir", label: "Iran" },
     { value: "iq", label: "Iraq" },
-    { value: "sy", label: "Syria" }
+    { value: "sy", label: "Syria" },
   ];
 
   const languages = [
@@ -66,20 +67,24 @@ export default function LanguagePreference() {
     { value: "ru", label: "Russian", flag: "🇷🇺" },
     { value: "pt", label: "Portuguese", flag: "🇵🇹" },
     { value: "de", label: "German", flag: "🇩🇪" },
-    { value: "ja", label: "Japanese", flag: "🇯🇵" }
+    { value: "ja", label: "Japanese", flag: "🇯🇵" },
   ];
 
-  const [currentCountry, setCurrentCountry] = useState<string>(countries[0].value);
-  const [currentLanguage, setCurrentLanguage] = useState<string>(languages[0].value);
+  const [currentCountry, setCurrentCountry] = useState<string>(
+    countries[0].value
+  );
+  const [currentLanguage, setCurrentLanguage] = useState<string>(
+    languages[0].value
+  );
   const handleLanguageChange = (lang: string) => {
     setCurrentLanguage(lang);
-    i18n.changeLanguage(lang); // 👈 update the app language
+    i18n.changeLanguage(lang);
   };
 
   return (
     <Form
       forWhich="language"
-      onContinue={() => {}}
+      onContinue={() => navigate("/home")}
       countries={countries}
       currentCountry={currentCountry}
       setCountry={setCurrentCountry}

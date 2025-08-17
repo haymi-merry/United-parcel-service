@@ -22,7 +22,7 @@ import Swal from "sweetalert2";
 const App = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<TAppDispatch>();
-  const { messageLoading } = useSelector((state: TRootState) => state.customerSupport);
+  const { loading } = useSelector((state: TRootState) => state.customerSupport);
   const [isMounted, setIsMounted] = useState(false);
   const [showCustomerService, setShowCustomerService] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -110,12 +110,14 @@ const App = () => {
     });
   }
 
-  if (initialLoading) {
+  if (initialLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#232110]">
         <div className="flex flex-col items-center gap-4">
           <div className="w-20 h-20 rounded-full bg-[#f9e106] animate-pulse" />
-          <p className="text-white font-semibold">{t('common.loading') || 'Loading Shipments...'}</p>
+          <p className="text-white font-semibold">
+            {t("common.loading") || "Loading Shipments..."}
+          </p>
         </div>
       </div>
     );
@@ -142,7 +144,7 @@ const App = () => {
               onClick={() => scrollIntoSection("home")}
               className="text-lg font-bold tracking-tight cursor-pointer sm:text-xl"
             >
-              {t('common.welcome') || 'United Parcel Services'}
+              {t("common.welcome") || "United Parcel Services"}
             </h2>
           </div>
           <div className="flex items-center gap-4">
@@ -156,28 +158,28 @@ const App = () => {
                 className="text-white text-sm font-medium hover:text-[#f9f506]"
                 onClick={() => scrollIntoSection("about")}
               >
-                {t('header.about') || 'About'}
+                {t("header.about") || "About"}
               </Link>
               <a
                 href="#contact"
                 className="text-white text-sm font-medium hover:text-[#f9f506]"
                 onClick={() => scrollIntoSection("contact")}
               >
-                {t('header.contact') || 'Contact'}
+                {t("header.contact") || "Contact"}
               </a>
               <a
                 href="#services"
                 className="text-white text-sm font-medium hover:text-[#f9f506]"
                 onClick={() => scrollIntoSection("services")}
               >
-                {t('header.services') || 'Services'}
+                {t("header.services") || "Services"}
               </a>
               <a
                 href="#updates"
                 className="text-white text-sm font-medium hover:text-[#f9f506]"
                 onClick={() => scrollIntoSection("updates")}
               >
-                {t('header.updates') || 'Updates'}
+                {t("header.updates") || "Updates"}
               </a>
             </nav>
             <Button
@@ -191,7 +193,7 @@ const App = () => {
               to="/track-parcel"
               className="hidden md:flex min-w-[84px] max-w-[480px] items-center justify-center rounded-lg h-10 px-4 bg-[#f9f506] text-[#181811] text-sm font-bold tracking-[0.015em]"
             >
-              <span className="truncate">{t('common.track') || 'Track'}</span>
+              <span className="truncate">{t("common.track") || "Track"}</span>
             </Link>
           </div>
         </header>
@@ -213,7 +215,8 @@ const App = () => {
                 <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-center">
                   <TypeAnimation
                     sequence={[
-                      t('common.welcome') || 'Welcome to United Parcel Services',
+                      t("common.welcome") ||
+                        "Welcome to United Parcel Services",
                       1000,
                       " ",
                       500,
@@ -229,30 +232,37 @@ const App = () => {
                     to="/track-parcel"
                     className="min-w-[84px] max-w-[480px] rounded-lg h-10 px-4 sm:h-12 sm:px-5 bg-[#f9f506] text-[#181811] text-sm sm:text-base font-bold tracking-[0.015em] flex items-center justify-center"
                   >
-                    <span className="truncate">{t('common.track_parcel') || 'Track Your Parcel'}</span>
+                    <span className="truncate">
+                      {t("common.track_parcel") || "Track Your Parcel"}
+                    </span>
                   </Link>
                   <Link
                     to="/solutions"
                     className="min-w-[84px] max-w-[480px] rounded-lg h-10 px-4 sm:h-12 sm:px-5 bg-[#3a3927] text-white text-sm sm:text-base font-bold tracking-[0.015em] flex items-center justify-center"
                   >
-                    <span className="truncate">{t('common.explore_solutions') || 'Explore Our Solutions'}</span>
+                    <span className="truncate">
+                      {t("common.explore_solutions") || "Explore Our Solutions"}
+                    </span>
                   </Link>
                 </div>
               </div>
             </div>
 
             <h2 className="text-white text-xl sm:text-2xl font-bold tracking-tight px-4 pb-3 pt-5">
-              {t('tariff.title') || 'Navigating Latest Tariff Development'}
+              {t("tariff.title") || "Navigating Latest Tariff Development"}
             </h2>
             <p className="text-white text-base font-normal px-4 pb-3 pt-1">
-              {t('tariff.content') || 'Stay informed about the latest tariff changes affecting international shipping. We\'re committed to providing transparent and up-to-date information to help you manage your logistics effectively.'}
+              {t("tariff.content") ||
+                "Stay informed about the latest tariff changes affecting international shipping. We're committed to providing transparent and up-to-date information to help you manage your logistics effectively."}
             </p>
             <div className="flex px-4 py-3 justify-start">
               <Link
                 to="/solutions"
                 className="min-w-[84px] max-w-[480px] rounded-lg h-10 px-4 bg-[#f9f506] text-[#181811] text-sm font-bold tracking-[0.015em] flex items-center justify-center"
               >
-                <span className="truncate">{t('common.explore_solutions') || 'Explore Our Solutions'}</span>
+                <span className="truncate">
+                  {t("common.explore_solutions") || "Explore Our Solutions"}
+                </span>
               </Link>
             </div>
 
@@ -260,7 +270,7 @@ const App = () => {
               id="services"
               className="text-white text-xl sm:text-2xl font-bold tracking-tight px-4 pb-3 pt-5"
             >
-              {t('header.services') || 'Our Services'}
+              {t("header.services") || "Our Services"}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
               <motion.div
@@ -277,10 +287,11 @@ const App = () => {
                   ></div>
                   <div>
                     <p className="text-white text-base font-medium leading-normal">
-                      {t('services.express_delivery') || 'Express Delivery'}
+                      {t("services.express_delivery") || "Express Delivery"}
                     </p>
                     <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                      {t('services.express_desc') || 'Fast and reliable delivery for urgent shipments.'}
+                      {t("services.express_desc") ||
+                        "Fast and reliable delivery for urgent shipments."}
                     </p>
                   </div>
                 </div>
@@ -299,10 +310,11 @@ const App = () => {
                   ></div>
                   <div>
                     <p className="text-white text-base font-medium leading-normal">
-                      {t('services.freight') || 'Freight Forwarding'}
+                      {t("services.freight") || "Freight Forwarding"}
                     </p>
                     <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                      {t('services.freight_desc') || 'Efficient and cost-effective solutions for large shipments.'}
+                      {t("services.freight_desc") ||
+                        "Efficient and cost-effective solutions for large shipments."}
                     </p>
                   </div>
                 </div>
@@ -321,10 +333,11 @@ const App = () => {
                   ></div>
                   <div>
                     <p className="text-white text-base font-medium leading-normal">
-                      {t('services.customs') || 'Customs Brokerage'}
+                      {t("services.customs") || "Customs Brokerage"}
                     </p>
                     <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                      {t('services.customs_desc') || 'Expert assistance with customs clearance processes.'}
+                      {t("services.customs_desc") ||
+                        "Expert assistance with customs clearance processes."}
                     </p>
                   </div>
                 </div>
@@ -343,10 +356,11 @@ const App = () => {
                   ></div>
                   <div>
                     <p className="text-white text-base font-medium leading-normal">
-                      {t('services.warehousing') || 'Warehousing'}
+                      {t("services.warehousing") || "Warehousing"}
                     </p>
                     <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                      {t('services.warehousing_desc') || 'Secure and flexible storage options for your goods.'}
+                      {t("services.warehousing_desc") ||
+                        "Secure and flexible storage options for your goods."}
                     </p>
                   </div>
                 </div>
@@ -357,7 +371,7 @@ const App = () => {
               id="updates"
               className="text-white text-xl sm:text-2xl font-bold tracking-tight px-4 pb-3 pt-5"
             >
-              {t('header.updates') || 'Important Updates'}
+              {t("header.updates") || "Important Updates"}
             </h2>
             <div className="flex overflow-x-auto snap-x snap-mandatory [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden p-4 gap-3">
               <motion.div
@@ -379,10 +393,12 @@ const App = () => {
                 ></div>
                 <div>
                   <p className="text-white text-base font-medium leading-normal">
-                    {t('updates.new_routes') || 'Service Update: New Delivery Routes'}
+                    {t("updates.new_routes") ||
+                      "Service Update: New Delivery Routes"}
                   </p>
                   <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                    {t('updates.new_routes_desc') || 'We\'ve expanded our delivery network to include new routes for faster service.'}
+                    {t("updates.new_routes_desc") ||
+                      "We've expanded our delivery network to include new routes for faster service."}
                   </p>
                 </div>
               </motion.div>
@@ -405,10 +421,11 @@ const App = () => {
                 ></div>
                 <div>
                   <p className="text-white text-base font-medium leading-normal">
-                    {t('updates.holiday') || 'Holiday Shipping Deadlines'}
+                    {t("updates.holiday") || "Holiday Shipping Deadlines"}
                   </p>
                   <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                    {t('updates.holiday_desc') || 'Plan your holiday shipments ahead with our updated deadlines.'}
+                    {t("updates.holiday_desc") ||
+                      "Plan your holiday shipments ahead with our updated deadlines."}
                   </p>
                 </div>
               </motion.div>
@@ -431,10 +448,12 @@ const App = () => {
                 ></div>
                 <div>
                   <p className="text-white text-base font-medium leading-normal">
-                    {t('updates.warehouse') || 'Warehouse Expansion Announcement'}
+                    {t("updates.warehouse") ||
+                      "Warehouse Expansion Announcement"}
                   </p>
                   <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                    {t('updates.warehouse_desc') || 'Our new warehouse facility is now open, offering more storage capacity.'}
+                    {t("updates.warehouse_desc") ||
+                      "Our new warehouse facility is now open, offering more storage capacity."}
                   </p>
                 </div>
               </motion.div>
@@ -449,7 +468,9 @@ const App = () => {
                 <div className="text-[#181811] text-2xl">
                   <FaQuestionCircle />
                 </div>
-                <span className="truncate">{t('contact.customer_service') || 'Customer Service'}</span>
+                <span className="truncate">
+                  {t("contact.customer_service") || "Customer Service"}
+                </span>
               </motion.button>
             </div>
 
@@ -460,49 +481,52 @@ const App = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 50 }}
               >
-            <h3 className="text-black mb-2">{t('contact.contact_us') || 'Contact Us'}</h3>
-<form
-  onSubmit={handleCustomerSupport}
-  encType="multipart/form-data"
-  className="flex flex-col gap-2"
->
-  <Input
-    type="text"
-    placeholder={t('contact.name') || 'Name'}
-    name="name"
-    value={formData.name}
-    onChange={handleInputChange}
-    className="border p-2 w-full"
-  />
-  <Input
-    type="email"
-    placeholder={t('contact.email') || 'Email'}
-    name="email"
-    value={formData.email}
-    onChange={handleInputChange}
-    className="border p-2 w-full"
-  />
-  <Textarea
-    placeholder={t('contact.message') || 'Message'}
-    name="message"
-    value={formData.message}
-    onChange={handleInputChange}
-    className="border p-2 w-full"
-  />
-  <Input
-    type="file"
-    name="attachment"
-    onChange={handleInputChange}
-    className="border p-2 w-full"
-  />
-  <Button
-    type="submit"
-    className="bg-[#f9f506] text-[#181811] p-2"
-  >
-    {messageLoading ? (t('contact.send') || "Send") : (t('contact.send') || "Send")}
-  </Button>
-</form>
-
+                <h3 className="text-black mb-2">
+                  {t("contact.contact_us") || "Contact Us"}
+                </h3>
+                <form
+                  onSubmit={handleCustomerSupport}
+                  encType="multipart/form-data"
+                  className="flex flex-col gap-2"
+                >
+                  <Input
+                    type="text"
+                    placeholder={t("contact.name") || "Name"}
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="border p-2 w-full"
+                  />
+                  <Input
+                    type="email"
+                    placeholder={t("contact.email") || "Email"}
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="border p-2 w-full"
+                  />
+                  <Textarea
+                    placeholder={t("contact.message") || "Message"}
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    className="border p-2 w-full"
+                  />
+                  <Input
+                    type="file"
+                    name="attachment"
+                    onChange={handleInputChange}
+                    className="border p-2 w-full"
+                  />
+                  <Button
+                    type="submit"
+                    className="bg-[#f9f506] text-[#181811] p-2"
+                  >
+                    {messageLoading
+                      ? t("contact.send") || "Send"
+                      : t("contact.send") || "Send"}
+                  </Button>
+                </form>
               </motion.div>
             )}
 
@@ -530,20 +554,30 @@ const App = () => {
               <p className="text-white font-semibold">
                 {new Date().toISOString().split("T")[0]}
               </p>
-<p className="text-[#bbba9b] text-base font-normal leading-normal">
-  <Trans 
-    i18nKey="contact.contact_info"
-    values={{
-      email: "unitedparcels880@gmail.com",
-      phone: "+31610928914"
-    }}
-    components={{
-      1: <a href="mailto:unitedparcels880@gmail.com" className="text-[#f9f506] hover:underline" />,
-      2: <a href="https://wa.me/31610928914" className="text-[#f9f506] hover:underline" />
-    }}
-    defaults="Contact us at <1>unitedparcels880@gmail.com</1> or WhatsApp <2>+31610928914</2>. Follow us on social media."
-  />
-</p>
+              <p className="text-[#bbba9b] text-base font-normal leading-normal">
+                <Trans
+                  i18nKey="contact.contact_info"
+                  values={{
+                    email: "unitedparcels880@gmail.com",
+                    phone: "+31610928914",
+                  }}
+                  components={{
+                    1: (
+                      <a
+                        href="mailto:unitedparcels880@gmail.com"
+                        className="text-[#f9f506] hover:underline"
+                      />
+                    ),
+                    2: (
+                      <a
+                        href="https://wa.me/31610928914"
+                        className="text-[#f9f506] hover:underline"
+                      />
+                    ),
+                  }}
+                  defaults="Contact us at <1>unitedparcels880@gmail.com</1> or WhatsApp <2>+31610928914</2>. Follow us on social media."
+                />
+              </p>
             </footer>
           </div>
         </motion.div>
