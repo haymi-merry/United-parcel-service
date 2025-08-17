@@ -24,12 +24,13 @@ const App = () => {
   const dispatch = useDispatch<TAppDispatch>();
   const { loading } = useSelector((state: TRootState) => state.customerSupport);
   const [isMounted, setIsMounted] = useState(false);
+
   const [showCustomerService, setShowCustomerService] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { loading: messageLoading, error: messageError } = useSelector(
-    (state: TRootState) => state.customerSupport
-  );
+  (state: TRootState) => state.customerSupport
+);
   const [formData, setFormData] = useState({
     name: "",
     email: "",

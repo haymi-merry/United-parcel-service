@@ -11,7 +11,10 @@
     "cancel": "取消",
     "loading": "加载中...",
     "error": "发生错误",
-    "back": "返回"
+    "back": "返回",
+    "ship": "发货",
+    "locations": "地点",
+    "support": "支持"
   },
   "header": {
     "home": "首页",
@@ -57,5 +60,30 @@
   "about": {
   "title": "关于SwiftShip",
   "description": "SwiftShip是全球物流领导者，为企业和个人提供全方位解决方案。拥有百年历史，我们以可靠、创新和客户满意著称。我们的服务包括包裹递送、货运代理、供应链管理和行业专项解决方案。先进的追踪系统提供货物实时可视性，确保透明与安心。我们致力于可持续发展和道德实践，努力减少环境影响并积极回馈服务社区。"
+},
+
+
+"solutions": {
+  "title": "运输解决方案",
+  "domestic": {
+    "title": "国内运输",
+    "subtitle": "快速可靠的国内递送服务",
+    "description": "SwiftTrack提供无缝国内追踪，实时更新和通知。"
+  },
+  "tracking": {
+    "title": "实时货物追踪",
+    "subtitle": "精准监控您的货件",
+    "description": "我们的平台提供货件的实时更新，确保您随时掌握最新动态。"
+  },
+  "specialized": {
+    "title": "专业物流",
+    "subtitle": "满足独特需求的定制方案",
+    "description": "通过专业传感器和实时报告监控敏感或超大货物。"
+  },
+  "warehousing": {
+    "title": "仓储与配送",
+    "subtitle": "安全存储与高效履约",
+    "description": "从仓库到门阶，全程可视化管理您的库存和运输。"
+  }
 }
 }
