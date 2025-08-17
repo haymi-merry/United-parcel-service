@@ -5,24 +5,25 @@ import {
   updateSyncRequest,
 } from "@/features/changeAddressSlice";
 import { supabase } from "./supabase";
-import { store } from "@/app/store";
+import { type TAppDispatch } from "@/app/store";
 
-export const initRealtime = () => {
+export const initRealtime = (dispatch: TAppDispatch) => {
   const channel = supabase.channel("address_change_request");
 
   // INSERT
   channel.on("broadcast", { event: "INSERT" }, ({ payload }) => {
-    store.dispatch(insertSyncRequest(payload));
+    console.log(payload);
+    dispatch(insertSyncRequest(payload));
   });
 
   // UPDATE
   channel.on("broadcast", { event: "UPDATE" }, ({ payload }) => {
-    store.dispatch(updateSyncRequest(payload));
+    dispatch(updateSyncRequest(payload));
   });
 
   // DELETE
   channel.on("broadcast", { event: "DELETE" }, ({ payload }) => {
-    store.dispatch(removeSyncRequest(payload.parcel_id));
+    dispatch(removeSyncRequest(payload.parcel_id));
   });
 
   channel.subscribe();

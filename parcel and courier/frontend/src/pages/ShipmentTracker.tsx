@@ -123,7 +123,7 @@ export default function ShipmentTracker() {
   }
 
   useEffect(() => {
-    const channel = initRealtime();
+    const channel = initRealtime(dispatch);
     return () => {
       void supabase.removeChannel(channel);
     };
