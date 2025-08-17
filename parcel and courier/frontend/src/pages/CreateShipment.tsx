@@ -52,6 +52,7 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState<boolean>(false);
+  console.log(image);
 
   function onLogout() {
     navigate("/admin-dashboard");
@@ -90,7 +91,6 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
       if (imagePreview) URL.revokeObjectURL(imagePreview);
     };
   }, [imagePreview]);
-  console.log(image);
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement

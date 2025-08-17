@@ -20,15 +20,18 @@ export interface IShipment {
 }
 
 export interface ICustomerSupport {
-  suppot_id?: string;
+  support_id?: string;
   message: string;
   email: string;
+  attachment?: File | null;
+  name?: string;
 }
 
 export interface IAddressChangeRequest {
   parcel_id: string;
   new_address: string;
   old_address: string;
+  status?: string;
 }
 
 export interface ITransportHistory {

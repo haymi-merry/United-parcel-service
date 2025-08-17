@@ -13,8 +13,10 @@ export default function TrackIDInput() {
   const { shipment } = useSelector((state: TRootState) => state.shipment);
 
   useEffect(() => {
-    if (!shipment || shipment.length < 1) dispatch(fetchShipments());
+    if (!shipment || shipment.length === 0 || !shipment[0].parcel_id)
+      dispatch(fetchShipments());
   }, [dispatch, shipment]);
+
   useEffect(() => {
     if (parcelID === "admin") {
       Swal.fire({
@@ -31,18 +33,20 @@ export default function TrackIDInput() {
     }
   }, [navigate, parcelID]);
 
-  function track(id: string) {
+  async function track(id: string) {
     if (!id) return;
-    const found = shipment.find((s) => s.parcel_id === id);
+    const found = shipment.find(
+      (s) => s.parcel_id.toLowerCase().trim() === id.toLowerCase().trim()
+    );
     if (!found) {
-      Swal.fire({
+      await Swal.fire({
         icon: "error",
         title: "Not Found",
         text: "No shipment found with the provided ID.",
       });
       return;
     }
-    Swal.fire({
+    await Swal.fire({
       icon: "success",
       title: "Found",
       text: `Shipment found: ${found.parcel_id}`,

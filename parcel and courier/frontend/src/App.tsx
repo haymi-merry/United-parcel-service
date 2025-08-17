@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type FormEvent, type ChangeEvent } from "react";
 import {
   FaQuestionCircle,
   FaTwitter,
@@ -13,12 +13,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { TypeAnimation } from "react-type-animation";
+import { useDispatch, useSelector } from "react-redux";
+import type { TAppDispatch, TRootState } from "./app/store";
+import { createMessage, fetchMessages } from "./features/customerSupportSlice";
+import Swal from "sweetalert2";
 
 const App = () => {
+  const dispatch = useDispatch<TAppDispatch>();
   const [isMounted, setIsMounted] = useState(false);
   const [showCustomerService, setShowCustomerService] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { loading: messageLoading, error: messageError } = useSelector(
+    (state: TRootState) => state.customerSupport
+  );
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+    attachment: null,
+  });
 
   useEffect(() => {
     setIsMounted(true);
@@ -46,6 +60,52 @@ const App = () => {
     }, 2000);
     return () => clearTimeout(id);
   }, []);
+
+  const handleCustomerSupport = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await dispatch(createMessage(formData));
+
+    if (!messageError) {
+      await Swal.fire({
+        title: "Success!",
+        text: "Your message has been sent.",
+        icon: "success",
+      });
+    }
+    setFormData({
+      name: "",
+      email: "",
+      message: "",
+      attachment: null,
+    });
+    setShowCustomerService(false);
+  };
+
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value, files } = e.currentTarget as HTMLInputElement & {
+      files: FileList;
+    };
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files ? files[0] : value,
+    }));
+  };
+
+  if (messageError) {
+    Swal.fire({
+      title: "Error!",
+      text: "Error while sending message.",
+      icon: "error",
+      showConfirmButton: true,
+      confirmButtonText: "Retry",
+    }).then(({ isConfirmed }) => {
+      if (isConfirmed) {
+        dispatch(fetchMessages());
+      }
+    });
+  }
 
   if (initialLoading) {
     return (
@@ -399,26 +459,45 @@ const App = () => {
                 exit={{ opacity: 0, y: 50 }}
               >
                 <h3 className="text-black mb-2">Contact Us</h3>
-                <form className="flex flex-col gap-2">
+                <form
+                  onSubmit={handleCustomerSupport}
+                  encType="multipart/form-data"
+                  className="flex flex-col gap-2"
+                >
                   <Input
                     type="text"
                     placeholder="Name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
                     className="border p-2 w-full"
                   />
                   <Input
                     type="email"
                     placeholder="Email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
                     className="border p-2 w-full"
                   />
                   <Textarea
                     placeholder="Message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    className="border p-2 w-full"
+                  />
+                  <Input
+                    type="file"
+                    name="attachment"
+                    onChange={handleInputChange}
                     className="border p-2 w-full"
                   />
                   <Button
                     type="submit"
                     className="bg-[#f9f506] text-[#181811] p-2"
                   >
-                    Send
+                    {messageLoading ? "Sending..." : "Send"}
                   </Button>
                 </form>
               </motion.div>

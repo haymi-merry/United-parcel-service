@@ -66,12 +66,17 @@ export const deleteRequest = createAsyncThunk(
 export const updateRequest = createAsyncThunk(
   "changeAddress/updateRequest",
   async (
-    { parcel_id, new_address, old_address }: IAddressChangeRequest,
+    {
+      parcel_id,
+      new_address,
+      old_address,
+      status,
+    }: Partial<IAddressChangeRequest>,
     { rejectWithValue }
   ) => {
     const { data, error } = await supabase
       .from("address_change_request")
-      .update({ parcel_id, new_address, old_address })
+      .update({ parcel_id, new_address, old_address, status })
       .eq("parcel_id", parcel_id);
 
     if (error) {
