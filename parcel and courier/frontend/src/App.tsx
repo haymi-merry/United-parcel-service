@@ -22,31 +22,32 @@ import Swal from "sweetalert2";
 const App = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<TAppDispatch>();
-  const { loading } = useSelector((state: TRootState) => state.customerSupport);
-  const [isMounted, setIsMounted] = useState(false);
-  const [showCustomerService, setShowCustomerService] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { loading: messageLoading, error: messageError } = useSelector(
     (state: TRootState) => state.customerSupport
   );
+  const [showCustomerService, setShowCustomerService] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
-    attachment: null,
+    attachment: null as File | null,
   });
 
   useEffect(() => {
-    setIsMounted(true);
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   const toggleCustomerService = () => {
-    setShowCustomerService(!showCustomerService);
+    setShowCustomerService((prev) => !prev);
   };
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsMobileMenuOpen((prev) => !prev);
   };
 
   const scrollIntoSection = (sectionId: string) => {
@@ -57,60 +58,61 @@ const App = () => {
     setIsMobileMenuOpen(false);
   };
 
-  useEffect(() => {
-    const id = setTimeout(() => {
-      setInitialLoading(false);
-    }, 2000);
-    return () => clearTimeout(id);
-  }, []);
-
-  const handleCustomerSupport = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    await dispatch(createMessage(formData));
-
-    if (!messageError) {
-      await Swal.fire({
-        title: "Success!",
-        text: "Your message has been sent.",
-        icon: "success",
-      });
-    }
-    setFormData({
-      name: "",
-      email: "",
-      message: "",
-      attachment: null,
-    });
-    setShowCustomerService(false);
-  };
-
   const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value, files } = e.currentTarget as HTMLInputElement & {
-      files: FileList;
-    };
+    const { name, value, files } = e.target as HTMLInputElement;
     setFormData((prev) => ({
       ...prev,
       [name]: files ? files[0] : value,
     }));
   };
 
-  if (messageError) {
-    Swal.fire({
-      title: "Error!",
-      text: "Error while sending message.",
-      icon: "error",
-      showConfirmButton: true,
-      confirmButtonText: "Retry",
-    }).then(({ isConfirmed }) => {
-      if (isConfirmed) {
-        dispatch(fetchMessages());
-      }
-    });
-  }
+  useEffect(() => {
+    if (messageError) {
+      Swal.fire({
+        title: t("common.error") || "Error!",
+        text: t("contact.message_error") || "Error while sending message.",
+        icon: "error",
+      });
+    }
+  }, [messageError, t]);
 
-  if (initialLoading || loading) {
+  const handleCustomerSupport = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const result = await dispatch(createMessage(formData));
+
+    if (createMessage.fulfilled.match(result)) {
+      await Swal.fire({
+        title: t("common.success") || "Success!",
+        text: t("contact.message_sent") || "Your message has been sent.",
+        icon: "success",
+      });
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+        attachment: null,
+      });
+      setShowCustomerService(false);
+    } else {
+      await Swal.fire({
+        title: t("common.error") || "Error!",
+        text: t("contact.message_error") || "Error while sending message.",
+        icon: "error",
+        showConfirmButton: true,
+        confirmButtonText: t("common.retry") || "Retry",
+      }).then(({ isConfirmed }) => {
+        if (isConfirmed) {
+          dispatch(fetchMessages());
+        }
+      });
+    }
+  };
+
+  // Removed redundant isMounted state/effect as opacity can be handled directly in motion
+
+  if (initialLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#232110]">
         <div className="flex flex-col items-center gap-4">
@@ -125,7 +127,7 @@ const App = () => {
 
   return (
     <div className="relative min-h-screen flex flex-col bg-[#181811] font-['Space_Grotesk','Noto_Sans',sans-serif] overflow-x-hidden">
-      <div className="flex flex-col h-full grow container mx-auto">
+      <div className="flex flex-col h-full grow container mx-auto max-w-7xl">
         <header className="flex items-center justify-between border-b border-[#3a3927] px-4 py-3 sm:px-6 md:px-10">
           <div className="flex items-center gap-4 text-white">
             <div className="w-4 h-4">
@@ -151,7 +153,7 @@ const App = () => {
             <nav
               className={`md:flex ${
                 isMobileMenuOpen ? "flex" : "hidden"
-              } flex-col md:flex-row gap-4 md:gap-8 absolute md:static top-16 left-0 w-full md:w-auto bg-[#181811] md:bg-transparent p-4 md:p-0 z-10`}
+              } flex-col md:flex-row gap-4 md:gap-8 absolute md:static top-16 left-0 w-full md:w-auto bg-[#181811] md:bg-transparent p-4 md:p-0 z-10 border-b md:border-none border-[#3a3927]`}
             >
               <Link
                 to="/about"
@@ -201,11 +203,11 @@ const App = () => {
         <motion.div
           className="px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40 py-5 flex flex-1 justify-center"
           initial={{ opacity: 0 }}
-          animate={{ opacity: isMounted ? 1 : 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
         >
           <div className="flex flex-col w-full max-w-5xl">
-            <div className="p-4 sm:p-6 md:p-8">
+            <section id="home" className="p-4 sm:p-6 md:p-8">
               <div
                 className="flex min-h-[300px] sm:min-h-[400px] md:min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat rounded-lg items-center justify-center p-4 sm:p-6"
                 style={{
@@ -217,9 +219,10 @@ const App = () => {
                     sequence={[
                       t("common.welcome") ||
                         "Welcome to United Parcel Services",
-                      1000,
-                      " ",
-                      500,
+                      2000,
+                      t("common.welcome_alt") ||
+                        "Your Reliable Shipping Partner",
+                      2000,
                     ]}
                     wrapper="span"
                     speed={50}
@@ -246,223 +249,155 @@ const App = () => {
                   </Link>
                 </div>
               </div>
-            </div>
+            </section>
 
-            <h2 className="text-white text-xl sm:text-2xl font-bold tracking-tight px-4 pb-3 pt-5">
-              {t("tariff.title") || "Navigating Latest Tariff Development"}
-            </h2>
-            <p className="text-white text-base font-normal px-4 pb-3 pt-1">
-              {t("tariff.content") ||
-                "Stay informed about the latest tariff changes affecting international shipping. We're committed to providing transparent and up-to-date information to help you manage your logistics effectively."}
-            </p>
-            <div className="flex px-4 py-3 justify-start">
-              <Link
-                to="/solutions"
-                className="min-w-[84px] max-w-[480px] rounded-lg h-10 px-4 bg-[#f9f506] text-[#181811] text-sm font-bold tracking-[0.015em] flex items-center justify-center"
-              >
-                <span className="truncate">
-                  {t("common.explore_solutions") || "Explore Our Solutions"}
-                </span>
-              </Link>
-            </div>
+            <section className="px-4 sm:px-6 md:px-8">
+              <h2 className="text-white text-xl sm:text-2xl font-bold tracking-tight pb-3 pt-5">
+                {t("tariff.title") || "Navigating Latest Tariff Development"}
+              </h2>
+              <p className="text-white text-base font-normal pb-3 pt-1">
+                {t("tariff.content") ||
+                  "Stay informed about the latest tariff changes affecting international shipping. We're committed to providing transparent and up-to-date information to help you manage your logistics effectively."}
+              </p>
+              <div className="flex py-3 justify-start">
+                <Link
+                  to="/solutions"
+                  className="min-w-[84px] max-w-[480px] rounded-lg h-10 px-4 bg-[#f9f506] text-[#181811] text-sm font-bold tracking-[0.015em] flex items-center justify-center"
+                >
+                  <span className="truncate">
+                    {t("common.explore_solutions") || "Explore Our Solutions"}
+                  </span>
+                </Link>
+              </div>
+            </section>
 
-            <h2
-              id="services"
-              className="text-white text-xl sm:text-2xl font-bold tracking-tight px-4 pb-3 pt-5"
-            >
-              {t("header.services") || "Our Services"}
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
-              <motion.div
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.8 }}
-              >
-                <div className="flex flex-col gap-3 pb-3">
-                  <div
-                    className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
-                    style={{
-                      backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuAPVDhg23R623ksMcUtF6ouzrKlNN7a2zEZ0SfXXfJ-4e057wPOJMyzkcsyXvwX7wYYlYnuIv1-1xk_qgddT8yvO2s4sWqgj3_S4o0vuSuPf2LftGWhCSEp4022EWObaf0ItxG2m0HX7DtgBaDvwJqKwyFBGUjR72WNnSjCWpykO5fX3ue_DCuNK6ps0ONmyW0JuA1aZ7ILWloatz5zPSHp-z9-B4TI9VjcpGbKKyZ361dMaVyZNqXRGLWRYmGFP4Qf4zbRVcKxPRU")`,
-                    }}
-                  ></div>
-                  <div>
-                    <p className="text-white text-base font-medium leading-normal">
-                      {t("services.express_delivery") || "Express Delivery"}
-                    </p>
-                    <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                      {t("services.express_desc") ||
-                        "Fast and reliable delivery for urgent shipments."}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-              <motion.div
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.8 }}
-              >
-                <div className="flex flex-col gap-3 pb-3">
-                  <div
-                    className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
-                    style={{
-                      backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuDAh5cBMEevj41qvDe_tCugWC3zNHtPTnCHOxb2LpoPQfvp5N0X_Zi5wg9sY7nF1ffbr9bz9aFxtr6CPFMlgnTUirO-19ZVHhWVAlVVheYotS04RTvqlEwIX2Zxn_Sas3vmXREqDuNozdj2YHGU-w8QKYHWkOCEpNw3SBfVCeugaJYpfs04GLDFej2A_2zs4MrV9k0OSfU1PkdOSga3QdU8F4Vjq5aK41WJ5SIERzqH2EVWD27P3wH6VnnOYp9ojbModw7WL6h-G5A")`,
-                    }}
-                  ></div>
-                  <div>
-                    <p className="text-white text-base font-medium leading-normal">
-                      {t("services.freight") || "Freight Forwarding"}
-                    </p>
-                    <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                      {t("services.freight_desc") ||
-                        "Efficient and cost-effective solutions for large shipments."}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-              <motion.div
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.8 }}
-              >
-                <div className="flex flex-col gap-3 pb-3">
-                  <div
-                    className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
-                    style={{
-                      backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuCp4NS5SXrZW7vCV-2jA8GK7G4FRWGzS1vje6mAc-fDLALVzVy2UG9w8oAFgPYevwLpnJ5H_klamhNHlHCmrSMj06FevKuhd9r9VvE8QKoYwbiKdbjEQCWbs14hswKVdMzUgkbbBDlKfd2TggRGGPc-5XVo_06XbM50vxTY_B4eHcAbFrsLnN0DO8KE_RqDfw5SAFTeS4nCbrlJHUsOyih_TCMx1UnxjvEVSX7ZoHYmft21tzFfu3o2mT4pFJgmzgwcDmD_UzeFIw8")`,
-                    }}
-                  ></div>
-                  <div>
-                    <p className="text-white text-base font-medium leading-normal">
-                      {t("services.customs") || "Customs Brokerage"}
-                    </p>
-                    <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                      {t("services.customs_desc") ||
-                        "Expert assistance with customs clearance processes."}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-              <motion.div
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.8 }}
-              >
-                <div className="flex flex-col gap-3 pb-3">
-                  <div
-                    className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
-                    style={{
-                      backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuDm9ucDsO7zxPzDgT4STTggSzP-Lyi6MeU2Lm9Y2JJ896KmeVWe--k81XbOQ7wyaun5br0hBxNpoVQ6wThbs80qGByory1AjLKpTe2ao3pCPpJVUjiL9iSdEzH29O0buVVn6yjwxbPqkoKoL-nPhCs4Zh2ZH1YghwaE7P5GEW_VbQv6VobCIEY2kiKL0GiK9aL2SJNwyRslzAYYhxt5xRxQ0mHJtl6SZItloD7Nx-bpl6o8_1a2xCFlf82VyJ-efrqhd3AAhwYVA84")`,
-                    }}
-                  ></div>
-                  <div>
-                    <p className="text-white text-base font-medium leading-normal">
-                      {t("services.warehousing") || "Warehousing"}
-                    </p>
-                    <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                      {t("services.warehousing_desc") ||
-                        "Secure and flexible storage options for your goods."}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
+            <section id="services" className="px-4 sm:px-6 md:px-8">
+              <h2 className="text-white text-xl sm:text-2xl font-bold tracking-tight pb-3 pt-5">
+                {t("header.services") || "Our Services"}
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                  {
+                    title: t("services.express_delivery") || "Express Delivery",
+                    desc:
+                      t("services.express_desc") ||
+                      "Fast and reliable delivery for urgent shipments.",
+                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAPVDhg23R623ksMcUtF6ouzrKlNN7a2zEZ0SfXXfJ-4e057wPOJMyzkcsyXvwX7wYYlYnuIv1-1xk_qgddT8yvO2s4sWqgj3_S4o0vuSuPf2LftGWhCSEp4022EWObaf0ItxG2m0HX7DtgBaDvwJqKwyFBGUjR72WNnSjCWpykO5fX3ue_DCuNK6ps0ONmyW0JuA1aZ7ILWloatz5zPSHp-z9-B4TI9VjcpGbKKyZ361dMaVyZNqXRGLWRYmGFP4Qf4zbRVcKxPRU",
+                  },
+                  {
+                    title: t("services.freight") || "Freight Forwarding",
+                    desc:
+                      t("services.freight_desc") ||
+                      "Efficient and cost-effective solutions for large shipments.",
+                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDAh5cBMEevj41qvDe_tCugWC3zNHtPTnCHOxb2LpoPQfvp5N0X_Zi5wg9sY7nF1ffbr9bz9aFxtr6CPFMlgnTUirO-19ZVHhWVAlVVheYotS04RTvqlEwIX2Zxn_Sas3vmXREqDuNozdj2YHGU-w8QKYHWkOCEpNw3SBfVCeugaJYpfs04GLDFej2A_2zs4MrV9k0OSfU1PkdOSga3QdU8F4Vjq5aK41WJ5SIERzqH2EVWD27P3wH6VnnOYp9ojbModw7WL6h-G5A",
+                  },
+                  {
+                    title: t("services.customs") || "Customs Brokerage",
+                    desc:
+                      t("services.customs_desc") ||
+                      "Expert assistance with customs clearance processes.",
+                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCp4NS5SXrZW7vCV-2jA8GK7G4FRWGzS1vje6mAc-fDLALVzVy2UG9w8oAFgPYevwLpnJ5H_klamhNHlHCmrSMj06FevKuhd9r9VvE8QKoYwbiKdbjEQCWbs14hswKVdMzUgkbbBDlKfd2TggRGGPc-5XVo_06XbM50vxTY_B4eHcAbFrsLnN0DO8KE_RqDfw5SAFTeS4nCbrlJHUsOyih_TCMx1UnxjvEVSX7ZoHYmft21tzFfu3o2mT4pFJgmzgwcDmD_UzeFIw8",
+                  },
+                  {
+                    title: t("services.warehousing") || "Warehousing",
+                    desc:
+                      t("services.warehousing_desc") ||
+                      "Secure and flexible storage options for your goods.",
+                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDm9ucDsO7zxPzDgT4STTggSzP-Lyi6MeU2Lm9Y2JJ896KmeVWe--k81XbOQ7wyaun5br0hBxNpoVQ6wThbs80qGByory1AjLKpTe2ao3pCPpJVUjiL9iSdEzH29O0buVVn6yjwxbPqkoKoL-nPhCs4Zh2ZH1YghwaE7P5GEW_VbQv6VobCIEY2kiKL0GiK9aL2SJNwyRslzAYYhxt5xRxQ0mHJtl6SZItloD7Nx-bpl6o8_1a2xCFlf82VyJ-efrqhd3AAhwYVA84",
+                  },
+                ].map((service, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <div className="flex flex-col gap-3 pb-3">
+                      <div
+                        className="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-lg"
+                        style={{ backgroundImage: `url("${service.img}")` }}
+                      ></div>
+                      <div>
+                        <p className="text-white text-base font-medium leading-normal">
+                          {service.title}
+                        </p>
+                        <p className="text-[#bbba9b] text-sm font-normal leading-normal">
+                          {service.desc}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
 
-            <h2
-              id="updates"
-              className="text-white text-xl sm:text-2xl font-bold tracking-tight px-4 pb-3 pt-5"
-            >
-              {t("header.updates") || "Important Updates"}
-            </h2>
-            <div className="flex overflow-x-auto snap-x snap-mandatory [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden p-4 gap-3">
-              <motion.div
-                initial={{ scale: 0.95 }}
-                animate={{ scale: 1 }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "easeInOut",
-                }}
-                className="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-[80%] sm:min-w-[40%] md:min-w-[30%]"
-              >
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg"
-                  style={{
-                    backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuBhR5hV__asiUgUfA_QHrbi4FlZ62rJFqY7tDNFHKLQhAKg6cFOnMOmNhWyjg0HnGwkmPCLMFIMh1Y16GXz-v-S9RhKiDgtmuAANrrxuk9VmBTRWqai-wQu1ZrhAsbz6I2r0TBQecQzayygsG8sEFmhNhuBA_nXkoc1g-RtQ-d9V6LkjfopB5PSncvBc5_vGCa_u7YFNSG-6ELg3wSJ67hFuB4CuG0FHiArgjWnTTrNJp9EXlePmS1tiaam89HB8Khu5AU-GBuh_b8")`,
-                  }}
-                ></div>
-                <div>
-                  <p className="text-white text-base font-medium leading-normal">
-                    {t("updates.new_routes") ||
-                      "Service Update: New Delivery Routes"}
-                  </p>
-                  <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                    {t("updates.new_routes_desc") ||
-                      "We've expanded our delivery network to include new routes for faster service."}
-                  </p>
-                </div>
-              </motion.div>
-              <motion.div
-                initial={{ scale: 0.95 }}
-                animate={{ scale: 1 }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "easeInOut",
-                }}
-                className="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-[80%] sm:min-w-[40%] md:min-w-[30%]"
-              >
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg"
-                  style={{
-                    backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuBaWwLiv1IOKnf9E04incnnJjNrOvrF74Jg_Tso6M5Olwv63-IgHxkQX_pIfDkxNFYN2SDNzVJWiGz9KKAycr2KVOeD8hJiITapRt3ixh1YB7Te718zMsh8rydSoAZspA4lq-Rt8ukcW6pKWKD39_IS-eSoiJz_n-Jmw6EL6xcLKE0DjkMo2IzvQ60MzxNGibMM5lJHSrNaMmUsFVCoiGxADA0gcEOsOIOcfgbbMTw4xDhBgMWv9Q4ZWvru3cVZtfFB8QtYg6MV8ak")`,
-                  }}
-                ></div>
-                <div>
-                  <p className="text-white text-base font-medium leading-normal">
-                    {t("updates.holiday") || "Holiday Shipping Deadlines"}
-                  </p>
-                  <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                    {t("updates.holiday_desc") ||
-                      "Plan your holiday shipments ahead with our updated deadlines."}
-                  </p>
-                </div>
-              </motion.div>
-              <motion.div
-                initial={{ scale: 0.95 }}
-                animate={{ scale: 1 }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "easeInOut",
-                }}
-                className="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-[80%] sm:min-w-[40%] md:min-w-[30%]"
-              >
-                <div
-                  className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg"
-                  style={{
-                    backgroundImage: `url("https://lh3.googleusercontent.com/aida-public/AB6AXuAGeUeCOkBDwqiu9cFbjdh9zJKZDtfh8XHsOLow_j5GAhKP0WU0UjixSk-gKxqrfkCkroxrEA2wvSXqv9gjwSrFeVhTEAqx1ZlHII-9V_UHYW1gbQYlQG8hQz8lxEH91sK5a4HKF53P_-zD_L7yM1YpoaY1_JnqhcKxlgwOHCk_oWidt5z0_EVGKtc6cvzBabh4JQtN_zCpvedkv4EnNTvFMMgb3vD3iA3mpQrCyodKFVb6M1uOXUPUhqtx9jkaGd9dE5t5cai9db0")`,
-                  }}
-                ></div>
-                <div>
-                  <p className="text-white text-base font-medium leading-normal">
-                    {t("updates.warehouse") ||
-                      "Warehouse Expansion Announcement"}
-                  </p>
-                  <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                    {t("updates.warehouse_desc") ||
-                      "Our new warehouse facility is now open, offering more storage capacity."}
-                  </p>
-                </div>
-              </motion.div>
-            </div>
+            <section id="updates" className="px-4 sm:px-6 md:px-8">
+              <h2 className="text-white text-xl sm:text-2xl font-bold tracking-tight pb-3 pt-5">
+                {t("header.updates") || "Important Updates"}
+              </h2>
+              <div className="flex overflow-x-auto snap-x snap-mandatory [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden gap-3">
+                {[
+                  {
+                    title:
+                      t("updates.new_routes") ||
+                      "Service Update: New Delivery Routes",
+                    desc:
+                      t("updates.new_routes_desc") ||
+                      "We've expanded our delivery network to include new routes for faster service.",
+                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBhR5hV__asiUgUfA_QHrbi4FlZ62rJFqY7tDNFHKLQhAKg6cFOnMOmNhWyjg0HnGwkmPCLMFIMh1Y16GXz-v-S9RhKiDgtmuAANrrxuk9VmBTRWqai-wQu1ZrhAsbz6I2r0TBQecQzayygsG8sEFmhNhuBA_nXkoc1g-RtQ-d9V6LkjfopB5PSncvBc5_vGCa_u7YFNSG-6ELg3wSJ67hFuB4CuG0FHiArgjWnTTrNJp9EXlePmS1tiaam89HB8Khu5AU-GBuh_b8",
+                  },
+                  {
+                    title: t("updates.holiday") || "Holiday Shipping Deadlines",
+                    desc:
+                      t("updates.holiday_desc") ||
+                      "Plan your holiday shipments ahead with our updated deadlines.",
+                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBaWwLiv1IOKnf9E04incnnJjNrOvrF74Jg_Tso6M5Olwv63-IgHxkQX_pIfDkxNFYN2SDNzVJWiGz9KKAycr2KVOeD8hJiITapRt3ixh1YB7Te718zMsh8rydSoAZspA4lq-Rt8ukcW6pKWKD39_IS-eSoiJz_n-Jmw6EL6xcLKE0DjkMo2IzvQ60MzxNGibMM5lJHSrNaMmUsFVCoiGxADA0gcEOsOIOcfgbbMTw4xDhBgMWv9Q4ZWvru3cVZtfFB8QtYg6MV8ak",
+                  },
+                  {
+                    title:
+                      t("updates.warehouse") ||
+                      "Warehouse Expansion Announcement",
+                    desc:
+                      t("updates.warehouse_desc") ||
+                      "Our new warehouse facility is now open, offering more storage capacity.",
+                    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAGeUeCOkBDwqiu9cFbjdh9zJKZDtfh8XHsOLow_j5GAhKP0WU0UjixSk-gKxqrfkCkroxrEA2wvSXqv9gjwSrFeVhTEAqx1ZlHII-9V_UHYW1gbQYlQG8hQz8lxEH91sK5a4HKF53P_-zD_L7yM1YpoaY1_JnqhcKxlgwOHCk_oWidt5z0_EVGKtc6cvzBabh4JQtN_zCpvedkv4EnNTvFMMgb3vD3iA3mpQrCyodKFVb6M1uOXUPUhqtx9jkaGd9dE5t5cai9db0",
+                  },
+                ].map((update, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ scale: 0.95 }}
+                    animate={{ scale: 1 }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                      ease: "easeInOut",
+                      delay: index * 0.5,
+                    }}
+                    className="flex h-full flex-1 flex-col gap-4 rounded-lg min-w-[80%] sm:min-w-[40%] md:min-w-[30%]"
+                  >
+                    <div
+                      className="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg"
+                      style={{ backgroundImage: `url("${update.img}")` }}
+                    ></div>
+                    <div>
+                      <p className="text-white text-base font-medium leading-normal">
+                        {update.title}
+                      </p>
+                      <p className="text-[#bbba9b] text-sm font-normal leading-normal">
+                        {update.desc}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
 
-            <div className="flex justify-end overflow-hidden px-4 sm:px-5 pb-5">
+            <div className="flex justify-end overflow-hidden px-4 sm:px-5 pb-5 pt-5">
               <motion.button
                 className="flex max-w-[480px] items-center justify-center rounded-lg h-14 px-5 bg-[#f9f506] text-[#181811] text-base font-bold tracking-[0.015em] min-w-0 gap-4 pl-4 pr-6"
                 whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={toggleCustomerService}
               >
                 <div className="text-[#181811] text-2xl">
@@ -476,18 +411,19 @@ const App = () => {
 
             {showCustomerService && (
               <motion.div
-                className="fixed bottom-20 right-5 bg-white p-4 rounded-lg shadow-lg w-[90%] sm:w-auto"
+                className="fixed bottom-20 right-4 sm:right-10 bg-white p-6 rounded-lg shadow-xl w-[90%] sm:w-96 z-20"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 50 }}
+                transition={{ duration: 0.3 }}
               >
-                <h3 className="text-black mb-2">
+                <h3 className="text-black text-lg font-bold mb-4">
                   {t("contact.contact_us") || "Contact Us"}
                 </h3>
                 <form
                   onSubmit={handleCustomerSupport}
                   encType="multipart/form-data"
-                  className="flex flex-col gap-2"
+                  className="flex flex-col gap-4"
                 >
                   <Input
                     type="text"
@@ -495,7 +431,8 @@ const App = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="border p-2 w-full"
+                    className="border border-gray-300 p-2 rounded-md"
+                    required
                   />
                   <Input
                     type="email"
@@ -503,56 +440,71 @@ const App = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="border p-2 w-full"
+                    className="border border-gray-300 p-2 rounded-md"
+                    required
                   />
                   <Textarea
                     placeholder={t("contact.message") || "Message"}
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
-                    className="border p-2 w-full"
+                    className="border border-gray-300 p-2 rounded-md min-h-[100px]"
+                    required
                   />
                   <Input
                     type="file"
                     name="attachment"
                     onChange={handleInputChange}
-                    className="border p-2 w-full"
+                    className="border border-gray-300 p-2 rounded-md"
                   />
                   <Button
                     type="submit"
-                    className="bg-[#f9f506] text-[#181811] p-2"
+                    className="bg-[#f9f506] text-[#181811] p-2 rounded-md font-bold"
+                    disabled={messageLoading}
                   >
                     {messageLoading
-                      ? t("contact.send") || "Send"
+                      ? t("common.loading") || "Sending..."
                       : t("contact.send") || "Send"}
                   </Button>
                 </form>
               </motion.div>
             )}
 
-            <footer className="flex flex-col gap-6 px-4 sm:px-5 py-10 text-center">
-              <div className="flex flex-wrap justify-center gap-4">
-                <Link
-                  to=""
+            <footer
+              id="contact"
+              className="flex flex-col gap-6 px-4 sm:px-5 py-10 text-center border-t border-[#3a3927] mt-10"
+            >
+              <div className="flex flex-wrap justify-center gap-6">
+                <a
+                  href="https://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-[#bbba9b] hover:text-[#f9f506] cursor-pointer text-2xl"
+                  aria-label="Twitter"
                 >
                   <FaTwitter />
-                </Link>
-                <Link
-                  to=""
+                </a>
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-[#bbba9b] hover:text-[#f9f506] cursor-pointer text-2xl"
+                  aria-label="Facebook"
                 >
                   <FaFacebookF />
-                </Link>
-                <Link
-                  to=""
+                </a>
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-[#bbba9b] hover:text-[#f9f506] cursor-pointer text-2xl"
+                  aria-label="Instagram"
                 >
                   <FaInstagram />
-                </Link>
+                </a>
               </div>
               <p className="text-white font-semibold">
-                {new Date().toISOString().split("T")[0]}
+                © {new Date().getFullYear()} United Parcel Services
               </p>
               <p className="text-[#bbba9b] text-base font-normal leading-normal">
                 <Trans

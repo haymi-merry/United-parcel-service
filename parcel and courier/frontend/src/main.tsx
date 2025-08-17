@@ -18,6 +18,7 @@ import { store } from "./app/store.ts";
 import { Provider } from "react-redux";
 import EditShipment from "./pages/EditingShipments.tsx";
 import "@/i18n/i18n.ts";
+import CustomerService from "./pages/CustomerService.tsx";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
   {
     path: "/parcel/:id",
     element: <ParcelDetails />,
+  },
+  {
+    path: "/customer-service",
+    element: <CustomerService />,
   },
   {
     path: "/parcel/:id/edit",
