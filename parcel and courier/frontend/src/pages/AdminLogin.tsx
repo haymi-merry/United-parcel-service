@@ -2,11 +2,15 @@ import Form from "@/components/Form";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import type { TAppDispatch } from "@/app/store";
+import { setUser } from "@/features/userSlice";
 
 export default function AdminLogin() {
   const [username, setUsername] = useState<string | undefined>(undefined);
   const [password, setPassword] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
+  const dispatch = useDispatch<TAppDispatch>();
   function handleLogin() {
     if (username === "admin" && password === "admin123") {
       Swal.fire({
@@ -17,6 +21,12 @@ export default function AdminLogin() {
         color: "#bbba9b",
         confirmButtonText: "Continue",
       }).then(() => {
+        dispatch(
+          setUser({
+            username: "admin",
+            authenticated: true,
+          })
+        );
         navigate("/admin-dashboard");
       });
     } else {
