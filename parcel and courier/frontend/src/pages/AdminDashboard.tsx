@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import type { TAppDispatch, TRootState } from "@/app/store";
 import { fetchShipments } from "@/features/shipmentSlice";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 
 const AdminDashboard: React.FC = () => {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch<TAppDispatch>();
@@ -21,17 +23,17 @@ const AdminDashboard: React.FC = () => {
   useEffect(() => {
     if (!authenticated) {
       Swal.fire({
-        title: "Unauthorized",
-        text: "Please log in to create a shipment.",
+        title: t("admin.unauthorized_title") || "Unauthorized",
+        text: t("admin.unauthorized_text") || "Please log in to access the dashboard.",
         icon: "warning",
         background: "#232110",
         color: "#bbba9b",
-        confirmButtonText: "OK",
+        confirmButtonText: t("common.ok") || "OK",
       }).then(({ isConfirmed }) => {
         if (isConfirmed) navigate("/");
       });
     }
-  }, [authenticated, navigate]);
+  }, [authenticated, navigate, t]);
 
   /** Fetch shipments on mount */
   useEffect(() => {
@@ -58,7 +60,9 @@ const AdminDashboard: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center bg-[#232110]">
         <div className="flex flex-col items-center gap-4">
           <div className="w-20 h-20 rounded-full bg-[#f9e106] animate-pulse" />
-          <p className="text-white font-semibold">Loading Shipments...</p>
+          <p className="text-white font-semibold">
+            {t("admin.loading_shipments") || "Loading Shipments..."}
+          </p>
         </div>
       </div>
     );
@@ -81,11 +85,11 @@ const AdminDashboard: React.FC = () => {
               />
             </svg>
             <h2 className="text-lg font-bold tracking-tight">
-              United Parcel Service
+              {t("common.welcome") || "United Parcel Service"}
             </h2>
           </div>
           <nav className="flex items-center gap-9">
-            <Link to="/">Home</Link>
+            <Link to="/">{t("header.home") || "Home"}</Link>
           </nav>
         </div>
       </header>
@@ -94,13 +98,13 @@ const AdminDashboard: React.FC = () => {
         <div className="flex max-w-[960px] flex-1 flex-col">
           <div className="flex flex-wrap items-center justify-between gap-3 p-4">
             <h1 className="min-w-72 text-3xl font-bold tracking-tight">
-              Shipments
+              {t("admin.shipments") || "Shipments"}
             </h1>
             <Link
               to={"/create-shipment"}
-              className="h-8 rounded-full bg-[#f9f506] font-semibold flex items-center justify-center text-black px-4 text-sm "
+              className="h-8 rounded-full bg-[#f9f506] font-semibold flex items-center justify-center text-black px-4 text-sm"
             >
-              Create New Shipment
+              {t("admin.create_shipment") || "Create New Shipment"}
             </Link>
           </div>
 
@@ -111,7 +115,7 @@ const AdminDashboard: React.FC = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by tracking number, origin, destination, or status"
+                placeholder={t("admin.search_placeholder") || "Search by tracking number, origin, destination, or status"}
                 className="h-full w-full rounded-xl border-none bg-[#4a4621] pl-12 pr-4 text-base placeholder:text-[#ccc68e] focus:outline-none"
               />
             </div>
@@ -123,18 +127,17 @@ const AdminDashboard: React.FC = () => {
                 <div className="flex flex-[2_2_0px] flex-col gap-4">
                   <div className="flex flex-col gap-1">
                     <p className="text-base font-bold">
-                      Parcel ID: {s.parcel_id}
+                      {t("admin.parcel_id") || "Parcel ID"}: {s.parcel_id}
                     </p>
                     <p className="text-sm text-[#ccc68e]">
-                      Origin: {s.origin} | Destination: {s.destination} |
-                      Status: {s.status}
+                      {t("admin.origin") || "Origin"}: {s.origin} | {t("admin.destination") || "Destination"}: {s.destination} | {t("admin.status") || "Status"}: {s.status}
                     </p>
                   </div>
                   <button
                     onClick={() => navigate(`/parcel/${s.parcel_id}`)}
                     className="h-8 w-fit rounded-full bg-[#4a4621] px-4 text-sm font-medium hover:bg-[#5a5531]"
                   >
-                    View Details
+                    {t("admin.view_details") || "View Details"}
                   </button>
                 </div>
                 {s.img_url && (

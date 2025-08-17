@@ -14,7 +14,8 @@
     "back": "Atrás",
     "ship": "Enviar",
     "locations": "Ubicaciones",
-    "support": "Soporte"
+    "support": "Soporte",
+    "ok": "Aceptar"
   },
   "header": {
     "home": "Inicio",
@@ -22,6 +23,19 @@
     "services": "Servicios",
     "contact": "Contacto",
     "updates": "Actualizaciones"
+  },
+  "admin": {
+    "unauthorized_title": "No autorizado",
+    "unauthorized_text": "Por favor inicie sesión para acceder al panel.",
+    "loading_shipments": "Cargando envíos...",
+    "shipments": "Envíos",
+    "create_shipment": "Crear nuevo envío",
+    "search_placeholder": "Buscar por número de seguimiento, origen, destino o estado",
+    "parcel_id": "ID del paquete",
+    "origin": "Origen",
+    "destination": "Destino",
+    "status": "Estado",
+    "view_details": "Ver detalles"
   },
   "services": {
     "express_delivery": "Entrega exprés",

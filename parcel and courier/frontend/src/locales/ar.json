@@ -14,7 +14,8 @@
     "back": "رجوع",
     "ship": "شحن",
     "locations": "المواقع",
-    "support": "الدعم"
+    "support": "الدعم",
+    "ok": "موافق"
   },
   "header": {
     "home": "الرئيسية",
@@ -22,6 +23,20 @@
     "services": "الخدمات",
     "contact": "اتصل بنا",
     "updates": "التحديثات"
+  },
+  
+   "admin": {
+    "unauthorized_title": "غير مصرح",
+    "unauthorized_text": "يرجى تسجيل الدخول للوصول إلى لوحة التحكم.",
+    "loading_shipments": "جارٍ تحميل الشحنات...",
+    "shipments": "الشحنات",
+    "create_shipment": "إنشاء شحنة جديدة",
+    "search_placeholder": "ابحث حسب رقم التتبع، المنشأ، الوجهة، أو الحالة",
+    "parcel_id": "معرف الطرد",
+    "origin": "المنشأ",
+    "destination": "الوجهة",
+    "status": "الحالة",
+    "view_details": "عرض التفاصيل"
   },
   "services": {
     "express_delivery": "توصيل سريع",

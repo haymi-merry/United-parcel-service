@@ -14,7 +14,8 @@
     "back": "Retour",
     "ship": "Expédier",
     "locations": "Emplacements",
-    "support": "Support"
+    "support": "Support",
+     "ok": "OK"
   },
   "header": {
     "home": "Accueil",
@@ -22,6 +23,19 @@
     "services": "Services",
     "contact": "Contact",
     "updates": "Mises à jour"
+  },
+  "admin": {
+    "unauthorized_title": "Non autorisé",
+    "unauthorized_text": "Veuillez vous connecter pour accéder au tableau de bord.",
+    "loading_shipments": "Chargement des expéditions...",
+    "shipments": "Expéditions",
+    "create_shipment": "Créer une nouvelle expédition",
+    "search_placeholder": "Rechercher par numéro de suivi, origine, destination ou statut",
+    "parcel_id": "ID du colis",
+    "origin": "Origine",
+    "destination": "Destination",
+    "status": "Statut",
+    "view_details": "Voir les détails"
   },
   "services": {
     "express_delivery": "Livraison express",

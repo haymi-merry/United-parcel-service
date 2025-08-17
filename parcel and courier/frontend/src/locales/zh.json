@@ -14,7 +14,8 @@
     "back": "返回",
     "ship": "发货",
     "locations": "地点",
-    "support": "支持"
+    "support": "支持",
+     "ok": "确定"
   },
   "header": {
     "home": "首页",
@@ -22,6 +23,19 @@
     "services": "服务",
     "contact": "联系",
     "updates": "更新"
+  },
+  "admin": {
+    "unauthorized_title": "未经授权",
+    "unauthorized_text": "请登录以访问仪表板。",
+    "loading_shipments": "正在加载货运信息...",
+    "shipments": "货运",
+    "create_shipment": "创建新货运",
+    "search_placeholder": "按跟踪号、始发地、目的地或状态搜索",
+    "parcel_id": "包裹ID",
+    "origin": "始发地",
+    "destination": "目的地",
+    "status": "状态",
+    "view_details": "查看详情"
   },
   "services": {
     "express_delivery": "快递服务",

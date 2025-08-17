@@ -14,7 +14,8 @@
     "back": "वापस",
     "ship": "भेजें",
     "locations": "स्थान",
-    "support": "सहायता"
+    "support": "सहायता",
+    "ok": "ठीक है"
   },
   "header": {
     "home": "होम",
@@ -22,6 +23,19 @@
     "services": "सेवाएं",
     "contact": "संपर्क करें",
     "updates": "अपडेट्स"
+  },
+    "admin": {
+    "unauthorized_title": "अनधिकृत",
+    "unauthorized_text": "डैशबोर्ड तक पहुंचने के लिए कृपया लॉगिन करें।",
+    "loading_shipments": "शिपमेंट लोड हो रहे हैं...",
+    "shipments": "शिपमेंट",
+    "create_shipment": "नया शिपमेंट बनाएं",
+    "search_placeholder": "ट्रैकिंग नंबर, मूल, गंतव्य, या स्थिति के अनुसार खोजें",
+    "parcel_id": "पार्सल आईडी",
+    "origin": "मूल",
+    "destination": "गंतव्य",
+    "status": "स्थिति",
+    "view_details": "विवरण देखें"
   },
   "services": {
     "express_delivery": "एक्सप्रेस डिलीवरी",
