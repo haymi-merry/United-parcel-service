@@ -11,7 +11,10 @@
     "cancel": "Abbrechen",
     "loading": "Wird geladen...",
     "error": "Ein Fehler ist aufgetreten",
-    "back": "Zurück"
+    "back": "Zurück",
+    "ship": "Versenden",
+    "locations": "Standorte",
+    "support": "Support"
   },
   "header": {
     "home": "Startseite",
@@ -57,5 +60,31 @@
   "about": {
   "title": "Über SwiftShip",
   "description": "SwiftShip ist ein weltweit führender Logistikdienstleister mit umfassenden Lösungen für Unternehmen und Privatpersonen. Mit über 100 Jahren Geschichte haben wir uns einen Ruf für Zuverlässigkeit, Innovation und Kundenzufriedenheit erarbeitet. Unsere Dienstleistungen umfassen Paketzustellung, Frachttransport, Lieferkettenmanagement und branchenspezifische Lösungen. Unser modernes Trackingsystem bietet Echtzeit-Überwachung Ihrer Sendungen. Wir verpflichten uns zu Nachhaltigkeit und ethischen Praktiken, minimieren unsere Umweltauswirkungen und leisten positive Beiträge für die Gemeinschaften, denen wir dienen."
+},
+
+
+
+"solutions": {
+  "title": "Versandlösungen",
+  "domestic": {
+    "title": "Inlandsversand",
+    "subtitle": "Schnelle und zuverlässige Lieferung innerhalb des Landes",
+    "description": "SwiftTrack bietet nahtlose Inlandverfolgung mit Echtzeit-Updates und Benachrichtigungen."
+  },
+  "tracking": {
+    "title": "Echtzeit-Sendungsverfolgung",
+    "subtitle": "Überwachen Sie Ihre Sendungen präzise",
+    "description": "Unsere Plattform bietet minutengenaue Updates zu Ihren Sendungen, sodass Sie in jedem Schritt informiert bleiben."
+  },
+  "specialized": {
+    "title": "Speziallogistik",
+    "subtitle": "Maßgeschneiderte Lösungen für besondere Anforderungen",
+    "description": "Überwachen Sie sensible oder überdimensionale Güter mit spezialisierten Sensoren und Echtzeitberichten."
+  },
+  "warehousing": {
+    "title": "Lagerung und Distribution",
+    "subtitle": "Sichere Lagerung und effiziente Abwicklung",
+    "description": "Verwalten Sie Ihren Bestand und Ihre Sendungen vom Lager bis zur Haustür mit vollständiger Transparenz."
+  }
 }
 }

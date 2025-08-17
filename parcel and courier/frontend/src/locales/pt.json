@@ -11,7 +11,10 @@
     "cancel": "Cancelar",
     "loading": "Carregando...",
     "error": "Ocorreu um erro",
-    "back": "Voltar"
+    "back": "Voltar",
+    "ship": "Enviar",
+    "locations": "Localizações",
+    "support": "Suporte"
   },
   "header": {
     "home": "Início",
@@ -57,5 +60,30 @@
   "about": {
   "title": "Sobre a SwiftShip",
   "description": "A SwiftShip é líder global em logística, oferecendo soluções abrangentes para empresas e indivíduos. Com mais de um século de história, construímos reputação de confiabilidade, inovação e satisfação do cliente. Nossos serviços incluem entrega de pacotes, transporte marítimo, gestão da cadeia de suprimentos e soluções especializadas para diversos setores. Nosso sistema de rastreamento avançado oferece visibilidade em tempo real. Comprometidos com sustentabilidade e práticas éticas, minimizamos nosso impacto ambiental e contribuímos positivamente para as comunidades que servimos."
+},
+
+
+"solutions": {
+  "title": "Soluções de Envio",
+  "domestic": {
+    "title": "Envio Doméstico",
+    "subtitle": "Entrega rápida e confiável dentro do país",
+    "description": "SwiftTrack oferece rastreamento doméstico perfeito com atualizações e notificações em tempo real."
+  },
+  "tracking": {
+    "title": "Rastreamento em Tempo Real",
+    "subtitle": "Monitore suas entregas com precisão",
+    "description": "Nossa plataforma fornece atualizações minuto a minuto sobre seus envios, garantindo que você esteja informado em cada etapa."
+  },
+  "specialized": {
+    "title": "Logística Especializada",
+    "subtitle": "Soluções personalizadas para necessidades únicas",
+    "description": "Monitore bens sensíveis ou de grande porte com sensores especializados e relatórios em tempo real."
+  },
+  "warehousing": {
+    "title": "Armazenagem e Distribuição",
+    "subtitle": "Armazenamento seguro e execução eficiente",
+    "description": "Gerencie seu inventário e envios do armazém até a porta com visibilidade completa."
+  }
 }
 }
