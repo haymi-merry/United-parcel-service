@@ -100,17 +100,13 @@ export default function ShipmentTracker() {
     }
   }
 
-  function handleSubmit(formData: FormData) {
+  async function handleSubmit(formData: FormData) {
     const oldAddress = shipment?.destination;
     const newAddress = formData.get("newAddress") as string;
     const parcelId = shipment?.parcel_id;
 
-    console.log("Old Address:", oldAddress);
-    console.log("New Address:", newAddress);
-    console.log("Parcel ID:", parcelId);
-
     if (oldAddress && newAddress && parcelId) {
-      dispatch(
+      await dispatch(
         createRequest({
           parcel_id: parcelId,
           new_address: newAddress,
