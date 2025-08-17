@@ -28,6 +28,7 @@ export interface ICustomerSupport {
 export interface IAddressChangeRequest {
   parcel_id: string;
   new_address: string;
+  old_address: string;
 }
 
 export interface ITransportHistory {

@@ -1,6 +1,19 @@
-import React from "react";
+import type { TAppDispatch, TRootState } from "@/app/store";
+import { Button } from "@/components/ui/button";
+import { fetchRequests } from "@/features/changeAddressSlice";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const AddressChangeRequest: React.FC = () => {
+  const dispatch = useDispatch<TAppDispatch>();
+  const { requests } = useSelector((state: TRootState) => state.addressChange);
+
+  useEffect(() => {
+    dispatch(fetchRequests());
+  }, [dispatch]);
+
+  console.log(requests);
+
   return (
     <div
       className="relative flex size-full min-h-screen flex-col bg-[#232110] dark group/design-root overflow-x-hidden"
@@ -79,74 +92,48 @@ const AddressChangeRequest: React.FC = () => {
                   <thead>
                     <tr className="bg-[#353218]">
                       <th className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-120 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">
-                        Visitor Name
+                        Parcel ID
                       </th>
-                      <th className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-240 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">
-                        Original Address
+
+                      <th className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-360 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">
+                        Old Address
                       </th>
+
                       <th className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-360 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">
                         New Address
                       </th>
                       <th className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-480 px-4 py-3 text-left text-white w-[400px] text-sm font-medium leading-normal">
-                        Message
+                        Approve
                       </th>
                       <th className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-600 px-4 py-3 text-left text-white w-60  text-sm font-medium leading-normal">
-                        Actions
+                        Reject
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr className="border-t border-t-[#6a642f]">
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-120 h-[72px] px-4 py-2 w-[400px] text-white text-sm font-normal leading-normal">
-                        Sophia Carter
-                      </td>
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-240 h-[72px] px-4 py-2 w-[400px] text-[#ccc68e] text-sm font-normal leading-normal">
-                        123 Maple Street, Anytown, USA
-                      </td>
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-360 h-[72px] px-4 py-2 w-[400px] text-[#ccc68e] text-sm font-normal leading-normal">
-                        456 Oak Avenue, Anytown, USA
-                      </td>
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-480 h-[72px] px-4 py-2 w-[400px] text-[#ccc68e] text-sm font-normal leading-normal">
-                        Moving closer to family.
-                      </td>
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-600 h-[72px] px-4 py-2 w-60 text-[#ccc68e] text-sm font-bold leading-normal tracking-[0.015em]">
-                        Approve | Reject
-                      </td>
-                    </tr>
-                    <tr className="border-t border-t-[#6a642f]">
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-120 h-[72px] px-4 py-2 w-[400px] text-white text-sm font-normal leading-normal">
-                        Ethan Bennett
-                      </td>
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-240 h-[72px] px-4 py-2 w-[400px] text-[#ccc68e] text-sm font-normal leading-normal">
-                        789 Pine Lane, Anytown, USA
-                      </td>
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-360 h-[72px] px-4 py-2 w-[400px] text-[#ccc68e] text-sm font-normal leading-normal">
-                        101 Cedar Road, Anytown, USA
-                      </td>
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-480 h-[72px] px-4 py-2 w-[400px] text-[#ccc68e] text-sm font-normal leading-normal">
-                        Relocating for work.
-                      </td>
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-600 h-[72px] px-4 py-2 w-60 text-[#ccc68e] text-sm font-bold leading-normal tracking-[0.015em]">
-                        Approve | Reject
-                      </td>
-                    </tr>
-                    <tr className="border-t border-t-[#6a642f]">
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-120 h-[72px] px-4 py-2 w-[400px] text-white text-sm font-normal leading-normal">
-                        Olivia Hayes
-                      </td>
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-240 h-[72px] px-4 py-2 w-[400px] text-[#ccc68e] text-sm font-normal leading-normal">
-                        222 Elm Street, Anytown, USA
-                      </td>
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-360 h-[72px] px-4 py-2 w-[400px] text-[#ccc68e] text-sm font-normal leading-normal">
-                        333 Birch Drive, Anytown, USA
-                      </td>
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-480 h-[72px] px-4 py-2 w-[400px] text-[#ccc68e] text-sm font-normal leading-normal">
-                        Personal reasons.
-                      </td>
-                      <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-600 h-[72px] px-4 py-2 w-60 text-[#ccc68e] text-sm font-bold leading-normal tracking-[0.015em]">
-                        Approve | Reject
-                      </td>
-                    </tr>
+                    {requests.map((request, index) => (
+                      <tr key={index} className="border-t border-t-[#6a642f]">
+                        <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-240 h-[72px] px-4 py-2 w-[400px] text-[#ccc68e] text-sm font-normal leading-normal">
+                          {request.parcel_id}
+                        </td>
+                        <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-360 h-[72px] px-4 py-2 w-[400px] text-[#ccc68e] text-sm font-normal leading-normal">
+                          {request.old_address}
+                        </td>
+                        <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-360 h-[72px] px-4 py-2 w-[400px] text-[#ccc68e] text-sm font-normal leading-normal">
+                          {request.new_address}
+                        </td>
+                        <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-480 h-[72px] px-4 py-2 w-[400px] text-[#ccc68e] text-sm font-normal leading-normal">
+                          <Button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                            Approve
+                          </Button>
+                        </td>
+                        <td className="table-b78ed1c0-767a-4a74-9879-240dda548288-column-600 h-[72px] px-4 py-2 w-60 text-[#ccc68e] text-sm font-bold leading-normal tracking-[0.015em]">
+                          <Button className=" bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                            Reject
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
