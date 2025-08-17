@@ -1,0 +1,61 @@
+{
+  "common": {
+    "welcome": "Bienvenue chez United Parcel Services",
+    "track": "Suivre",
+    "track_parcel": "Suivre votre colis",
+    "explore_solutions": "Découvrez nos solutions",
+    "continue": "Continuer",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "submit": "Soumettre",
+    "cancel": "Annuler",
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "back": "Retour"
+  },
+  "header": {
+    "home": "Accueil",
+    "about": "À propos",
+    "services": "Services",
+    "contact": "Contact",
+    "updates": "Mises à jour"
+  },
+  "services": {
+    "express_delivery": "Livraison express",
+    "express_desc": "Livraison rapide et fiable pour les envois urgents",
+    "freight": "Fret maritime",
+    "freight_desc": "Solutions efficaces et économiques pour les gros envois",
+    "customs": "Dédouanement",
+    "customs_desc": "Assistance experte pour les procédures de dédouanement",
+    "warehousing": "Entreposage",
+    "warehousing_desc": "Options de stockage sécurisées et flexibles pour vos marchandises"
+  },
+  "updates": {
+    "new_routes": "Mise à jour du service : Nouvelles routes de livraison",
+    "new_routes_desc": "Nous avons élargi notre réseau de livraison pour inclure de nouvelles routes pour un service plus rapide",
+    "holiday": "Délais d'expédition pour les fêtes",
+    "holiday_desc": "Planifiez vos envois de fêtes à l'avance avec nos délais mis à jour",
+    "warehouse": "Annonce d'extension d'entrepôt",
+    "warehouse_desc": "Notre nouvelle installation d'entrepôt est maintenant ouverte, offrant plus de capacité de stockage"
+  },
+  "contact": {
+    "customer_service": "Service client",
+    "name": "Nom",
+    "email": "Email",
+    "message": "Message",
+    "send": "Envoyer",
+    "contact_info": "Contactez-nous à <1>{{email}}</1> ou WhatsApp <2>{{phone}}</2>. Suivez-nous sur les réseaux sociaux."
+  },
+  "tariff": {
+    "title": "Navigation dans les derniers développements tarifaires",
+    "content": "Restez informé des derniers changements tarifaires affectant le transport international. Nous nous engageons à fournir des informations transparentes et à jour pour vous aider à gérer votre logistique efficacement."
+  },
+  "language": {
+    "select_language": "Sélectionnez votre langue",
+    "select_country": "Sélectionnez votre pays"
+  },
+  "about": {
+  "title": "À propos de SwiftShip",
+  "description": "SwiftShip est un leader mondial de la logistique, offrant des solutions complètes pour les entreprises et les particuliers. Avec plus d'un siècle d'histoire, nous avons bâti une réputation de fiabilité, d'innovation et de satisfaction client. Nos services incluent la livraison de colis, le fret maritime, la gestion de la chaîne d'approvisionnement et des solutions spécialisées pour divers secteurs. Notre système de suivi avancé offre une visibilité en temps réel de vos expéditions. Nous nous engageons en faveur du développement durable et des pratiques éthiques, en minimisant notre impact environnemental et en contribuant positivement aux communautés que nous servons."
+}
+}

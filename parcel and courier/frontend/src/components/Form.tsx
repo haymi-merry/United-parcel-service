@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { FaChevronDown } from "react-icons/fa6";
 import { Input } from "./ui/input";
 import { FaBox, FaLock, FaUser } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 interface SelectOption {
   value: string;
@@ -43,6 +44,7 @@ export default function Form({
   password,
   forWhich = "language",
 }: LanguagePreferenceProps) {
+  const { t } = useTranslation();
   const [isMounted, setIsMounted] = useState<boolean>(false);
 
   const handleContinue = () => {
@@ -68,9 +70,9 @@ export default function Form({
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            {forWhich === "admin_login" && "Welcome to the Admin Login"}
-            {forWhich === "parcel_tracking" && "Track your parcel"}
-            {forWhich === "language" && "Select your Language"}
+            {forWhich === "admin_login" && t('admin_login.title')}
+            {forWhich === "parcel_tracking" && t('tracking.title')}
+            {forWhich === "language" && t('language.select_language')}
           </motion.h2>
           <motion.div
             className="flex flex-col gap-4 px-4 py-3"
@@ -139,33 +141,30 @@ export default function Form({
                 <div className="flex flex-col gap-2 px-4 py-3 items-start">
                   <label className="flex gap-x-3 min-w-40 flex-1 relative">
                     <FaUser />
-                    <span className="text-sm font-medium">Username</span>
+                    <span className="text-sm font-medium">{t('admin_login.username')}</span>
                   </label>
                   <Input
                     value={username}
                     onChange={(e) =>
                       setUsername ? setUsername(e.target.value) : null
                     }
-                    className="w-full rounded-sm bg-[#353218] border border-[#6a642f] text-white  p-[15px] text-base font-normal focus:outline-none focus:ring-0 focus:border-[#6a642f]"
-                    placeholder="Username"
+                    className="w-full rounded-sm bg-[#353218] border border-[#6a642f] text-white p-[15px] text-base font-normal focus:outline-none focus:ring-0 focus:border-[#6a642f]"
+                    placeholder={t('admin_login.username_placeholder')}
                   />
                 </div>
                 <div className="flex flex-col gap-2 px-4 py-3 items-start">
-                  <label
-                    className="flex gap-x-3 min-w-40 flex-1 relative"
-                    htmlFor="password"
-                  >
+                  <label className="flex gap-x-3 min-w-40 flex-1 relative">
                     <FaLock />
-                    <span className="text-sm font-medium">Password</span>
+                    <span className="text-sm font-medium">{t('admin_login.password')}</span>
                   </label>
                   <Input
                     value={password}
-                    id="password"
+                    type="password"
                     onChange={(e) =>
                       setPassword ? setPassword(e.target.value) : null
                     }
-                    className="w-full rounded-sm bg-[#353218] border border-[#6a642f] text-white  p-[15px] text-base font-normal focus:outline-none focus:ring-0 focus:border-[#6a642f]"
-                    placeholder="Password"
+                    className="w-full rounded-sm bg-[#353218] border border-[#6a642f] text-white p-[15px] text-base font-normal focus:outline-none focus:ring-0 focus:border-[#6a642f]"
+                    placeholder={t('admin_login.password_placeholder')}
                   />
                 </div>
               </>
@@ -175,7 +174,7 @@ export default function Form({
               <div className="flex flex-col gap-2 px-4 py-3 items-start">
                 <label className="flex gap-x-3 min-w-40 flex-1 relative">
                   <FaBox />
-                  <span className="text-sm font-medium">Parcel ID</span>
+                  <span className="text-sm font-medium">{t('tracking.parcel_id')}</span>
                 </label>
                 <Input
                   value={parcelID}
@@ -183,7 +182,7 @@ export default function Form({
                     setParcelID ? setParcelID(e.target.value) : null
                   }
                   className="w-full rounded-xl bg-[#353218] border border-[#6a642f] text-white h-14 p-[15px] text-base font-normal focus:outline-none focus:ring-0 focus:border-[#6a642f]"
-                  placeholder="Enter your parcel ID"
+                  placeholder={t('tracking.parcel_id_placeholder')}
                 />
               </div>
             )}
@@ -197,12 +196,12 @@ export default function Form({
           >
             <motion.button
               onClick={handleContinue}
-              className=" w-[calc(100%-40px)] rounded-md h-10 px-4 bg-[#f9e106] text-[#232110] text-sm font-bold tracking-[0.015em] cursor-pointer"
+              className="w-[calc(100%-40px)] rounded-md h-10 px-4 bg-[#f9e106] text-[#232110] text-sm font-bold tracking-[0.015em] cursor-pointer"
             >
               <span className="truncate">
-                {forWhich === "parcel_tracking" && "Track Parcel"}
-                {forWhich === "admin_login" && "Login"}
-                {forWhich === "language" && "Continue"}
+                {forWhich === "parcel_tracking" && t('tracking.track_button')}
+                {forWhich === "admin_login" && t('admin_login.login_button')}
+                {forWhich === "language" && t('common.continue')}
               </span>
             </motion.button>
           </motion.div>

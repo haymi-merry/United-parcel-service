@@ -1,0 +1,63 @@
+{
+  "common": {
+    "welcome": "Welcome to United Parcel Services",
+    "track": "Track",
+    "track_parcel": "Track Your Parcel",
+    "explore_solutions": "Explore Our Solutions",
+    "continue": "Continue",
+    "login": "Login",
+    "logout": "Logout",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "back": "Back"
+  },
+  "header": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact",
+    "updates": "Updates"
+  },
+  "services": {
+    "express_delivery": "Express Delivery",
+    "express_desc": "Fast and reliable delivery for urgent shipments",
+    "freight": "Freight Forwarding",
+    "freight_desc": "Efficient and cost-effective solutions for large shipments",
+    "customs": "Customs Brokerage",
+    "customs_desc": "Expert assistance with customs clearance processes",
+    "warehousing": "Warehousing",
+    "warehousing_desc": "Secure and flexible storage options for your goods"
+  },
+  "updates": {
+    "new_routes": "Service Update: New Delivery Routes",
+    "new_routes_desc": "We've expanded our delivery network to include new routes for faster service",
+    "holiday": "Holiday Shipping Deadlines",
+    "holiday_desc": "Plan your holiday shipments ahead with our updated deadlines",
+    "warehouse": "Warehouse Expansion Announcement",
+    "warehouse_desc": "Our new warehouse facility is now open, offering more storage capacity"
+  },
+  "contact": {
+    "customer_service": "Customer Service",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send",
+    "contact_info": "Contact us at <1>{{email}}</1> or WhatsApp <2>{{phone}}</2>. Follow us on social media."  
+  },
+  "tariff": {
+    "title": "Navigating Latest Tariff Development",
+    "content": "Stay informed about the latest tariff changes affecting international shipping. We're committed to providing transparent and up-to-date information to help you manage your logistics effectively."
+  },
+  "language": {
+    "select_language": "Select your Language",
+    "select_country": "Select your Country"
+  },
+
+  "about": {
+  "title": "About SwiftShip",
+  "description": "SwiftShip is a global leader in logistics, offering a wide range of solutions for businesses and individuals. With a history spanning over a century, we've built a reputation for reliability, innovation, and customer satisfaction. Our services include package delivery, freight forwarding, supply chain management, and specialized solutions for various industries. Our advanced tracking system provides real-time visibility of your shipments, ensuring transparency and peace of mind. We're committed to sustainability and ethical practices, striving to minimize our environmental impact and contribute positively to the communities we serve."
+}
+}
+

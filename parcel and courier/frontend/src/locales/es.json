@@ -1,0 +1,62 @@
+{
+  "common": {
+    "welcome": "Bienvenido a United Parcel Services",
+    "track": "Rastrear",
+    "track_parcel": "Rastrear su paquete",
+    "explore_solutions": "Explorar nuestras soluciones",
+    "continue": "Continuar",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "back": "Atrás"
+  },
+  "header": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "services": "Servicios",
+    "contact": "Contacto",
+    "updates": "Actualizaciones"
+  },
+  "services": {
+    "express_delivery": "Entrega exprés",
+    "express_desc": "Entrega rápida y confiable para envíos urgentes",
+    "freight": "Transporte de carga",
+    "freight_desc": "Soluciones eficientes y rentables para envíos grandes",
+    "customs": "Agente de aduanas",
+    "customs_desc": "Asistencia experta con procesos de despacho aduanero",
+    "warehousing": "Almacenamiento",
+    "warehousing_desc": "Opciones de almacenamiento seguras y flexibles para sus bienes"
+  },
+  "updates": {
+    "new_routes": "Actualización de servicio: Nuevas rutas de entrega",
+    "new_routes_desc": "Hemos ampliado nuestra red de entrega para incluir nuevas rutas para un servicio más rápido",
+    "holiday": "Plazos de envío para días festivos",
+    "holiday_desc": "Planifique sus envíos festivos con anticipación con nuestros plazos actualizados",
+    "warehouse": "Anuncio de expansión de almacén",
+    "warehouse_desc": "Nuestra nueva instalación de almacén ya está abierta, ofreciendo más capacidad de almacenamiento"
+  },
+  "contact": {
+    "customer_service": "Servicio al cliente",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "message": "Mensaje",
+    "send": "Enviar",
+    "contact_info": "Contáctenos en <1>{{email}}</1> o WhatsApp <2>{{phone}}</2>. Síganos en redes sociales."
+  },
+  "tariff": {
+    "title": "Navegando por los últimos desarrollos arancelarios",
+    "content": "Manténgase informado sobre los últimos cambios arancelarios que afectan el transporte internacional. Nos comprometemos a proporcionar información transparente y actualizada para ayudarle a gestionar su logística de manera efectiva."
+  },
+  "language": {
+    "select_language": "Seleccione su idioma",
+    "select_country": "Seleccione su país"
+  }
+  ,
+  "about": {
+  "title": "Acerca de SwiftShip",
+  "description": "SwiftShip es líder global en logística, ofreciendo soluciones integrales para empresas e individuos. Con más de un siglo de historia, hemos construido una reputación de confiabilidad, innovación y satisfacción al cliente. Nuestros servicios incluyen entrega de paquetes, transporte de carga, gestión de cadena de suministro y soluciones especializadas para diversas industrias. Nuestro sistema de seguimiento avanzado ofrece visibilidad en tiempo real de sus envíos, garantizando transparencia y tranquilidad. Estamos comprometidos con la sostenibilidad y prácticas éticas, minimizando nuestro impacto ambiental y contribuyendo positivamente a las comunidades que servimos."
+}
+}

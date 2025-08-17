@@ -13,8 +13,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { TypeAnimation } from "react-type-animation";
+import { useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 
 const App = () => {
+  const { t } = useTranslation();
   const [isMounted, setIsMounted] = useState(false);
   const [showCustomerService, setShowCustomerService] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -37,7 +40,7 @@ const App = () => {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
-    setIsMobileMenuOpen(false); // Close mobile menu on link click
+    setIsMobileMenuOpen(false);
   };
 
   useEffect(() => {
@@ -52,7 +55,7 @@ const App = () => {
       <div className="min-h-screen flex items-center justify-center bg-[#232110]">
         <div className="flex flex-col items-center gap-4">
           <div className="w-20 h-20 rounded-full bg-[#f9e106] animate-pulse" />
-          <p className="text-white font-semibold">Loading Shipments...</p>
+          <p className="text-white font-semibold">{t('common.loading') || 'Loading Shipments...'}</p>
         </div>
       </div>
     );
@@ -79,7 +82,7 @@ const App = () => {
               onClick={() => scrollIntoSection("home")}
               className="text-lg font-bold tracking-tight cursor-pointer sm:text-xl"
             >
-              United Parcel Services
+              {t('common.welcome') || 'United Parcel Services'}
             </h2>
           </div>
           <div className="flex items-center gap-4">
@@ -93,28 +96,28 @@ const App = () => {
                 className="text-white text-sm font-medium hover:text-[#f9f506]"
                 onClick={() => scrollIntoSection("about")}
               >
-                About
+                {t('header.about') || 'About'}
               </Link>
               <a
                 href="#contact"
                 className="text-white text-sm font-medium hover:text-[#f9f506]"
                 onClick={() => scrollIntoSection("contact")}
               >
-                Contact
+                {t('header.contact') || 'Contact'}
               </a>
               <a
                 href="#services"
                 className="text-white text-sm font-medium hover:text-[#f9f506]"
                 onClick={() => scrollIntoSection("services")}
               >
-                Services
+                {t('header.services') || 'Services'}
               </a>
               <a
                 href="#updates"
                 className="text-white text-sm font-medium hover:text-[#f9f506]"
                 onClick={() => scrollIntoSection("updates")}
               >
-                Updates
+                {t('header.updates') || 'Updates'}
               </a>
             </nav>
             <Button
@@ -128,10 +131,11 @@ const App = () => {
               to="/track-parcel"
               className="hidden md:flex min-w-[84px] max-w-[480px] items-center justify-center rounded-lg h-10 px-4 bg-[#f9f506] text-[#181811] text-sm font-bold tracking-[0.015em]"
             >
-              <span className="truncate">Track</span>
+              <span className="truncate">{t('common.track') || 'Track'}</span>
             </Link>
           </div>
         </header>
+
         <motion.div
           className="px-4 sm:px-6 md:px-10 lg:px-20 xl:px-40 py-5 flex flex-1 justify-center"
           initial={{ opacity: 0 }}
@@ -149,7 +153,7 @@ const App = () => {
                 <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-center">
                   <TypeAnimation
                     sequence={[
-                      "Welcome to United Parcel Services",
+                      t('common.welcome') || 'Welcome to United Parcel Services',
                       1000,
                       " ",
                       500,
@@ -165,39 +169,38 @@ const App = () => {
                     to="/track-parcel"
                     className="min-w-[84px] max-w-[480px] rounded-lg h-10 px-4 sm:h-12 sm:px-5 bg-[#f9f506] text-[#181811] text-sm sm:text-base font-bold tracking-[0.015em] flex items-center justify-center"
                   >
-                    <span className="truncate">Track Your Parcel</span>
+                    <span className="truncate">{t('common.track_parcel') || 'Track Your Parcel'}</span>
                   </Link>
                   <Link
                     to="/solutions"
                     className="min-w-[84px] max-w-[480px] rounded-lg h-10 px-4 sm:h-12 sm:px-5 bg-[#3a3927] text-white text-sm sm:text-base font-bold tracking-[0.015em] flex items-center justify-center"
                   >
-                    <span className="truncate">Explore Our Solutions</span>
+                    <span className="truncate">{t('common.explore_solutions') || 'Explore Our Solutions'}</span>
                   </Link>
                 </div>
               </div>
             </div>
+
             <h2 className="text-white text-xl sm:text-2xl font-bold tracking-tight px-4 pb-3 pt-5">
-              Navigating Latest Tariff Development
+              {t('tariff.title') || 'Navigating Latest Tariff Development'}
             </h2>
             <p className="text-white text-base font-normal px-4 pb-3 pt-1">
-              Stay informed about the latest tariff changes affecting
-              international shipping. We're committed to providing transparent
-              and up-to-date information to help you manage your logistics
-              effectively.
+              {t('tariff.content') || 'Stay informed about the latest tariff changes affecting international shipping. We\'re committed to providing transparent and up-to-date information to help you manage your logistics effectively.'}
             </p>
             <div className="flex px-4 py-3 justify-start">
               <Link
                 to="/solutions"
                 className="min-w-[84px] max-w-[480px] rounded-lg h-10 px-4 bg-[#f9f506] text-[#181811] text-sm font-bold tracking-[0.015em] flex items-center justify-center"
               >
-                <span className="truncate">Explore Our Solutions</span>
+                <span className="truncate">{t('common.explore_solutions') || 'Explore Our Solutions'}</span>
               </Link>
             </div>
+
             <h2
               id="services"
               className="text-white text-xl sm:text-2xl font-bold tracking-tight px-4 pb-3 pt-5"
             >
-              Our Services
+              {t('header.services') || 'Our Services'}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
               <motion.div
@@ -214,10 +217,10 @@ const App = () => {
                   ></div>
                   <div>
                     <p className="text-white text-base font-medium leading-normal">
-                      Express Delivery
+                      {t('services.express_delivery') || 'Express Delivery'}
                     </p>
                     <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                      Fast and reliable delivery for urgent shipments.
+                      {t('services.express_desc') || 'Fast and reliable delivery for urgent shipments.'}
                     </p>
                   </div>
                 </div>
@@ -236,11 +239,10 @@ const App = () => {
                   ></div>
                   <div>
                     <p className="text-white text-base font-medium leading-normal">
-                      Freight Forwarding
+                      {t('services.freight') || 'Freight Forwarding'}
                     </p>
                     <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                      Efficient and cost-effective solutions for large
-                      shipments.
+                      {t('services.freight_desc') || 'Efficient and cost-effective solutions for large shipments.'}
                     </p>
                   </div>
                 </div>
@@ -259,10 +261,10 @@ const App = () => {
                   ></div>
                   <div>
                     <p className="text-white text-base font-medium leading-normal">
-                      Customs Brokerage
+                      {t('services.customs') || 'Customs Brokerage'}
                     </p>
                     <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                      Expert assistance with customs clearance processes.
+                      {t('services.customs_desc') || 'Expert assistance with customs clearance processes.'}
                     </p>
                   </div>
                 </div>
@@ -281,20 +283,21 @@ const App = () => {
                   ></div>
                   <div>
                     <p className="text-white text-base font-medium leading-normal">
-                      Warehousing
+                      {t('services.warehousing') || 'Warehousing'}
                     </p>
                     <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                      Secure and flexible storage options for your goods.
+                      {t('services.warehousing_desc') || 'Secure and flexible storage options for your goods.'}
                     </p>
                   </div>
                 </div>
               </motion.div>
             </div>
+
             <h2
               id="updates"
               className="text-white text-xl sm:text-2xl font-bold tracking-tight px-4 pb-3 pt-5"
             >
-              Important Updates
+              {t('header.updates') || 'Important Updates'}
             </h2>
             <div className="flex overflow-x-auto snap-x snap-mandatory [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden p-4 gap-3">
               <motion.div
@@ -316,11 +319,10 @@ const App = () => {
                 ></div>
                 <div>
                   <p className="text-white text-base font-medium leading-normal">
-                    Service Update: New Delivery Routes
+                    {t('updates.new_routes') || 'Service Update: New Delivery Routes'}
                   </p>
                   <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                    We've expanded our delivery network to include new routes
-                    for faster service.
+                    {t('updates.new_routes_desc') || 'We\'ve expanded our delivery network to include new routes for faster service.'}
                   </p>
                 </div>
               </motion.div>
@@ -343,11 +345,10 @@ const App = () => {
                 ></div>
                 <div>
                   <p className="text-white text-base font-medium leading-normal">
-                    Holiday Shipping Deadlines
+                    {t('updates.holiday') || 'Holiday Shipping Deadlines'}
                   </p>
                   <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                    Plan your holiday shipments ahead with our updated
-                    deadlines.
+                    {t('updates.holiday_desc') || 'Plan your holiday shipments ahead with our updated deadlines.'}
                   </p>
                 </div>
               </motion.div>
@@ -370,15 +371,15 @@ const App = () => {
                 ></div>
                 <div>
                   <p className="text-white text-base font-medium leading-normal">
-                    Warehouse Expansion Announcement
+                    {t('updates.warehouse') || 'Warehouse Expansion Announcement'}
                   </p>
                   <p className="text-[#bbba9b] text-sm font-normal leading-normal">
-                    Our new warehouse facility is now open, offering more
-                    storage capacity.
+                    {t('updates.warehouse_desc') || 'Our new warehouse facility is now open, offering more storage capacity.'}
                   </p>
                 </div>
               </motion.div>
             </div>
+
             <div className="flex justify-end overflow-hidden px-4 sm:px-5 pb-5">
               <motion.button
                 className="flex max-w-[480px] items-center justify-center rounded-lg h-14 px-5 bg-[#f9f506] text-[#181811] text-base font-bold tracking-[0.015em] min-w-0 gap-4 pl-4 pr-6"
@@ -388,9 +389,10 @@ const App = () => {
                 <div className="text-[#181811] text-2xl">
                   <FaQuestionCircle />
                 </div>
-                <span className="truncate">Customer Service</span>
+                <span className="truncate">{t('contact.customer_service') || 'Customer Service'}</span>
               </motion.button>
             </div>
+
             {showCustomerService && (
               <motion.div
                 className="fixed bottom-20 right-5 bg-white p-4 rounded-lg shadow-lg w-[90%] sm:w-auto"
@@ -398,31 +400,32 @@ const App = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 50 }}
               >
-                <h3 className="text-black mb-2">Contact Us</h3>
+                <h3 className="text-black mb-2">{t('contact.contact_us') || 'Contact Us'}</h3>
                 <form className="flex flex-col gap-2">
                   <Input
                     type="text"
-                    placeholder="Name"
+                    placeholder={t('contact.name') || 'Name'}
                     className="border p-2 w-full"
                   />
                   <Input
                     type="email"
-                    placeholder="Email"
+                    placeholder={t('contact.email') || 'Email'}
                     className="border p-2 w-full"
                   />
                   <Textarea
-                    placeholder="Message"
+                    placeholder={t('contact.message') || 'Message'}
                     className="border p-2 w-full"
                   />
                   <Button
                     type="submit"
                     className="bg-[#f9f506] text-[#181811] p-2"
                   >
-                    Send
+                    {t('contact.send') || 'Send'}
                   </Button>
                 </form>
               </motion.div>
             )}
+
             <footer className="flex flex-col gap-6 px-4 sm:px-5 py-10 text-center">
               <div className="flex flex-wrap justify-center gap-4">
                 <Link
@@ -447,28 +450,20 @@ const App = () => {
               <p className="text-white font-semibold">
                 {new Date().toISOString().split("T")[0]}
               </p>
-              <p
-                id="contact"
-                className="text-[#bbba9b] text-base font-normal leading-normal"
-              >
-                Contact us at{" "}
-                <Link
-                  target="_blank"
-                  to="https://mail.google.com/mail/?view=cm&fs=1&to=unitedparcels880@gmail.com"
-                  className="text-[#f9f506] mx-1 border-b border-[#f9f506]"
-                >
-                  unitedparcels880@gmail.com
-                </Link>{" "}
-                or WhatsApp
-                <Link
-                  className="text-[#f9f506] mx-1 border-b border-[#f9f506]"
-                  target="_blank"
-                  to="https://wa.me/31610928914"
-                >
-                  +31610928914
-                </Link>
-                . Follow us on social media.
-              </p>
+<p className="text-[#bbba9b] text-base font-normal leading-normal">
+  <Trans 
+    i18nKey="contact.contact_info"
+    values={{
+      email: "unitedparcels880@gmail.com",
+      phone: "+31610928914"
+    }}
+    components={{
+      1: <a href="mailto:unitedparcels880@gmail.com" className="text-[#f9f506] hover:underline" />,
+      2: <a href="https://wa.me/31610928914" className="text-[#f9f506] hover:underline" />
+    }}
+    defaults="Contact us at <1>unitedparcels880@gmail.com</1> or WhatsApp <2>+31610928914</2>. Follow us on social media."
+  />
+</p>
             </footer>
           </div>
         </motion.div>
