@@ -47,16 +47,18 @@ const ServiceCard: React.FC<Service> = ({
   image,
 }) => (
   <motion.div
-    className="flex flex-col md:flex-row items-stretch justify-start rounded-lg bg-[#1f1f1a] overflow-hidden"
+    className="flex flex-col md:flex-row items-stretch justify-start rounded-lg bg-[#1f1f1a] overflow-hidden shadow-lg"
     initial={{ scale: 0.9, opacity: 0 }}
     whileInView={{ scale: 1, opacity: 1 }}
     transition={{ duration: 1.3 }}
     viewport={{ once: true }}
   >
-    <div
-      className="w-full md:w-1/2 bg-center bg-no-repeat aspect-video bg-cover"
-      style={{ backgroundImage: `url("${image}")` }}
-    ></div>
+    {/* Image */}
+    <div className="w-full md:w-1/2">
+      <img src={image} alt={title} className="w-full h-full object-cover" />
+    </div>
+
+    {/* Text Content */}
     <div className="flex w-full md:w-1/2 flex-col gap-2 py-4 px-4">
       <p className="text-white text-lg font-bold leading-tight tracking-[-0.015em]">
         {title}
@@ -81,7 +83,7 @@ const SolutionsDetail: React.FC = () => {
       description:
         "SwiftTrack offers seamless domestic tracking with real-time updates and notifications.",
       image:
-        "https://images.unsplash.com/photo-1590502593744-4a153b14c8d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80", // package being scanned
+        "https://images.unsplash.com/photo-1590502593744-4a153b14c8d8?auto=format&fit=crop&w=800&q=80", // package scanning
     },
     {
       title: "International Shipping",
@@ -89,7 +91,7 @@ const SolutionsDetail: React.FC = () => {
       description:
         "Track international shipments effortlessly across multiple carriers with precise location updates.",
       image:
-        "https://images.unsplash.com/photo-1623410630792-c2f8e64b0dbf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80", // cargo container image
+        "https://images.unsplash.com/photo-1623410630792-c2f8e64b0dbf?auto=format&fit=crop&w=800&q=80", // cargo container
     },
     {
       title: "Specialized Logistics",
@@ -97,7 +99,7 @@ const SolutionsDetail: React.FC = () => {
       description:
         "Monitor sensitive or oversized goods with specialized sensors and real-time reporting.",
       image:
-        "https://images.unsplash.com/photo-1615390052522-93c17e8799be?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80", // warehouse logistics
+        "https://images.unsplash.com/photo-1615390052522-93c17e8799be?auto=format&fit=crop&w=800&q=80", // warehouse logistics
     },
     {
       title: "Warehousing & Distribution",
@@ -105,7 +107,7 @@ const SolutionsDetail: React.FC = () => {
       description:
         "Manage your inventory and shipments from warehouse to doorstep with full visibility.",
       image:
-        "https://images.unsplash.com/photo-1605902711622-cfb43c4438f0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80", // warehouse interior
+        "https://images.unsplash.com/photo-1605902711622-cfb43c4438f0?auto=format&fit=crop&w=800&q=80", // warehouse interior
     },
   ];
 
@@ -114,7 +116,7 @@ const SolutionsDetail: React.FC = () => {
       {/* Header */}
       <header className="flex flex-col md:flex-row items-center justify-between border-b border-[#3a3927] px-4 md:px-10 py-3">
         <div className="flex items-center gap-4 text-white">
-          <FaTruck className="text-white w-5 h-5" />
+          <FaTruck className="w-5 h-5" />
           <h2 className="text-lg font-bold tracking-[-0.015em]">SwiftTrack</h2>
         </div>
         <div className="flex flex-1 flex-col md:flex-row justify-end gap-4 md:gap-8 mt-2 md:mt-0">
@@ -138,9 +140,9 @@ const SolutionsDetail: React.FC = () => {
         <div className="flex flex-col w-full max-w-[960px] space-y-6">
           {/* Hero Section */}
           <motion.div
-            className="min-h-80 bg-cover bg-center flex flex-col justify-end rounded-lg"
+            className="min-h-[250px] md:min-h-[300px] bg-cover bg-center flex flex-col justify-end rounded-lg"
             style={{
-              backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 25%), url("https://images.unsplash.com/photo-1611599535630-15d0cd9e0c5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80")`,
+              backgroundImage: `linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 25%), url('https://images.unsplash.com/photo-1611599535630-15d0cd9e0c5b?auto=format&fit=crop&w=1350&q=80')`,
             }}
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
