@@ -220,8 +220,7 @@ const App = () => {
                       t("common.welcome") ||
                         "Welcome to United Parcel Services",
                       2000,
-                      t("common.welcome_alt") ||
-                        "Your Reliable Shipping Partner",
+                      " ",
                       2000,
                     ]}
                     wrapper="span"

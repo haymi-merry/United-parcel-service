@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function LanguagePreference() {
   const navigate = useNavigate();
+  const selectedLanguage = localStorage.getItem("i18nextLng");
   const countries = [
     { value: "us", label: "United States" },
     { value: "ca", label: "Canada" },
@@ -71,7 +72,7 @@ export default function LanguagePreference() {
   ];
 
   const [currentCountry, setCurrentCountry] = useState<string>(
-    countries[0].value
+    selectedLanguage || languages[0].value
   );
   const [currentLanguage, setCurrentLanguage] = useState<string>(
     languages[0].value

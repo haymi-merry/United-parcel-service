@@ -23,7 +23,6 @@ export default function TrackingForm({
   const dispatch = useDispatch<TAppDispatch>();
   const { error, loading } = useSelector((state: TRootState) => state.transit);
 
-  // 🔹 SweetAlert wrapper for consistent UI
   const showAlert = (
     icon: "error" | "warning",
     title: string,
