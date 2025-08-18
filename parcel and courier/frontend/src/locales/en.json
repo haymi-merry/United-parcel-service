@@ -164,6 +164,28 @@
     "subtitle": "Secure storage and efficient fulfillment",
     "description": "Manage your inventory and shipments from warehouse to doorstep with full visibility."
   }
-}   
+},
+
+  "tracker": {
+    "provide_address": "Provide new Address",
+    "address_placeholder": "e.g. Lagos",
+    "shipped": "Shipped",
+    "delivered": "Delivered",
+    "in_transit": "In Transit",
+    "success": "Success!",
+    "address_submitted": "Address change submitted.",
+    "loading_info": "Loading Tracking Info...",
+    "tracking_details": "Tracking Details",
+    "tracking_id": "Tracking ID",
+    "package_info": "Package Information",
+    "estimated_delivery": "Estimated Delivery",
+    "view_details": "View Details",
+    "map_route": "Map & Route",
+    "change_address": "Need a change of delivery address?",
+    "shipment_progress": "Shipment Progress",
+    "contact_us": "Contact us at",
+    "or_whatsapp": "or WhatsApp",
+    "package_preview": "Package preview"
+  }
 }
 

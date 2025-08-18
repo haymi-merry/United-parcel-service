@@ -165,5 +165,27 @@
     "subtitle": "सुरक्षित भंडारण और कुशल पूर्ति",
     "description": "पूर्ण दृश्यता के साथ वेयरहाउस से दरवाजे तक अपनी इन्वेंट्री और शिपमेंट प्रबंधित करें।"
   }
-}
+},
+
+"tracker": {
+    "provide_address": "नया पता प्रदान करें",
+    "address_placeholder": "जैसे: लागोस",
+    "shipped": "भेज दिया गया",
+    "delivered": "वितरित",
+    "in_transit": "ट्रांजिट में",
+    "success": "सफलता!",
+    "address_submitted": "पता परिवर्तन सबमिट किया गया।",
+    "loading_info": "ट्रैकिंग जानकारी लोड हो रही है...",
+    "tracking_details": "ट्रैकिंग विवरण",
+    "tracking_id": "ट्रैकिंग आईडी",
+    "package_info": "पैकेज जानकारी",
+    "estimated_delivery": "अनुमानित वितरण तिथि",
+    "view_details": "विवरण देखें",
+    "map_route": "मानचित्र और मार्ग",
+    "change_address": "डिलीवरी पते में बदलाव की आवश्यकता है?",
+    "shipment_progress": "शिपमेंट प्रगति",
+    "contact_us": "हमसे संपर्क करें",
+    "or_whatsapp": "या व्हाट्सएप",
+    "package_preview": "पैकेज पूर्वावलोकन"
+  }
 }

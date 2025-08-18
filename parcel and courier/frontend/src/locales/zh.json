@@ -165,5 +165,27 @@
     "subtitle": "安全存储与高效履约",
     "description": "从仓库到门阶，全程可视化管理您的库存和运输。"
   }
-}
+},
+
+  "tracker": {
+    "provide_address": "提供新地址",
+    "address_placeholder": "例如：拉各斯",
+    "shipped": "已发货",
+    "delivered": "已送达",
+    "in_transit": "运输中",
+    "success": "成功！",
+    "address_submitted": "地址变更已提交。",
+    "loading_info": "正在加载追踪信息...",
+    "tracking_details": "追踪详情",
+    "tracking_id": "追踪ID",
+    "package_info": "包裹信息",
+    "estimated_delivery": "预计送达日期",
+    "view_details": "查看详情",
+    "map_route": "地图和路线",
+    "change_address": "需要更改送货地址？",
+    "shipment_progress": "货运进度",
+    "contact_us": "联系我们",
+    "or_whatsapp": "或WhatsApp",
+    "package_preview": "包裹预览"
+  }
 }

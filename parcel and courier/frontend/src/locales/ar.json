@@ -166,5 +166,27 @@
     "subtitle": "تخزين آمن وتنفيذ فعال",
     "description": "إدارة المخزون والشحنات من المستودع إلى الباب مع رؤية كاملة."
   }
-}
+},
+
+"tracker": {
+    "provide_address": "تقديم عنوان جديد",
+    "address_placeholder": "مثال: لاغوس",
+    "shipped": "تم الشحن",
+    "delivered": "تم التسليم",
+    "in_transit": "قيد النقل",
+    "success": "نجاح!",
+    "address_submitted": "تم تقديم تغيير العنوان.",
+    "loading_info": "جارٍ تحميل معلومات التتبع...",
+    "tracking_details": "تفاصيل التتبع",
+    "tracking_id": "معرف التتبع",
+    "package_info": "معلومات الطرد",
+    "estimated_delivery": "موعد التسليم المتوقع",
+    "view_details": "عرض التفاصيل",
+    "map_route": "الخريطة والمسار",
+    "change_address": "هل تحتاج إلى تغيير عنوان التسليم؟",
+    "shipment_progress": "تقدم الشحنة",
+    "contact_us": "اتصل بنا على",
+    "or_whatsapp": "أو واتساب",
+    "package_preview": "معاينة الطرد"
+  }
 }

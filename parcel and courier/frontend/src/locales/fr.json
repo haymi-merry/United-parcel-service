@@ -164,5 +164,27 @@
     "subtitle": "Stockage sécurisé et exécution efficace",
     "description": "Gérez votre inventaire et vos expéditions de l'entrepôt à votre porte avec une visibilité complète."
   }
-}
+},
+
+ "tracker": {
+    "provide_address": "Fournir une nouvelle adresse",
+    "address_placeholder": "ex. Lagos",
+    "shipped": "Expédié",
+    "delivered": "Livré",
+    "in_transit": "En transit",
+    "success": "Succès!",
+    "address_submitted": "Changement d'adresse soumis.",
+    "loading_info": "Chargement des informations de suivi...",
+    "tracking_details": "Détails de suivi",
+    "tracking_id": "ID de suivi",
+    "package_info": "Informations sur le colis",
+    "estimated_delivery": "Date de livraison estimée",
+    "view_details": "Voir les détails",
+    "map_route": "Carte et itinéraire",
+    "change_address": "Besoin de changer l'adresse de livraison?",
+    "shipment_progress": "Progression de l'expédition",
+    "contact_us": "Contactez-nous à",
+    "or_whatsapp": "ou WhatsApp",
+    "package_preview": "Aperçu du colis"
+  }
 }

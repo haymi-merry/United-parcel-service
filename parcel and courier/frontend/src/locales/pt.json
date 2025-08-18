@@ -165,5 +165,27 @@
     "subtitle": "Armazenamento seguro e execução eficiente",
     "description": "Gerencie seu inventário e envios do armazém até a porta com visibilidade completa."
   }
-}
+},
+
+ "tracker": {
+    "provide_address": "Fornecer novo endereço",
+    "address_placeholder": "ex. Lagos",
+    "shipped": "Enviado",
+    "delivered": "Entregue",
+    "in_transit": "Em trânsito",
+    "success": "Sucesso!",
+    "address_submitted": "Alteração de endereço submetida.",
+    "loading_info": "Carregando informações de rastreamento...",
+    "tracking_details": "Detalhes de rastreamento",
+    "tracking_id": "ID de rastreamento",
+    "package_info": "Informações da encomenda",
+    "estimated_delivery": "Data estimada de entrega",
+    "view_details": "Ver detalhes",
+    "map_route": "Mapa e rota",
+    "change_address": "Precisa alterar o endereço de entrega?",
+    "shipment_progress": "Progresso do envio",
+    "contact_us": "Contate-nos em",
+    "or_whatsapp": "ou WhatsApp",
+    "package_preview": "Pré-visualização da encomenda"
+  }
 }
