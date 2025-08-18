@@ -5,6 +5,7 @@ import { useFetcher, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { TRootState } from "@/app/store";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 
 interface FormData {
   parcelId: string;
@@ -31,16 +32,18 @@ interface CreateShipmentProps {
 }
 
 const CreateShipment: React.FC<CreateShipmentProps> = () => {
+  const { t } = useTranslation();
   const { authenticated } = useSelector((state: TRootState) => state.user);
+  const navigate = useNavigate();
 
   if (!authenticated) {
     Swal.fire({
-      title: "Unauthorized",
-      text: "Please log in to create a shipment.",
+      title: t("admin.unauthorized_title") || "Unauthorized",
+      text: t("admin.unauthorized_text") || "Please log in to create a shipment.",
       icon: "warning",
       background: "#232110",
       color: "#bbba9b",
-      confirmButtonText: "OK",
+      confirmButtonText: t("common.ok") || "OK",
     }).then(({ isConfirmed }) => {
       if (isConfirmed) {
         navigate("/");
@@ -68,11 +71,9 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
     quantity: 1,
   });
   const fetcher = useFetcher();
-  const navigate = useNavigate();
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState<boolean>(false);
-  console.log(image);
 
   function onLogout() {
     navigate("/admin-dashboard");
@@ -111,6 +112,7 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
       if (imagePreview) URL.revokeObjectURL(imagePreview);
     };
   }, [imagePreview]);
+
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -136,11 +138,14 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
       <div className="min-h-screen flex items-center justify-center bg-[#232110]">
         <div className="flex flex-col items-center gap-4">
           <div className="w-20 h-20 rounded-full bg-[#f9e106] animate-pulse" />
-          <p className="text-white font-semibold">Creating Shipments</p>
+          <p className="text-white font-semibold">
+            {t("admin.creating_shipment") || "Creating Shipment..."}
+          </p>
         </div>
       </div>
     );
   }
+
   return (
     <>
       <motion.div
@@ -168,7 +173,7 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                       <FaPlus size={24} />
                     </i>
                     <p className="text-white text-sm font-medium">
-                      Create Shipment
+                      {t("admin.create_shipment") || "Create Shipment"}
                     </p>
                   </motion.button>
 
@@ -181,7 +186,9 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                     <i className="text-white">
                       <FaDoorOpen size={24} />
                     </i>
-                    <p className="text-white text-sm font-medium">Logout</p>
+                    <p className="text-white text-sm font-medium">
+                      {t("common.logout") || "Logout"}
+                    </p>
                   </motion.button>
                 </div>
               </div>
@@ -195,7 +202,7 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <p className="text-2xl sm:text-[32px] font-bold tracking-tight">
-                Create Shipment
+                {t("admin.create_shipment") || "Create Shipment"}
               </p>
             </motion.div>
             <motion.section
@@ -205,25 +212,25 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
             >
               <fetcher.Form method="post" encType="multipart/form-data">
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Parcel Information
+                  {t("admin.parcel_info") || "Parcel Information"}
                 </h3>
                 {[
                   {
-                    label: "Parcel ID",
+                    label: t("admin.parcel_id") || "Parcel ID",
                     name: "parcelId",
-                    placeholder: "Enter parcel id",
+                    placeholder: t("admin.enter_parcel_id") || "Enter parcel id",
                     type: "text",
                   },
                   {
-                    label: "Package Name",
+                    label: t("admin.package_name") || "Package Name",
                     name: "package_name",
-                    placeholder: "Enter package name",
+                    placeholder: t("admin.enter_package_name") || "Enter package name",
                     type: "text",
                   },
                   {
-                    label: "Quantity",
+                    label: t("admin.quantity") || "Quantity",
                     name: "quantity",
-                    placeholder: "Enter quantity of the parcel",
+                    placeholder: t("admin.enter_quantity") || "Enter quantity of the parcel",
                     type: "number",
                   },
                 ].map((item) => (
@@ -250,23 +257,23 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                 ))}
 
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Sender Details
+                  {t("admin.sender_details") || "Sender Details"}
                 </h3>
                 {[
                   {
-                    label: "Name",
+                    label: t("common.name") || "Name",
                     name: "senderName",
-                    placeholder: "Enter sender's name",
+                    placeholder: t("admin.enter_sender_name") || "Enter sender's name",
                   },
                   {
-                    label: "Address",
+                    label: t("admin.address") || "Address",
                     name: "senderAddress",
-                    placeholder: "Enter sender's address",
+                    placeholder: t("admin.enter_sender_address") || "Enter sender's address",
                   },
                   {
-                    label: "Phone Number",
+                    label: t("admin.phone_number") || "Phone Number",
                     name: "senderPhone",
-                    placeholder: "Enter sender's phone number",
+                    placeholder: t("admin.enter_sender_phone") || "Enter sender's phone number",
                   },
                 ].map((field) => (
                   <div
@@ -292,23 +299,23 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                   </div>
                 ))}
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Recipient Details
+                  {t("admin.recipient_details") || "Recipient Details"}
                 </h3>
                 {[
                   {
-                    label: "Name",
+                    label: t("common.name") || "Name",
                     name: "recipientName",
-                    placeholder: "Enter recipient's name",
+                    placeholder: t("admin.enter_recipient_name") || "Enter recipient's name",
                   },
                   {
-                    label: "Address",
+                    label: t("admin.address") || "Address",
                     name: "recipientAddress",
-                    placeholder: "Enter recipient's address",
+                    placeholder: t("admin.enter_recipient_address") || "Enter recipient's address",
                   },
                   {
-                    label: "Phone Number",
+                    label: t("admin.phone_number") || "Phone Number",
                     name: "recipientPhone",
-                    placeholder: "Enter recipient's phone number",
+                    placeholder: t("admin.enter_recipient_phone") || "Enter recipient's phone number",
                   },
                 ].map((field) => (
                   <div
@@ -334,18 +341,18 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                   </div>
                 ))}
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Origin & Destination
+                  {t("admin.origin_destination") || "Origin & Destination"}
                 </h3>
                 {[
                   {
-                    label: "Origin",
+                    label: t("admin.origin") || "Origin",
                     name: "origin",
-                    placeholder: "Enter origin",
+                    placeholder: t("admin.enter_origin") || "Enter origin",
                   },
                   {
-                    label: "Destination",
+                    label: t("admin.destination") || "Destination",
                     name: "destination",
-                    placeholder: "Enter destination",
+                    placeholder: t("admin.enter_destination") || "Enter destination",
                   },
                 ].map((field) => (
                   <div
@@ -372,7 +379,7 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                 ))}
 
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Upload Package Image
+                  {t("admin.upload_image") || "Upload Package Image"}
                 </h3>
                 <div className="flex flex-col p-4">
                   <motion.div
@@ -382,10 +389,10 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                     transition={{ duration: 0.5 }}
                   >
                     <p className="text-lg font-bold tracking-[-0.015em] text-center">
-                      Upload Image
+                      {t("admin.upload_image") || "Upload Image"}
                     </p>
                     <p className="text-sm font-normal text-center">
-                      Click to upload or drag and drop
+                      {t("admin.upload_instructions") || "Click to upload or drag and drop"}
                     </p>
                     <input
                       type="file"
@@ -402,7 +409,7 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.3 }}
                     >
-                      Upload
+                      {t("admin.upload") || "Upload"}
                     </motion.label>
                     {imagePreview && (
                       <motion.img
@@ -417,18 +424,18 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                   </motion.div>
                 </div>
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Shipping Dates
+                  {t("admin.shipping_dates") || "Shipping Dates"}
                 </h3>
                 {[
                   {
-                    label: "Pickup Date",
+                    label: t("admin.pickup_date") || "Pickup Date",
                     name: "pickupDate",
-                    placeholder: "Select pickup date",
+                    placeholder: t("admin.select_pickup_date") || "Select pickup date",
                   },
                   {
-                    label: "Delivery Date",
+                    label: t("admin.delivery_date") || "Delivery Date",
                     name: "deliveryDate",
-                    placeholder: "Select delivery date",
+                    placeholder: t("admin.select_delivery_date") || "Select delivery date",
                   },
                 ].map((field) => (
                   <div
@@ -463,7 +470,7 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                 ))}
 
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Transport Information
+                  {t("admin.transport_info") || "Transport Information"}
                 </h3>
                 <div
                   key="status"
@@ -473,7 +480,9 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                     htmlFor="status"
                     className="flex flex-col min-w-40 flex-1"
                   >
-                    <p className="text-base font-medium pb-2">Status</p>
+                    <p className="text-base font-medium pb-2">
+                      {t("admin.status") || "Status"}
+                    </p>
                     <div className="flex w-full items-stretch rounded-lg">
                       <select
                         name="status"
@@ -482,10 +491,18 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                         onChange={handleInputChange}
                         className="w-full rounded-lg rounded-r-none bg-[#27271b] border border-[#55553a] border-r-0 h-14 p-[15px] pr-2 text-base font-normal  focus:outline-none focus:ring-0 focus:border-[#55553a] placeholder:text-[#bbba9b]"
                       >
-                        <option value="pending">Pending</option>
-                        <option value="shipped off">Shipped off</option>
-                        <option value="on transit">On transit</option>
-                        <option value="delivered">Delivered</option>
+                        <option value="pending">
+                          {t("admin.status_pending") || "Pending"}
+                        </option>
+                        <option value="shipped off">
+                          {t("admin.status_shipped") || "Shipped off"}
+                        </option>
+                        <option value="on transit">
+                          {t("admin.status_transit") || "On transit"}
+                        </option>
+                        <option value="delivered">
+                          {t("admin.status_delivered") || "Delivered"}
+                        </option>
                       </select>
                     </div>
                   </label>
@@ -499,8 +516,8 @@ const CreateShipment: React.FC<CreateShipmentProps> = () => {
                   >
                     <span className="truncate">
                       {fetcher.state === "idle"
-                        ? "Create Shipment"
-                        : "Creating..."}
+                        ? t("admin.create_shipment") || "Create Shipment"
+                        : t("admin.creating") || "Creating..."}
                     </span>
                   </motion.button>
                 </div>
