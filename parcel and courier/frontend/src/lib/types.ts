@@ -24,6 +24,7 @@ export interface ICustomerSupport {
   message: string;
   email: string;
   attachment?: File | null;
+  img_url?: string;
   name?: string;
 }
 

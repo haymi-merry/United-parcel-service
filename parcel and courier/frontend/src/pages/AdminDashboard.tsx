@@ -31,7 +31,7 @@ const AdminDashboard: React.FC = () => {
         background: "#232110",
         color: "#bbba9b",
         confirmButtonText: t("common.ok") || "OK",
-      }).then(() => navigate("/"));
+      }).then(() => navigate("/home"));
     }
   }, [authenticated, navigate, t]);
 

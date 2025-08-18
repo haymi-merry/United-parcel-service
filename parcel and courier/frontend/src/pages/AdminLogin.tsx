@@ -27,6 +27,7 @@ export default function AdminLogin() {
             authenticated: true,
           })
         );
+        localStorage.setItem("token", "true");
         navigate("/admin-dashboard");
       });
     } else {

@@ -10,20 +10,20 @@ import {
 import L, { type LatLngTuple } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { FaTruck, FaMapMarkerAlt, FaCheckCircle } from "react-icons/fa";
-
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import type { TAppDispatch, TRootState } from "@/app/store";
 import type { IShipment } from "@/lib/types";
 import { fetchShipments } from "@/features/shipmentSlice";
-import { Button } from "@/components/ui/button";
 import { createRequest } from "@/features/changeAddressSlice";
 import { initRealtime, sendRealtimeEvent } from "@/supabase/supabaseRealTime";
 import { supabase } from "@/supabase/supabase";
 import Swal from "sweetalert2";
+import { Button } from "@/components/ui/button";
+
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
@@ -31,12 +31,12 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
+// -------------------- Map Helpers --------------------
 function FitBounds({ points }: { points: LatLngTuple[] }) {
   const map = useMap();
   useEffect(() => {
-    if (points.length > 0) {
+    if (points.length)
       map.fitBounds(L.latLngBounds(points), { padding: [40, 40], maxZoom: 12 });
-    }
   }, [map, points]);
   return null;
 }
@@ -44,106 +44,166 @@ function FitBounds({ points }: { points: LatLngTuple[] }) {
 function ChangeCenter({ center }: { center?: LatLngTuple }) {
   const map = useMap();
   useEffect(() => {
-    if (center) {
-      map.setView(center, map.getZoom());
-    }
+    if (center) map.setView(center, map.getZoom());
   }, [center, map]);
   return null;
 }
 
+// -------------------- Address Form --------------------
+function AddressForm({
+  onSubmit,
+  onCancel,
+}: {
+  onSubmit: (value: string) => void;
+  onCancel: () => void;
+}) {
+  const [value, setValue] = useState("");
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (value.trim()) onSubmit(value.trim());
+      }}
+      className="mt-3 space-y-2"
+    >
+      <label className="block text-sm text-[#ccc68e]">
+        Provide new Address
+        <input
+          placeholder="e.g. Lagos"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          className="mt-1 w-full rounded-md bg-[#232110] border border-[#3b3b2a] px-3 py-2 text-white text-sm"
+        />
+      </label>
+      <div className="flex gap-2 justify-end">
+        <Button variant="secondary" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant="secondary"
+          className="bg-[#f9e106]  text-[#232110]"
+        >
+          Submit
+        </Button>
+      </div>
+    </form>
+  );
+}
+
+// -------------------- Shipment Progress --------------------
+function ShipmentProgress({
+  transportHistory,
+  onMarkerClick,
+}: {
+  transportHistory: IShipment["transport_history"];
+  onMarkerClick: (coord: LatLngTuple) => void;
+}) {
+  return (
+    <div className="space-y-4 max-h-full overflow-y-scroll">
+      {transportHistory?.map((ev, index) => {
+        const isFirst = index === 0;
+        const isLast = index === transportHistory.length - 1;
+        const Icon = isFirst
+          ? FaMapMarkerAlt
+          : isLast
+          ? FaCheckCircle
+          : FaTruck;
+        const color = isFirst ? "#f9e106" : isLast ? "green" : "#f9e106";
+        const status = isFirst
+          ? "Shipped"
+          : isLast
+          ? "Delivered"
+          : "In Transit";
+        return (
+          <div
+            key={ev.transport_id}
+            className="flex gap-3 items-start cursor-pointer"
+            onClick={() => onMarkerClick(ev.coordinates as LatLngTuple)}
+          >
+            <div className="mt-1 text-[color]">
+              <Icon style={{ color }} />
+            </div>
+            <div>
+              <p className="font-medium">{status}</p>
+              <p className="text-[#ccc68e] text-sm">{ev.current_time}</p>
+              <p className="text-sm mt-1">{ev.current_location}</p>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// -------------------- Main Component --------------------
 export default function ShipmentTracker() {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch<TAppDispatch>();
+
   const [shipment, setShipment] = useState<IShipment | null>(null);
   const [showAddressForm, setShowAddressForm] = useState(false);
-
   const [center, setCenter] = useState<LatLngTuple>([51.505, -0.09]);
+  const mapRef = useRef(null);
 
-  const { shipment: shipments, loading: isShipmentsLoading } = useSelector(
+  const { shipment: shipments, loading } = useSelector(
     (state: TRootState) => state.shipment
   );
 
-  const mapRef = useRef(null);
-
   useEffect(() => {
-    if (!shipments || shipments.length === 0) {
-      dispatch(fetchShipments());
-    }
+    if (!shipments.length) dispatch(fetchShipments());
   }, [dispatch, shipments]);
 
   useEffect(() => {
     const found = shipments.find((s) => s.parcel_id === id);
     if (found) {
       setShipment(found);
-
       const coords = found.transport_history?.[0]?.coordinates;
-      if (Array.isArray(coords) && coords.length === 2) {
-        setCenter([coords[0], coords[1]]);
-      }
+      if (coords?.length === 2) setCenter(coords as LatLngTuple);
     }
-  }, [id, shipments, showAddressForm]);
+  }, [id, shipments]);
 
-  const routes: LatLngTuple[] = useMemo(() => {
-    return (
-      shipment?.transport_history?.map((item) =>
-        Array.isArray(item.coordinates) && item.coordinates.length === 2
-          ? (item.coordinates as LatLngTuple)
-          : [51.505, -0.09]
-      ) || []
-    );
-  }, [shipment]);
+  const routes: LatLngTuple[] = useMemo(
+    () =>
+      shipment?.transport_history?.map((h) => h.coordinates as LatLngTuple) ||
+      [],
+    [shipment]
+  );
 
-  function scrollToSection(sectionId: string) {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  }
-
-  async function handleSubmit(formData: FormData) {
-    const oldAddress = shipment?.destination;
-    const newAddress = formData.get("newAddress") as string;
-    const parcelId = shipment?.parcel_id;
-
-    if (oldAddress && newAddress && parcelId) {
-      await dispatch(
-        createRequest({
-          parcel_id: parcelId,
-          new_address: newAddress,
-          old_address: oldAddress,
-        })
-      );
-
-      sendRealtimeEvent("INSERT", {
-        parcel_id: parcelId,
+  const handleAddressSubmit = async (newAddress: string) => {
+    if (!shipment) return;
+    await dispatch(
+      createRequest({
+        parcel_id: shipment.parcel_id,
         new_address: newAddress,
-        old_address: oldAddress,
-      });
-
-      await Swal.fire({
-        title: "Success!",
-        text: "Your address change request has been submitted.",
-        icon: "success",
-      });
-    }
-  }
+        old_address: shipment.destination!,
+      })
+    );
+    sendRealtimeEvent("INSERT", {
+      parcel_id: shipment.parcel_id,
+      new_address: newAddress,
+      old_address: shipment.destination!,
+    });
+    await Swal.fire({
+      title: "Success!",
+      text: "Address change submitted.",
+      icon: "success",
+    });
+    setShowAddressForm(false);
+  };
 
   useEffect(() => {
     const channel = initRealtime(dispatch);
-    return () => {
-      void supabase.removeChannel(channel);
-    };
+    return () => void supabase.removeChannel(channel);
   }, [dispatch]);
 
-  if (isShipmentsLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#232110]">
         <div className="flex flex-col items-center gap-4">
           <div className="w-20 h-20 rounded-full bg-[#f9e106] animate-pulse" />
-          <p className="text-white font-semibold">
-            Loading Tacking Information...
-          </p>
+          <p className="text-white font-semibold">Loading Tracking Info...</p>
         </div>
       </div>
     );
@@ -154,16 +214,16 @@ export default function ShipmentTracker() {
       {/* Header */}
       <header className="flex flex-wrap items-center justify-between border-b border-[#4a4621] px-4 py-4 sm:px-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 text-[#f9e106]">
-            <FaTruck size={24} />
-          </div>
+          <FaTruck size={24} className="text-[#f9e106]" />
           <h1 className="text-lg font-bold">United Parcel Service</h1>
         </div>
-
         <nav className="flex flex-wrap items-center gap-3 mt-2 sm:mt-0 sm:gap-5">
           <Button
-            className="text-sm cursor-pointer"
-            onClick={() => scrollToSection("contact")}
+            onClick={() =>
+              document
+                .getElementById("contact")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
           >
             Contact
           </Button>
@@ -174,31 +234,25 @@ export default function ShipmentTracker() {
       </header>
 
       <main className="max-w-6xl mx-auto p-4 sm:p-6">
-        {/* Top area */}
+        {/* Tracking & Image */}
         <section className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
             <h2 className="text-xl sm:text-2xl font-bold">Tracking Details</h2>
             <p className="text-[#ccc68e]">Tracking ID: {shipment?.parcel_id}</p>
-
             <div className="mt-4 bg-[#181811] p-4 rounded-xl">
               <p className="font-semibold">Package Information</p>
               <p className="text-[#ccc68e]">
                 Estimated Delivery: {shipment?.delivery_date}
               </p>
               <div className="mt-3">
-                <button
-                  onClick={async () => {
-                    await navigate(`/parcel/${shipment?.parcel_id}`);
-                    window.location.reload();
-                  }}
-                  className="rounded-full bg-[#4a4621] px-4 py-2 text-sm"
+                <Button
+                  onClick={() => navigate(`/parcel/${shipment?.parcel_id}`)}
                 >
                   View Details
-                </button>
+                </Button>
               </div>
             </div>
           </div>
-
           <div className="w-full md:w-96 mt-2 md:mt-0">
             <img
               src={shipment?.img_url}
@@ -208,10 +262,10 @@ export default function ShipmentTracker() {
           </div>
         </section>
 
+        {/* Map & Progress */}
         <section className="mt-6 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6">
           <div className="bg-[#181811] p-4 rounded-xl">
             <h3 className="font-semibold mb-3">Map & Route</h3>
-
             <MapContainer
               ref={mapRef}
               className="h-64 sm:h-96 w-full rounded-md"
@@ -219,24 +273,26 @@ export default function ShipmentTracker() {
               zoom={6}
             >
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              <FitBounds points={[[51.505, -0.09]]} />
+              <FitBounds points={routes.length ? routes : [[51.505, -0.09]]} />
               <Polyline
                 positions={routes}
                 pathOptions={{ color: "#1be73d", weight: 4 }}
               />
               <ChangeCenter center={center} />
-
               {shipment?.transport_history?.map((ev) => (
                 <Marker
                   key={ev.transport_id}
                   position={ev.coordinates || [51.505, -0.09]}
-                  title={ev.current_location}
-                  icon={L.icon({
-                    iconUrl: markerIcon,
-                    iconSize: [25, 41],
-                    iconAnchor: [12, 41],
-                    popupAnchor: [0, -41],
-                  })}
+                  icon={
+                    new L.Icon({
+                      iconUrl: markerIcon,
+                      iconRetinaUrl: markerIcon2x,
+                      shadowUrl: markerShadow,
+                      iconSize: [25, 41],
+                      iconAnchor: [12, 41],
+                      popupAnchor: [0, -41],
+                    })
+                  }
                 >
                   <Popup>
                     <div className="max-w-xs">
@@ -252,90 +308,28 @@ export default function ShipmentTracker() {
             </MapContainer>
 
             <div className="mt-3 flex justify-end">
-              <button
-                className="rounded-full bg-[#f9e106] text-[#232110] px-4 py-2 font-medium text-sm sm:text-base"
+              <Button
+                className="bg-[#f9e106] text-[#232110]"
                 onClick={() => setShowAddressForm((s) => !s)}
               >
                 Need a change of delivery address?
-              </button>
+              </Button>
             </div>
 
             {showAddressForm && (
-              <form action={handleSubmit} className="mt-3 space-y-2">
-                <label className="block text-sm text-[#ccc68e]">
-                  Provide new Address
-                  <input
-                    placeholder="e.g. Lagos"
-                    name="newAddress"
-                    className="mt-1 w-full rounded-md bg-[#232110] border border-[#3b3b2a] px-3 py-2 text-white text-sm"
-                  />
-                </label>
-                <div className="flex gap-2 justify-end">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowAddressForm(false);
-                    }}
-                    className="px-4 py-2 rounded-md border border-[#3b3b2a] text-sm"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 rounded-md bg-[#f9e106] text-[#232110] font-medium text-sm"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </form>
+              <AddressForm
+                onSubmit={handleAddressSubmit}
+                onCancel={() => setShowAddressForm(false)}
+              />
             )}
           </div>
 
           <aside className="bg-[#181811] p-4 rounded-xl">
             <h4 className="font-semibold mb-3">Shipment Progress</h4>
-
-            <div className="space-y-4 max-h-full overflow-y-scroll">
-              {shipment?.transport_history?.map((ev, index) => (
-                <div
-                  key={ev.transport_id}
-                  className="flex gap-3 items-start cursor-pointer"
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => setCenter(ev.coordinates as LatLngTuple)}
-                >
-                  <div className="mt-1">
-                    {index === 0 ? (
-                      <i className="text-[#f9e106]">
-                        <FaMapMarkerAlt />
-                      </i>
-                    ) : index ===
-                      (shipment!.transport_history! &&
-                        shipment?.transport_history?.length &&
-                        shipment?.transport_history?.length) -
-                        1 ? (
-                      <i className="text-green-500">
-                        <FaCheckCircle />
-                      </i>
-                    ) : (
-                      <i className="text-[#f9e106]">
-                        <FaTruck />
-                      </i>
-                    )}
-                  </div>
-                  <div>
-                    <p className="font-medium">
-                      {index === 1
-                        ? "In Transit"
-                        : index === 0
-                        ? "Shipped"
-                        : "Delivered"}
-                    </p>
-                    <p className="text-[#ccc68e] text-sm">{ev.current_time}</p>
-                    <p className="text-sm mt-1">{ev.current_location}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <ShipmentProgress
+              transportHistory={shipment?.transport_history}
+              onMarkerClick={setCenter}
+            />
           </aside>
         </section>
 
@@ -346,12 +340,12 @@ export default function ShipmentTracker() {
           Contact us at{" "}
           <a
             className="text-[#f9e106]"
-            href={`mailto:unitedparcels880@gmail.com`}
+            href="mailto:unitedparcels880@gmail.com"
           >
             unitedparcels880@gmail.com
           </a>{" "}
           or WhatsApp{" "}
-          <a href={`https://wa.me/31610928914`} className="text-[#f9e106]">
+          <a className="text-[#f9e106]" href="https://wa.me/31610928914">
             +31610928914
           </a>
           .

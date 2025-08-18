@@ -63,7 +63,7 @@ const router = createBrowserRouter([
     element: <ParcelDetails />,
   },
   {
-    path: "/customer-service",
+    path: "/customer-support",
     element: <CustomerService />,
   },
   {
