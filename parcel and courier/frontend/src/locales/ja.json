@@ -70,7 +70,14 @@
     "status_transit": "輸送中",
     "status_delivered": "配達済み",
     "creating": "作成中...",
-    "logout": "ログアウト"
+    "logout": "ログアウト",
+    "edit_shipment": "出荷を編集",
+    "updating_shipment": "出荷を更新中...",
+    "update_shipment": "出荷を更新",
+    "updating": "更新中...",
+    "package_details": "荷物の詳細",
+    "description": "説明",
+    "enter_package_desc": "荷物の説明を入力してください"
   }
 ,
   "services": {

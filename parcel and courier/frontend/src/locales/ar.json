@@ -71,7 +71,14 @@
     "status_transit": "قيد النقل",
     "status_delivered": "تم التسليم",
     "creating": "جارٍ الإنشاء...",
-    "logout": "تسجيل الخروج"
+    "logout": "تسجيل الخروج",
+    "edit_shipment": "تعديل الشحنة",
+    "updating_shipment": "جارٍ تحديث الشحنة...",
+    "update_shipment": "تحديث الشحنة",
+    "updating": "جارٍ التحديث...",
+    "package_details": "تفاصيل الطرد",
+    "description": "الوصف",
+    "enter_package_desc": "أدخل وصف الطرد"
   
   },
   "services": {

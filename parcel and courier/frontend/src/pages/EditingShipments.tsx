@@ -5,6 +5,7 @@ import { useFetcher, useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { IShipment } from "@/lib/types";
 import type { TRootState } from "@/app/store";
+import { useTranslation } from "react-i18next";
 
 interface FormData {
   parcelId: string;
@@ -27,6 +28,7 @@ interface EditShipmentProps {
 }
 
 const EditShipment: React.FC<EditShipmentProps> = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { shipment: shipments } = useSelector(
     (state: TRootState) => state.shipment
@@ -55,10 +57,11 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState<boolean>(false);
-  console.log(image);
+
   function onBack() {
     navigate("/admin-dashboard");
   }
+
   useEffect(() => {
     const found = shipments.find((s: IShipment) => s.parcel_id === id);
     setCurrentShipment(found);
@@ -137,11 +140,14 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
       <div className="min-h-screen flex items-center justify-center bg-[#232110]">
         <div className="flex flex-col items-center gap-4">
           <div className="w-20 h-20 rounded-full bg-[#f9e106] animate-pulse" />
-          <p className="text-white font-semibold">Updating Shipment</p>
+          <p className="text-white font-semibold">
+            {t("admin.updating_shipment") || "Updating Shipment..."}
+          </p>
         </div>
       </div>
     );
   }
+
   return (
     <>
       <motion.div
@@ -169,7 +175,7 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                       <FaEdit size={24} />
                     </i>
                     <p className="text-white text-sm font-medium">
-                      Edit Shipment
+                      {t("admin.edit_shipment") || "Edit Shipment"}
                     </p>
                   </motion.button>
 
@@ -182,7 +188,9 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                     <i className="text-white">
                       <FaDoorOpen size={24} />
                     </i>
-                    <p className="text-white text-sm font-medium">Back</p>
+                    <p className="text-white text-sm font-medium">
+                      {t("common.back") || "Back"}
+                    </p>
                   </motion.button>
                 </div>
               </div>
@@ -196,7 +204,7 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <p className="text-2xl sm:text-[32px] font-bold tracking-tight">
-                Edit Shipment
+                {t("admin.edit_shipment") || "Edit Shipment"}
               </p>
             </motion.div>
             <motion.section
@@ -206,7 +214,7 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
             >
               <fetcher.Form method="put" encType="multipart/form-data">
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Parcel Information
+                  {t("admin.parcel_info") || "Parcel Information"}
                 </h3>
                 <div
                   key="parcelId"
@@ -216,36 +224,38 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                     htmlFor="parcelId"
                     className="flex flex-col min-w-40 flex-1"
                   >
-                    <p className="text-base font-medium pb-2">Parcel ID</p>
+                    <p className="text-base font-medium pb-2">
+                      {t("admin.parcel_id") || "Parcel ID"}
+                    </p>
                     <input
                       name="parcelId"
                       id="parcelId"
                       defaultValue={formData.parcelId}
                       onChange={handleInputChange}
-                      placeholder="Enter parcel ID"
+                      placeholder={t("admin.enter_parcel_id") || "Enter parcel ID"}
                       readOnly
                       className="w-full rounded-lg bg-[#27271b] border border-[#55553a] h-14 p-[15px] text-base font-normal focus:outline-none focus:ring-0 focus:border-[#55553a] placeholder:text-[#bbba9b]"
                     />
                   </label>
                 </div>
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Sender Details
+                  {t("admin.sender_details") || "Sender Details"}
                 </h3>
                 {[
                   {
-                    label: "Name",
+                    label: t("common.name") || "Name",
                     name: "senderName",
-                    placeholder: "Enter sender's name",
+                    placeholder: t("admin.enter_sender_name") || "Enter sender's name",
                   },
                   {
-                    label: "Address",
+                    label: t("admin.address") || "Address",
                     name: "senderAddress",
-                    placeholder: "Enter sender's address",
+                    placeholder: t("admin.enter_sender_address") || "Enter sender's address",
                   },
                   {
-                    label: "Phone Number",
+                    label: t("admin.phone_number") || "Phone Number",
                     name: "senderPhone",
-                    placeholder: "Enter sender's phone number",
+                    placeholder: t("admin.enter_sender_phone") || "Enter sender's phone number",
                   },
                 ].map((field) => (
                   <div
@@ -271,23 +281,23 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                   </div>
                 ))}
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Recipient Details
+                  {t("admin.recipient_details") || "Recipient Details"}
                 </h3>
                 {[
                   {
-                    label: "Name",
+                    label: t("common.name") || "Name",
                     name: "recipientName",
-                    placeholder: "Enter recipient's name",
+                    placeholder: t("admin.enter_recipient_name") || "Enter recipient's name",
                   },
                   {
-                    label: "Address",
+                    label: t("admin.address") || "Address",
                     name: "recipientAddress",
-                    placeholder: "Enter recipient's address",
+                    placeholder: t("admin.enter_recipient_address") || "Enter recipient's address",
                   },
                   {
-                    label: "Phone Number",
+                    label: t("admin.phone_number") || "Phone Number",
                     name: "recipientPhone",
-                    placeholder: "Enter recipient's phone number",
+                    placeholder: t("admin.enter_recipient_phone") || "Enter recipient's phone number",
                   },
                 ].map((field) => (
                   <div
@@ -313,18 +323,18 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                   </div>
                 ))}
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Origin & Destination
+                  {t("admin.origin_destination") || "Origin & Destination"}
                 </h3>
                 {[
                   {
-                    label: "Origin",
+                    label: t("admin.origin") || "Origin",
                     name: "origin",
-                    placeholder: "Enter origin",
+                    placeholder: t("admin.enter_origin") || "Enter origin",
                   },
                   {
-                    label: "Destination",
+                    label: t("admin.destination") || "Destination",
                     name: "destination",
-                    placeholder: "Enter destination",
+                    placeholder: t("admin.enter_destination") || "Enter destination",
                   },
                 ].map((field) => (
                   <div
@@ -350,24 +360,26 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                   </div>
                 ))}
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Package Details
+                  {t("admin.package_details") || "Package Details"}
                 </h3>
                 <div className="flex w-full max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
                   <label className="flex flex-col min-w-40 flex-1">
-                    <p className="text-base font-medium pb-2">Description</p>
+                    <p className="text-base font-medium pb-2">
+                      {t("admin.description") || "Description"}
+                    </p>
                     <textarea
                       name="packageDescription"
                       id="packageDescription"
                       defaultValue={formData.packageDescription}
                       onChange={handleInputChange}
-                      placeholder="Enter package description"
+                      placeholder={t("admin.enter_package_desc") || "Enter package description"}
                       className="w-full rounded-lg bg-[#27271b] border border-[#55553a] h-32 p-[15px] text-base font-normal focus:outline-none focus:ring-0 focus:border-[#55553a] placeholder:text-[#bbba9b]"
                     />
                   </label>
                 </div>
 
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Upload Package Image
+                  {t("admin.upload_image") || "Upload Package Image"}
                 </h3>
                 <div className="flex flex-col p-4">
                   <motion.div
@@ -377,10 +389,10 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                     transition={{ duration: 0.5 }}
                   >
                     <p className="text-lg font-bold tracking-[-0.015em] text-center">
-                      Upload Image
+                      {t("admin.upload_image") || "Upload Image"}
                     </p>
                     <p className="text-sm font-normal text-center">
-                      Click to upload or drag and drop
+                      {t("admin.upload_instructions") || "Click to upload or drag and drop"}
                     </p>
                     <input
                       type="file"
@@ -397,7 +409,7 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.3 }}
                     >
-                      Upload
+                      {t("admin.upload") || "Upload"}
                     </motion.label>
                     {imagePreview && (
                       <motion.img
@@ -412,18 +424,18 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                   </motion.div>
                 </div>
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Shipping Dates
+                  {t("admin.shipping_dates") || "Shipping Dates"}
                 </h3>
                 {[
                   {
-                    label: "Pickup Date",
+                    label: t("admin.pickup_date") || "Pickup Date",
                     name: "pickupDate",
-                    placeholder: "Select pickup date",
+                    placeholder: t("admin.select_pickup_date") || "Select pickup date",
                   },
                   {
-                    label: "Delivery Date",
+                    label: t("admin.delivery_date") || "Delivery Date",
                     name: "deliveryDate",
-                    placeholder: "Select delivery date",
+                    placeholder: t("admin.select_delivery_date") || "Select delivery date",
                   },
                 ].map((field) => (
                   <div
@@ -458,7 +470,7 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                 ))}
 
                 <h3 className="text-lg font-bold tracking-[-0.015em] px-4 pb-2 pt-4">
-                  Transport Information
+                  {t("admin.transport_info") || "Transport Information"}
                 </h3>
                 <div
                   key="status"
@@ -468,7 +480,9 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                     htmlFor="status"
                     className="flex flex-col min-w-40 flex-1"
                   >
-                    <p className="text-base font-medium pb-2">Status</p>
+                    <p className="text-base font-medium pb-2">
+                      {t("admin.status") || "Status"}
+                    </p>
                     <div className="flex w-full items-stretch rounded-lg">
                       <select
                         name="status"
@@ -477,10 +491,18 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                         onChange={handleInputChange}
                         className="w-full rounded-lg rounded-r-none bg-[#27271b] border border-[#55553a] border-r-0 h-14 p-[15px] pr-2 text-base font-normal focus:outline-none focus:ring-0 focus:border-[#55553a] placeholder:text-[#bbba9b]"
                       >
-                        <option value="pending">Pending</option>
-                        <option value="shipped off">Shipped off</option>
-                        <option value="on transit">On transit</option>
-                        <option value="delivered">Delivered</option>
+                        <option value="pending">
+                          {t("admin.status_pending") || "Pending"}
+                        </option>
+                        <option value="shipped off">
+                          {t("admin.status_shipped") || "Shipped off"}
+                        </option>
+                        <option value="on transit">
+                          {t("admin.status_transit") || "On transit"}
+                        </option>
+                        <option value="delivered">
+                          {t("admin.status_delivered") || "Delivered"}
+                        </option>
                       </select>
                     </div>
                   </label>
@@ -494,8 +516,8 @@ const EditShipment: React.FC<EditShipmentProps> = () => {
                   >
                     <span className="truncate">
                       {fetcher.state === "idle"
-                        ? "Update Shipment"
-                        : "Updating..."}
+                        ? t("admin.update_shipment") || "Update Shipment"
+                        : t("admin.updating") || "Updating..."}
                     </span>
                   </motion.button>
                 </div>

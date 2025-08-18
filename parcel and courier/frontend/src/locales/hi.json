@@ -70,7 +70,14 @@
   "status_transit": "प्रवासन में",
   "status_delivered": "वितरित",
   "creating": "बनाया जा रहा है...",
-  "logout": "लॉग आउट"
+  "logout": "लॉग आउट",
+  "edit_shipment": "शिपमेंट संपादित करें",
+  "updating_shipment": "शिपमेंट अपडेट किया जा रहा है...",
+  "update_shipment": "शिपमेंट अपडेट करें",
+  "updating": "अपडेट हो रहा है...",
+  "package_details": "पैकेज विवरण",
+  "description": "विवरण",
+  "enter_package_desc": "पैकेज विवरण दर्ज करें"
 }
 ,
   "services": {

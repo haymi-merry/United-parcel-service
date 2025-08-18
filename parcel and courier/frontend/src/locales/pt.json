@@ -70,7 +70,14 @@
   "status_transit": "Em trânsito",
   "status_delivered": "Entregue",
   "creating": "Criando...",
-  "logout": "Sair"
+  "logout": "Sair",
+  "edit_shipment": "Editar remessa",
+  "updating_shipment": "Atualizando remessa...",
+  "update_shipment": "Atualizar remessa",
+  "updating": "Atualizando...",
+  "package_details": "Detalhes do pacote",
+  "description": "Descrição",
+  "enter_package_desc": "Insira a descrição do pacote"
 }
 ,
   "services": {
