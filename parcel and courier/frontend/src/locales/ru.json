@@ -14,7 +14,8 @@
     "back": "Назад",
     "ship": "Отправить",
     "locations": "Местоположения",
-    "support": "Поддержка"
+    "support": "Поддержка",
+    "ok": "ОК"
   },
   "header": {
     "home": "Главная",
@@ -22,6 +23,19 @@
     "services": "Услуги",
     "contact": "Контакты",
     "updates": "Обновления"
+  },
+    "admin": {
+    "unauthorized_title": "Не авторизован",
+    "unauthorized_text": "Пожалуйста, войдите для доступа к панели управления.",
+    "loading_shipments": "Загрузка отправлений...",
+    "shipments": "Отправления",
+    "create_shipment": "Создать новое отправление",
+    "search_placeholder": "Поиск по номеру отслеживания, отправлению, назначению или статусу",
+    "parcel_id": "ID посылки",
+    "origin": "Отправление",
+    "destination": "Назначение",
+    "status": "Статус",
+    "view_details": "Просмотреть детали"
   },
   "services": {
     "express_delivery": "Экспресс-доставка",

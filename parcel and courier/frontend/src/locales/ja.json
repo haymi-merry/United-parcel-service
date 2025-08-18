@@ -14,7 +14,8 @@
     "back": "戻る",
     "ship": "発送",
     "locations": "場所",
-    "support": "サポート"
+    "support": "サポート",
+    "ok": "OK"
   },
   "header": {
     "home": "ホーム",
@@ -22,6 +23,19 @@
     "services": "サービス",
     "contact": "お問い合わせ",
     "updates": "更新情報"
+  },
+   "admin": {
+    "unauthorized_title": "未承認",
+    "unauthorized_text": "ダッシュボードにアクセスするにはログインしてください。",
+    "loading_shipments": "出荷を読み込み中...",
+    "shipments": "出荷",
+    "create_shipment": "新しい出荷を作成",
+    "search_placeholder": "追跡番号、出発地、目的地、または状態で検索",
+    "parcel_id": "荷物ID",
+    "origin": "出発地",
+    "destination": "目的地",
+    "status": "状態",
+    "view_details": "詳細を表示"
   },
   "services": {
     "express_delivery": "速達配達",

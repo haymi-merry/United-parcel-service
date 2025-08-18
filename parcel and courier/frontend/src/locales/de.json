@@ -14,7 +14,8 @@
     "back": "Zurück",
     "ship": "Versenden",
     "locations": "Standorte",
-    "support": "Support"
+    "support": "Support",
+    "ok": "OK"
   },
   "header": {
     "home": "Startseite",
@@ -23,6 +24,20 @@
     "contact": "Kontakt",
     "updates": "Aktualisierungen"
   },
+  "admin": {
+    "unauthorized_title": "Nicht autorisiert",
+    "unauthorized_text": "Bitte melden Sie sich an, um auf das Dashboard zuzugreifen.",
+    "loading_shipments": "Lade Sendungen...",
+    "shipments": "Sendungen",
+    "create_shipment": "Neue Sendung erstellen",
+    "search_placeholder": "Suche nach Sendungsnummer, Herkunft, Ziel oder Status",
+    "parcel_id": "Paket-ID",
+    "origin": "Herkunft",
+    "destination": "Ziel",
+    "status": "Status",
+    "view_details": "Details anzeigen"
+  },
+  
   "services": {
     "express_delivery": "Expresslieferung",
     "express_desc": "Schnelle und zuverlässige Lieferung für dringende Sendungen",

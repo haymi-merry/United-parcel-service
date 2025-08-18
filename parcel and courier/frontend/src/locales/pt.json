@@ -14,7 +14,8 @@
     "back": "Voltar",
     "ship": "Enviar",
     "locations": "Localizações",
-    "support": "Suporte"
+    "support": "Suporte",
+    "ok": "OK"
   },
   "header": {
     "home": "Início",
@@ -22,6 +23,19 @@
     "services": "Serviços",
     "contact": "Contato",
     "updates": "Atualizações"
+  },
+    "admin": {
+    "unauthorized_title": "Não autorizado",
+    "unauthorized_text": "Por favor faça login para acessar o painel.",
+    "loading_shipments": "Carregando remessas...",
+    "shipments": "Remessas",
+    "create_shipment": "Criar nova remessa",
+    "search_placeholder": "Pesquisar por número de rastreamento, origem, destino ou status",
+    "parcel_id": "ID da encomenda",
+    "origin": "Origem",
+    "destination": "Destino",
+    "status": "Status",
+    "view_details": "Ver detalhes"
   },
   "services": {
     "express_delivery": "Entrega expressa",

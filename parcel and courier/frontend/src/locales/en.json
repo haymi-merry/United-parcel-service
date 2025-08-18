@@ -14,7 +14,8 @@
     "back": "Back",
     "ship": "Ship",
     "locations": "Locations",
-    "support": "Support"
+    "support": "Support",
+    "ok": "OK"
   },
   "header": {
     "home": "Home",
@@ -22,6 +23,19 @@
     "services": "Services",
     "contact": "Contact",
     "updates": "Updates"
+  },
+     "admin": {
+    "unauthorized_title": "Unauthorized",
+    "unauthorized_text": "Please log in to access the dashboard.",
+    "loading_shipments": "Loading Shipments...",
+    "shipments": "Shipments",
+    "create_shipment": "Create New Shipment",
+    "search_placeholder": "Search by tracking number, origin, destination, or status",
+    "parcel_id": "Parcel ID",
+    "origin": "Origin",
+    "destination": "Destination",
+    "status": "Status",
+    "view_details": "View Details"
   },
   "services": {
     "express_delivery": "Express Delivery",
