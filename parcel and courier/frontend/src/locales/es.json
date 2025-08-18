@@ -70,7 +70,14 @@
     "status_transit": "En tránsito",
     "status_delivered": "Entregado",
     "creating": "Creando...",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "edit_shipment": "Editar envío",
+    "updating_shipment": "Actualizando envío...",
+    "update_shipment": "Actualizar envío",
+    "updating": "Actualizando...",
+    "package_details": "Detalles del paquete",
+    "description": "Descripción",
+    "enter_package_desc": "Ingrese descripción del paquete"
   },
   "services": {
     "express_delivery": "Entrega exprés",

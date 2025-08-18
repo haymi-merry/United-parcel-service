@@ -70,7 +70,14 @@
   "status_transit": "运输中",
   "status_delivered": "已送达",
   "creating": "正在创建...",
-  "logout": "退出登录"
+  "logout": "退出登录",
+  "edit_shipment": "编辑货运",
+  "updating_shipment": "正在更新货运...",
+  "update_shipment": "更新货运",
+  "updating": "正在更新...",
+  "package_details": "包裹详情",
+  "description": "描述",
+  "enter_package_desc": "输入包裹描述"
 }
 ,
   "services": {

@@ -70,7 +70,14 @@
   "status_transit": "В пути",
   "status_delivered": "Доставлено",
   "creating": "Создание...",
-  "logout": "Выйти"
+  "logout": "Выйти",
+  "edit_shipment": "Редактировать отправление",
+  "updating_shipment": "Обновление отправления...",
+  "update_shipment": "Обновить отправление",
+  "updating": "Обновление...",
+  "package_details": "Детали посылки",
+  "description": "Описание",
+  "enter_package_desc": "Введите описание посылки"
 }
 ,
   "services": {

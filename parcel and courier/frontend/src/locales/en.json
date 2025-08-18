@@ -70,7 +70,14 @@
     "status_transit": "On transit",
     "status_delivered": "Delivered",
     "creating": "Creating...",
-    "logout": "Logout"
+    "logout": "Logout",
+    "edit_shipment": "Edit Shipment",
+    "updating_shipment": "Updating Shipment...",
+    "update_shipment": "Update Shipment",
+    "updating": "Updating...",
+    "package_details": "Package Details",
+    "description": "Description",
+    "enter_package_desc": "Enter package description"
   },
   "services": {
     "express_delivery": "Express Delivery",

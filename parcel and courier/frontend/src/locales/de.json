@@ -70,7 +70,14 @@
     "status_transit": "Unterwegs",
     "status_delivered": "Geliefert",
     "creating": "Wird erstellt...",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "edit_shipment": "Sendung bearbeiten",
+    "updating_shipment": "Sendung wird aktualisiert...",
+    "update_shipment": "Sendung aktualisieren",
+    "updating": "Aktualisierung...",
+    "package_details": "Paketdetails",
+    "description": "Beschreibung",
+    "enter_package_desc": "Paketbeschreibung eingeben"
   
   },
   
